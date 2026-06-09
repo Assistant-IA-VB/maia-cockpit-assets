@@ -112,188 +112,168 @@ body.night .nightbar{display:block}
 <body class="st-attend">
 <div id="splash"><div class="sl"><img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png" alt="Maïa"></div><div class="sn">Maïa</div><div class="sv">V1.14.1 · aperçu</div></div>
 <div class="banner">● V1.14.1 APERÇU CORRECTIF · clic = détail partout · Parler à Maïa → Telegram · lecture seule · ne remplace pas la version publiée</div>
-
 <div class="hdr"><div class="logo"><img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png" alt="Maïa"></div>
 <div class="htext"><h1>Maïa <span class="ver">V1.14.1</span></h1><div class="d" id="dateline">mardi 9 juin 2026 — bonjour Kevin</div></div>
 <span class="badge" id="badge">à jour</span></div>
 <div class="status"><span class="sdot"></span><span>Maïa prête — à toi de piloter · <b>tape n'importe quel bloc pour le détail</b></span></div>
-
 <div class="btns">
-  <a class="btn brown" id="talkBtn" href="https://t.me/maia_sbx_bot" target="_blank" rel="noopener">💬 Parler à Maïa</a>
-  <button class="btn red" id="urgBtn">🔥 Urgence</button>
-  <button class="btn acc" id="ideaBtn">💡 Déposer une idée</button>
-  <button class="btn" id="audioBtn">▶ Écouter ma journée</button>
-  <button class="btn" id="nightBtn" title="Mode nuit">🌙</button>
+<a class="btn brown" id="talkBtn" href="https://t.me/maia_sbx_bot" target="_blank" rel="noopener">💬 Parler à Maïa</a>
+<button class="btn red" id="urgBtn">🔥 Urgence</button>
+<button class="btn acc" id="ideaBtn">💡 Déposer une idée</button>
+<button class="btn" id="audioBtn">▶ Écouter ma journée</button>
+<button class="btn" id="nightBtn" title="Mode nuit">🌙</button>
 </div>
 <div class="voicelbl" id="voicelbl">🔊 Voix : système (provisoire) — la vraie voix Maïa reste à connecter.</div>
-
 <div class="nightbar" id="nightbar">🌙 <b>Capture nuit.</b> Je garde tout, on ne lance aucun nouveau chantier. <b>Demain je te ressors les 3 meilleures.</b></div>
-
 <div class="composer" id="composer"><div class="card pad">
-  <div class="ctype" id="ctype"><span class="seg on" data-t="idee">💡 Idée</span><span class="seg" data-t="pense">📌 Pense-bête</span><span class="seg" data-t="reparler">🗣️ À reparler</span><span class="seg" data-t="rappel">⏰ Me rappeler</span></div>
-  <textarea id="ideaText" placeholder="Vide ta tête : une idée, un truc à ne pas perdre…"></textarea>
-  <div class="row"><button class="btn acc sm" id="ideaSave">Garder</button><button class="btn sm" id="ideaClose">Fermer</button></div>
-  <div class="note">💡 « Déposer une idée » = <b>capture rapide</b> (reste dans l'inbox, local). Pour <b>discuter</b> avec Maïa, utilise « Parler à Maïa » → Telegram <b>@maia_sbx_bot</b>.</div>
+<div class="ctype" id="ctype"><span class="seg on" data-t="idee">💡 Idée</span><span class="seg" data-t="pense">📌 Pense-bête</span><span class="seg" data-t="reparler">🗣️ À reparler</span><span class="seg" data-t="rappel">⏰ Me rappeler</span></div>
+<textarea id="ideaText" placeholder="Vide ta tête : une idée, un truc à ne pas perdre…"></textarea>
+<div class="row"><button class="btn acc sm" id="ideaSave">Garder</button><button class="btn sm" id="ideaClose">Fermer</button></div>
+<div class="note">💡 « Déposer une idée » = <b>capture rapide</b> (reste dans l'inbox, local). Pour <b>discuter</b> avec Maïa, utilise « Parler à Maïa » → Telegram <b>@maia_sbx_bot</b>.</div>
 </div></div>
-
 <!-- ===== JOUR ===== -->
 <div class="view active" id="view-jour">
-  <div class="sec">🎯 Mes 3 priorités du jour <span class="sim">clique → ouvre la tâche / le détail</span></div>
-  <div class="prio" id="prio"></div>
-  <div class="card pad hero"><div class="lbl">▶ Prochaine action unique</div><div class="act" id="heroAct">—</div><div class="m" id="heroM"></div></div>
-  <div class="gauges">
-    <div class="card pad gauge"><div class="ring" id="ring"><i>89</i></div><div><div class="gtit">Santé Maïa</div><div class="gsub">Système sain · 5/6 verts</div></div></div>
-    <div class="card pad charge" id="chargeCard"><div class="gtit">Ta charge cognitive <span class="sim">estimation</span></div><div id="arc"></div><div class="chpct" id="chPct">—</div><div class="lab" id="chLab">—</div><div class="msg" id="chMsg"></div><div class="chmore" id="chMore">▾ Pourquoi ce niveau ?</div><div class="detail"><div class="in" id="chDetailIn"></div></div></div>
-  </div>
-  <div class="cogrow"><div class="cogbox" id="cogOpen"><div class="h">🧩 <span>Trop de choses ouvertes ?</span></div><div class="x" id="cogOpenX">—</div></div><div class="cogbox" id="cogFront"><div class="h">🌫️ <span>À sortir du premier plan</span></div><div class="x" id="cogFrontX">—</div></div></div>
-  <div class="prog">✅ <span id="pd">0</span>/<span id="pt">0</span> validé(s) <span class="bar"><i id="pbar"></i></span></div>
-  <div class="card pad" id="allgoodWrap" style="display:none"><div class="allgood"><span class="big">✅</span><span>Tout est à jour — rien ne réclame ton attention maintenant.</span></div></div>
-  <div id="vue"></div>
-  <div class="sec">📊 Charge de la semaine <span class="sim">simulé</span></div><div class="card pad"><div id="weekbars"></div></div>
-  <div class="sec">👀 Aujourd'hui en un coup d'œil <span class="sim">tape une carte pour le détail</span></div>
-  <div class="glance" id="glance"></div>
-  <div class="sec">✉️ Communication & quotidien</div><div class="card pad" id="comm"></div>
+<div class="sec">🎯 Mes 3 priorités du jour <span class="sim">clique → ouvre la tâche / le détail</span></div>
+<div class="prio" id="prio"></div>
+<div class="card pad hero"><div class="lbl">▶ Prochaine action unique</div><div class="act" id="heroAct">—</div><div class="m" id="heroM"></div></div>
+<div class="gauges">
+<div class="card pad gauge"><div class="ring" id="ring"><i>89</i></div><div><div class="gtit">Santé Maïa</div><div class="gsub">Système sain · 5/6 verts</div></div></div>
+<div class="card pad charge" id="chargeCard"><div class="gtit">Ta charge cognitive <span class="sim">estimation</span></div><div id="arc"></div><div class="chpct" id="chPct">—</div><div class="lab" id="chLab">—</div><div class="msg" id="chMsg"></div><div class="chmore" id="chMore">▾ Pourquoi ce niveau ?</div><div class="detail"><div class="in" id="chDetailIn"></div></div></div>
 </div>
-
+<div class="cogrow"><div class="cogbox" id="cogOpen"><div class="h">🧩 <span>Trop de choses ouvertes ?</span></div><div class="x" id="cogOpenX">—</div></div><div class="cogbox" id="cogFront"><div class="h">🌫️ <span>À sortir du premier plan</span></div><div class="x" id="cogFrontX">—</div></div></div>
+<div class="prog">✅ <span id="pd">0</span>/<span id="pt">0</span> validé(s) <span class="bar"><i id="pbar"></i></span></div>
+<div class="card pad" id="allgoodWrap" style="display:none"><div class="allgood"><span class="big">✅</span><span>Tout est à jour — rien ne réclame ton attention maintenant.</span></div></div>
+<div id="vue"></div>
+<div class="sec">📊 Charge de la semaine <span class="sim">simulé</span></div><div class="card pad"><div id="weekbars"></div></div>
+<div class="sec">👀 Aujourd'hui en un coup d'œil <span class="sim">tape une carte pour le détail</span></div>
+<div class="glance" id="glance"></div>
+<div class="sec">✉️ Communication & quotidien</div><div class="card pad" id="comm"></div>
+</div>
 <!-- ===== PROJETS ===== -->
 <div class="view" id="view-projets">
-  <div class="sec">🚀 Projets actifs <span class="cnt" id="projCnt">0</span> <span class="sim">tape un projet = détail</span></div><div id="projList"></div>
-  <div class="sec">🤖 Missions Claude <span class="cnt" id="misCnt">0</span></div><div id="missions"></div>
-  <div class="sec">🟠 Validations en attente <span class="cnt" id="valCnt">0</span></div><div id="vals"></div>
-  <div class="sec">📉 Dettes ouvertes <span class="cnt" id="debtCnt">0</span></div><div class="card pad" id="debts"></div>
-  <div class="sec">🧭 Piloter un projet</div>
-  <div class="card pad"><div class="pilote"><select id="pSel" onchange="renderPilote()"></select><div class="kv" id="pState"></div>
-    <div class="row"><button class="btn acc sm" id="genBrief">🧾 Générer une mission Claude</button><button class="btn sm" id="copyBrief">📋 Copier</button></div>
-    <textarea id="briefOut" placeholder="Le brief de mission Claude s'affichera ici…"></textarea>
-    <textarea id="reportIn" placeholder="Colle ici le rapport court de Claude…"></textarea>
-    <div class="row"><button class="btn sm" id="analyzeBtn">🔍 Analyser le rapport</button></div><div class="kv" id="analyzeOut"></div><div class="decide" id="decide"></div></div></div>
+<div class="sec">🚀 Projets actifs <span class="cnt" id="projCnt">0</span> <span class="sim">tape un projet = détail</span></div><div id="projList"></div>
+<div class="sec">🤖 Missions Claude <span class="cnt" id="misCnt">0</span></div><div id="missions"></div>
+<div class="sec">🟠 Validations en attente <span class="cnt" id="valCnt">0</span></div><div id="vals"></div>
+<div class="sec">📉 Dettes ouvertes <span class="cnt" id="debtCnt">0</span></div><div class="card pad" id="debts"></div>
+<div class="sec">🧭 Piloter un projet</div>
+<div class="card pad"><div class="pilote"><select id="pSel" onchange="renderPilote()"></select><div class="kv" id="pState"></div>
+<div class="row"><button class="btn acc sm" id="genBrief">🧾 Générer une mission Claude</button><button class="btn sm" id="copyBrief">📋 Copier</button></div>
+<textarea id="briefOut" placeholder="Le brief de mission Claude s'affichera ici…"></textarea>
+<textarea id="reportIn" placeholder="Colle ici le rapport court de Claude…"></textarea>
+<div class="row"><button class="btn sm" id="analyzeBtn">🔍 Analyser le rapport</button></div><div class="kv" id="analyzeOut"></div><div class="decide" id="decide"></div></div></div>
 </div>
-
 <!-- ===== CAPTURE ===== -->
 <div class="view" id="view-capture">
-  <div class="sec">⚡ Capture rapide <span class="sim">reste local (inbox) tant que non connecté</span></div>
-  <div class="btns"><button class="btn acc" data-cap="idee">💡 Déposer une idée</button><button class="btn" data-cap="pense">📌 Pense-bête</button><button class="btn" data-cap="reparler">🗣️ À reparler</button><button class="btn" data-cap="rappel">⏰ Me rappeler</button><button class="btn" id="nightBtn2">🌙 Capture nuit</button></div>
-  <div class="note">ℹ️ Où va une capture ? Aujourd'hui : <b>inbox locale du cockpit</b> (ce navigateur). Telegram/cockpit ne sont <b>pas encore reliés</b> (voir Ordre → boucle Telegram). Responsable du tri : <span class="who maia">🤖 Maïa</span> (à brancher).</div>
-  <div class="sec">🗃️ Inbox brute <span class="cnt" id="inboxCnt">0</span></div><div class="card pad kept" id="inboxList"></div>
-  <div class="sec">⏰ Rappels préparés <span class="cnt" id="remCnt">0</span></div><div class="card pad kept" id="remList"></div>
+<div class="sec">⚡ Capture rapide <span class="sim">reste local (inbox) tant que non connecté</span></div>
+<div class="btns"><button class="btn acc" data-cap="idee">💡 Déposer une idée</button><button class="btn" data-cap="pense">📌 Pense-bête</button><button class="btn" data-cap="reparler">🗣️ À reparler</button><button class="btn" data-cap="rappel">⏰ Me rappeler</button><button class="btn" id="nightBtn2">🌙 Capture nuit</button></div>
+<div class="note">ℹ️ Où va une capture ? Aujourd'hui : <b>inbox locale du cockpit</b> (ce navigateur). Telegram/cockpit ne sont <b>pas encore reliés</b> (voir Ordre → boucle Telegram). Responsable du tri : <span class="who maia">🤖 Maïa</span> (à brancher).</div>
+<div class="sec">🗃️ Inbox brute <span class="cnt" id="inboxCnt">0</span></div><div class="card pad kept" id="inboxList"></div>
+<div class="sec">⏰ Rappels préparés <span class="cnt" id="remCnt">0</span></div><div class="card pad kept" id="remList"></div>
 </div>
-
 <!-- ===== LOGISTIQUE ===== -->
 <div class="view" id="view-logistique">
-  <div class="sec">🌍 Voyage & recherche <span class="sim">prépare une recherche · ne réserve rien</span></div>
-  <div class="card pad">
-    <div class="field"><label>Ville de départ</label><input id="vDep" value="Orléans"></div>
-    <div class="field"><label>Dates dispo (souples possibles)</label><input id="vDates" placeholder="ex : 10–14 juillet, flexible ±3 j"></div>
-    <div class="field"><label>Budget</label><input id="vBudget" placeholder="ex : 600 € pour 2"></div>
-    <div class="field"><label>Envie (clique, ça se mémorise)</label><div class="chips" id="vEnvies"></div></div>
-    <div class="row"><button class="btn acc sm" id="vGo">🔎 Préparer la recherche</button><button class="btn sm" data-vk="hôtels">🏨 Hôtels</button><button class="btn sm" data-vk="billets">🎫 Billets</button><button class="btn sm" data-vk="comparer">📋 Comparer</button><button class="btn sm" data-vk="plan">🗺️ Plan</button></div>
-    <div class="out" id="vOut"></div>
-    <div class="note"><b>Ce que fait chaque bouton :</b> Préparer = rédige un brief de recherche · Hôtels/Billets/Comparer/Plan = ciblent le brief. Aujourd'hui ça <b>prépare</b> (texte à copier) ; la recherche live (comparateurs, alertes prix) est <b>à brancher</b>. Maïa <b>ne réserve ni ne paie</b> sans ta validation. Responsable : <span class="who maia">🤖 Maïa</span> prépare → <span class="who valid">✅ Validation Kevin</span> pour agir.</div>
-  </div>
-
-  <div class="sec">🎟️ Sorties autour de moi <span class="reel">réel · sources Orléans</span></div>
-  <div class="card pad">
-    <div class="row" style="margin-top:0"><div class="field" style="flex:2"><label>Ville</label><input id="sVille" value="Orléans"></div><div class="field" style="flex:1"><label>Rayon</label><select id="sRayon"><option>10 km</option><option selected>25 km</option><option>50 km</option></select></div><div class="field" style="flex:1"><label>Période</label><select id="sPeriode"><option selected>Cette semaine</option><option>Ce week-end</option><option>Ce mois-ci</option></select></div></div>
-    <div class="field"><label>Type d'envie</label><div class="chips" id="sTypes"></div></div>
-    <div class="row"><button class="btn acc sm" id="sGo">🔎 Préparer / ouvrir l'agenda</button><a class="btn sm" href="https://sortir.orleans-metropole.fr/" target="_blank" rel="noopener">📅 Agenda officiel</a></div>
-    <div class="out" id="sOut"></div>
-    <div class="sec" style="margin-top:12px">Lieux & sources réels (Orléans)</div>
-    <div id="sLieux"></div>
-    <div class="note"><b>Réel :</b> ces salles et l'agenda « On sort ! » existent (sources ci-dessus). La <b>liste d'événements datés</b> sera branchée sur l'agenda live. « ça m'intéresse / pas pour moi » mémorise tes préférences. Ajout agenda = <span class="who valid">✅ Validation Kevin</span> uniquement.</div>
-  </div>
-
-  <div class="sec">🛶 Kayak / mise à l'eau <span class="reel">réel · sources Loire/Orléans</span></div>
-  <div class="card pad">
-    <div class="row" style="margin-top:0"><div class="field" style="flex:2"><label>Ville</label><input id="kVille" value="Orléans"></div><div class="field" style="flex:1"><label>Rayon</label><select id="kRayon"><option>10 km</option><option selected>25 km</option><option>50 km</option></select></div></div>
-    <div class="row"><button class="btn acc sm" id="kGo">🔎 Voir les points près d'Orléans</button><a class="btn sm" id="kMap" target="_blank" rel="noopener">🗺️ Carte</a></div>
-    <div id="kList"></div>
-    <div class="note">🔒 Sécurité : gilet obligatoire, vérifier niveau d'eau + météo, prévenir un proche, éviter seuils/barrages. <b>Réel :</b> points ci-dessous sourcés. Niveau d'eau/météo en direct = <b>à brancher</b>.</div>
-    <div class="sec" style="margin-top:14px">⭐ Mes spots favoris <span class="cnt" id="kFavCnt">0</span></div><div class="card pad kept" id="kFavList" style="box-shadow:none;border:0;padding:0"></div>
-  </div>
-
-  <div class="sec">🧳 Déplacements pro (prestations) <span class="sim">simulé</span></div><div id="trips"></div>
+<div class="sec">🌍 Voyage & recherche <span class="sim">prépare une recherche · ne réserve rien</span></div>
+<div class="card pad">
+<div class="field"><label>Ville de départ</label><input id="vDep" value="Orléans"></div>
+<div class="field"><label>Dates dispo (souples possibles)</label><input id="vDates" placeholder="ex : 10–14 juillet, flexible ±3 j"></div>
+<div class="field"><label>Budget</label><input id="vBudget" placeholder="ex : 600 € pour 2"></div>
+<div class="field"><label>Envie (clique, ça se mémorise)</label><div class="chips" id="vEnvies"></div></div>
+<div class="row"><button class="btn acc sm" id="vGo">🔎 Préparer la recherche</button><button class="btn sm" data-vk="hôtels">🏨 Hôtels</button><button class="btn sm" data-vk="billets">🎫 Billets</button><button class="btn sm" data-vk="comparer">📋 Comparer</button><button class="btn sm" data-vk="plan">🗺️ Plan</button></div>
+<div class="out" id="vOut"></div>
+<div class="note"><b>Ce que fait chaque bouton :</b> Préparer = rédige un brief de recherche · Hôtels/Billets/Comparer/Plan = ciblent le brief. Aujourd'hui ça <b>prépare</b> (texte à copier) ; la recherche live (comparateurs, alertes prix) est <b>à brancher</b>. Maïa <b>ne réserve ni ne paie</b> sans ta validation. Responsable : <span class="who maia">🤖 Maïa</span> prépare → <span class="who valid">✅ Validation Kevin</span> pour agir.</div>
 </div>
-
+<div class="sec">🎟️ Sorties autour de moi <span class="reel">réel · sources Orléans</span></div>
+<div class="card pad">
+<div class="row" style="margin-top:0"><div class="field" style="flex:2"><label>Ville</label><input id="sVille" value="Orléans"></div><div class="field" style="flex:1"><label>Rayon</label><select id="sRayon"><option>10 km</option><option selected>25 km</option><option>50 km</option></select></div><div class="field" style="flex:1"><label>Période</label><select id="sPeriode"><option selected>Cette semaine</option><option>Ce week-end</option><option>Ce mois-ci</option></select></div></div>
+<div class="field"><label>Type d'envie</label><div class="chips" id="sTypes"></div></div>
+<div class="row"><button class="btn acc sm" id="sGo">🔎 Préparer / ouvrir l'agenda</button><a class="btn sm" href="https://sortir.orleans-metropole.fr/" target="_blank" rel="noopener">📅 Agenda officiel</a></div>
+<div class="out" id="sOut"></div>
+<div class="sec" style="margin-top:12px">Lieux & sources réels (Orléans)</div>
+<div id="sLieux"></div>
+<div class="note"><b>Réel :</b> ces salles et l'agenda « On sort ! » existent (sources ci-dessus). La <b>liste d'événements datés</b> sera branchée sur l'agenda live. « ça m'intéresse / pas pour moi » mémorise tes préférences. Ajout agenda = <span class="who valid">✅ Validation Kevin</span> uniquement.</div>
+</div>
+<div class="sec">🛶 Kayak / mise à l'eau <span class="reel">réel · Loiret & Orléans (sources)</span></div>
+<div class="card pad">
+<div class="row" style="margin-top:0"><div class="field" style="flex:2"><label>Ville</label><input id="kVille" value="Orléans"></div><div class="field" style="flex:1"><label>Rayon</label><select id="kRayon"><option>10 km</option><option selected>25 km</option><option>50 km</option></select></div></div>
+<div class="row"><button class="btn acc sm" id="kGo">🔎 Voir les points près d'Orléans</button><a class="btn sm" id="kMap" target="_blank" rel="noopener">🗺️ Carte</a></div>
+<div id="kList"></div>
+<div class="note">🔒 Sécurité : gilet obligatoire, vérifier niveau d'eau + météo, prévenir un proche, éviter seuils/barrages. <b>Réel :</b> points ci-dessous sourcés. Niveau d'eau/météo en direct = <b>à brancher</b>.</div>
+<div class="sec" style="margin-top:14px">⭐ Mes spots favoris <span class="cnt" id="kFavCnt">0</span></div><div class="card pad kept" id="kFavList" style="box-shadow:none;border:0;padding:0"></div>
+</div>
+<div class="sec">🧳 Déplacements pro (prestations) <span class="sim">simulé</span></div><div id="trips"></div>
+</div>
 <!-- ===== ORDRE ===== -->
 <div class="view" id="view-gouv">
-  <div class="sec">🧹 Anti-prolifération — règles actives</div>
-  <div class="card pad rules"><b>Avant de créer, Maïa vérifie :</b><br>• Pas de document si un équivalent existe → compléter l'existant.<br>• Pas de mission si une équivalente existe → regrouper.<br>• Signaler doublons, projets morts, documents obsolètes.<br>• <b>Une seule version active par sujet.</b></div>
-  <div class="sec">🔌 Connexions & données <span class="sim">état réel</span></div><div id="connList"></div>
-  <div class="sec">🔎 Désordre détecté <span class="cnt" id="govCnt">0</span></div><div class="card pad gov" id="govList"></div>
+<div class="sec">🧹 Anti-prolifération — règles actives</div>
+<div class="card pad rules"><b>Avant de créer, Maïa vérifie :</b><br>• Pas de document si un équivalent existe → compléter l'existant.<br>• Pas de mission si une équivalente existe → regrouper.<br>• Signaler doublons, projets morts, documents obsolètes.<br>• <b>Une seule version active par sujet.</b></div>
+<div class="sec">🔌 Connexions & données <span class="sim">état réel</span></div><div id="connList"></div>
+<div class="sec">🔎 Désordre détecté <span class="cnt" id="govCnt">0</span></div><div class="card pad gov" id="govList"></div>
 </div>
-
 <div class="foot"><span class="ro">🔒 Lecture seule · rien envoyé / créé / réservé / payé</span><br>Maïa V1.14.1 aperçu correctif · style clair + lumière animée conservés · données réelles marquées « réel · source »</div>
-
 <nav class="nav" id="nav"><a data-v="jour" class="on"><span class="ic">📋</span>Jour</a><a data-v="projets"><span class="ic">🚀</span>Projets</a><a data-v="capture"><span class="ic">⚡</span>Capture</a><a data-v="logistique"><span class="ic">🧳</span>Logistique</a><a data-v="gouv"><span class="ic">🧹</span>Ordre</a></nav>
 <div class="toast" id="toast"></div>
-
 <script>
 function W(c){var m={kevin:["kevin","👤 Kevin"],maia:["maia","🤖 Maïa"],claude:["claude","🧠 Claude"],valid:["valid","✅ Validation Kevin"]}[c]||["maia","🤖 Maïa"];return '<span class="who '+m[0]+'">'+m[1]+'</span>';}
 var CTX={
- dateline:"mardi 9 juin 2026 — bonjour Kevin",
- prio:[{t:"Vérifier la connexion du 05/06 (sécurité)",go:"SEC1"},{t:"Migration modèles Claude (15/06)",go:"VAL1"},{t:"Répondre à l'avocat (contrats)",go:"R1"}],
- hero:{act:"Vérifier la connexion du 05/06",m:"Sécurité d'abord : confirme que la connexion du 05/06 (Galaxy Z Fold7) était bien toi. Puis enchaîne sur la migration Claude (15/06)."},
- items:[
-  {id:"SEC1",kind:"securite",prio:"hi",t:"Vérifier la connexion du 05/06 (Galaxy Z Fold7)",meta:"Sécurité",remind:1,link:"https://myaccount.google.com/security",d:"Nouvel appareil + récupération de compte le 05/06.",det:{quoi:"Une connexion d'un nouvel appareil + récupération de compte le 05/06.",pourquoi:"Alertes Google de sécurité dans la boîte ia.votrebarman.",qui:"kevin",prochaine:"Ouvrir myaccount.google.com → Sécurité → Vos appareils.",etat:"réel",source:"E-mails de sécurité Google (lus, lecture seule)",maia:"Te pointer le lien, surveiller d'autres alertes.",kevin:"Confirmer que c'était toi, sinon changer le mot de passe."}},
-  {id:"SEC2",kind:"securite",prio:"hi",t:"Révoquer la clé Retell #2",meta:"Sécurité",remind:1,d:"À révoquer côté Retell.",det:{quoi:"Une 2ᵉ clé API Retell à révoquer.",pourquoi:"Incident sécurité ouvert (zone rouge Retell).",qui:"kevin",prochaine:"Révoquer la clé dans la console Retell.",etat:"réel",source:"Suivi sécurité MAIA",maia:"Rappeler, ne JAMAIS toucher la clé (zone rouge).",kevin:"Révoquer manuellement."}},
-  {id:"VAL1",kind:"validation",prio:"hi",t:"Migrer les modèles Claude sur Make avant le 15/06",meta:"Décision · échéance 15/06",remind:1,bloc:1,d:"Sonnet 4 / Opus 4 retirés le 15/06.",det:{quoi:"Mettre à jour les modèles Claude utilisés dans les scénarios Make.",pourquoi:"Sonnet 4 / Opus 4 retirés le 15/06 (e-mail Make 03/06).",qui:"valid",prochaine:"Inventaire lecture seule des scénarios Make → mapping.",etat:"réel",source:"E-mail Make (03/06) + échéance agenda",maia:"Préparer l'inventaire et le mapping (lecture seule).",kevin:"Valider le mapping puis la mise en prod."}},
-  {id:"VAL2",kind:"validation",prio:"mid",t:"Crédits Make — à vérifier dans Make",meta:"Décision",d:"Valeur non connectée en direct.",det:{quoi:"Niveau de crédits/opérations Make.",pourquoi:"Anciennes alertes e-mail (02–04/06). Le cockpit n'est PAS branché à Make.",qui:"kevin",prochaine:"Vérifier le vrai niveau dans Make (make.com) avant toute décision.",etat:"non connecté / à vérifier",source:"Anciens e-mails d'alerte — PAS une lecture live",maia:"Brancher Make en lecture seule (futur) pour un vrai chiffre.",kevin:"Ne rien acheter tant que le vrai niveau n'est pas confirmé."}},
-  {id:"R1",kind:"rappel",prio:"mid",t:"Répondre à l'avocat (contrats + holding)",meta:"Rappel · échéance dépassée",remind:1,d:"Échéance dépassée.",det:{quoi:"Réponse à l'avocat sur contrats + étude holding.",pourquoi:"Rappel posé, échéance 05/06 dépassée.",qui:"kevin",prochaine:"Dire : fait / reporter / ignorer. Brouillon préparable.",etat:"réel",source:"Rappel MAIA",maia:"Préparer un brouillon de réponse (sur demande).",kevin:"Valider/envoyer toi-même (zone rouge e-mail)."}},
-  {id:"R2",kind:"rappel",prio:"lo",t:"Déclarer les heures de Michael (intérim)",meta:"Rappel · échéance dépassée",d:"Statut inconnu.",det:{quoi:"Déclaration des heures de l'intérimaire Michael.",pourquoi:"Rappel, échéance dépassée, statut inconnu.",qui:"kevin",prochaine:"Dire : fait / reporter / ignorer.",etat:"réel",source:"Rappel MAIA",maia:"Garder le rappel.",kevin:"Statuer."}}
- ],
- week:[{l:"Auj",v:0},{l:"Jeu 11",v:2},{l:"Ven 12",v:0},{l:"Sam 13",v:3},{l:"Lun 15",v:0,dl:1},{l:"Sam 20",v:4}],
- glance:[
-  {v:"2",l:"urgences",c:"r",det:{quoi:"2 sujets de sécurité (connexion 05/06, clé Retell #2).",pourquoi:"Marqués sécurité = priorité haute.",qui:"kevin",prochaine:"Onglet Jour → cartes rouges.",etat:"réel",source:"Items sécurité",maia:"Les remonter en tête.",kevin:"Les traiter."}},
-  {v:"2",l:"rappels actifs",c:"b",det:{quoi:"2 rappels (avocat, heures Michael).",pourquoi:"Échéances dépassées.",qui:"kevin",prochaine:"Dire fait/reporter/ignorer.",etat:"réel",source:"Rappels MAIA",maia:"Préparer un brouillon avocat.",kevin:"Statuer."}},
-  {v:"?",l:"crédits Make",c:"muted",det:{quoi:"Crédits/opérations Make.",pourquoi:"Le « 8% » affiché avant était une vieille valeur, PAS une lecture live.",qui:"kevin",prochaine:"Vérifier dans make.com.",etat:"non connecté",source:"Anciens e-mails — non temps réel",maia:"Brancher Make lecture seule (futur).",kevin:"Ne rien acheter sans le vrai chiffre."}},
-  {v:"2",l:"à valider",c:"o",det:{quoi:"2 décisions (migration Claude, crédits Make).",pourquoi:"Demandent un arbitrage.",qui:"valid",prochaine:"Onglet Jour → cartes oranges.",etat:"réel",source:"Items validation",maia:"Préparer les éléments.",kevin:"Décider."}}
- ],
- comm:[
-  {k:"✋ À répondre",v:"0 client externe",det:{quoi:"File des réponses clients dues.",pourquoi:"Aucune en attente aujourd'hui.",qui:"maia",prochaine:"Rien.",etat:"réel (lecture Gmail ia, filtrée)",source:"Gmail ia.votrebarman (lecture seule)",maia:"Surveiller.",kevin:"Rien."}},
-  {k:"🔴 Mails à surveiller",v:"1 sécurité",det:{quoi:"1 mail sécurité (connexion 05/06).",pourquoi:"Sécurité = priorité.",qui:"kevin",prochaine:"Vérifier le compte Google.",etat:"réel",source:"Gmail ia",maia:"Pointer le lien.",kevin:"Vérifier."}},
-  {k:"🟠 Décisions",v:"migration Claude · crédits Make",det:{quoi:"2 décisions à prendre.",pourquoi:"Échéance + coûts.",qui:"valid",prochaine:"Voir cartes oranges.",etat:"réel / partiel",source:"E-mails + suivi",maia:"Préparer.",kevin:"Décider."}}
- ],
- projects:[
-  {id:"P-MAIA",name:"Maïa (cockpit & OS perso)",state:"en_cours",blockers:["Dette gouvernance (~23 cockpits, 2× « 15_ »)","Synchro Drive figée 07/06"],next:"Assainir le terrain (source de vérité unique)",det:{quoi:"Le système de pilotage Maïa lui-même.",pourquoi:"Chantier en cours (V1.14 → V1.14.1).",qui:"claude",prochaine:"Valider V1.14.1 puis assainir les doublons.",etat:"réel",source:"Travaux Claude/Kevin",maia:"Exécuter via Claude.",kevin:"Valider les étapes."}},
-  {id:"P-MIG",name:"Migration modèles Claude (Make)",state:"bloque",blockers:["Échéance 15/06","Inventaire non fait"],next:"Inventaire lecture seule des scénarios Make",det:{quoi:"Mise à jour des modèles Claude dans Make.",pourquoi:"Échéance 15/06.",qui:"valid",prochaine:"Lancer l'inventaire (lecture seule).",etat:"réel · bloqué",source:"E-mail Make",maia:"Préparer l'inventaire.",kevin:"Valider la migration."}},
-  {id:"P-JUR",name:"Juridique (contrats + holding)",state:"en_cours",blockers:["Réponse avocat en attente"],next:"Valider le brouillon de réponse avocat",det:{quoi:"Contrats barmans/commerciaux + étude holding.",pourquoi:"Réponse avocat due.",qui:"kevin",prochaine:"Valider le brouillon.",etat:"réel",source:"Rappel + e-mails",maia:"Préparer le brouillon.",kevin:"Envoyer."}}
- ],
- missions:[
-  {proj:"Maïa",title:"Reprise V1.13 + audit",status:"terminee",det:{quoi:"Reprise V1.13 + audit maturité.",pourquoi:"Mission précédente.",qui:"claude",prochaine:"Archivée.",etat:"réel · terminé",source:"Livrables 20_",maia:"—",kevin:"—"}},
-  {proj:"Maïa",title:"V1.14 + correctif V1.14.1",status:"en_cours",det:{quoi:"Cockpit opérationnel + corrections.",pourquoi:"Demande Kevin.",qui:"claude",prochaine:"Valider l'aperçu.",etat:"réel · en cours",source:"Cette session",maia:"—",kevin:"Valider visuel + fonctions."}},
-  {proj:"Migration Claude",title:"Inventaire scénarios Make",status:"a_lancer",det:{quoi:"Inventaire lecture seule des scénarios Make.",pourquoi:"Préparer la migration.",qui:"claude",prochaine:"Générer le brief (onglet Projets → Piloter).",etat:"réel · à lancer",source:"Échéance 15/06",maia:"Préparer.",kevin:"Lancer."}}
- ],
- validations:[
-  {t:"Migration Claude : acheter des crédits Make ou réduire la conso",det:{quoi:"Choix sur les crédits Make.",pourquoi:"Conso vs achat.",qui:"valid",prochaine:"Vérifier le vrai niveau Make d'abord.",etat:"non connecté",source:"Anciens e-mails",maia:"Brancher Make (futur).",kevin:"Décider après vérif."}},
-  {t:"Réponse avocat : valider le brouillon avant envoi",det:{quoi:"Brouillon de réponse avocat.",pourquoi:"Échéance dépassée.",qui:"valid",prochaine:"Lire + valider le brouillon.",etat:"réel",source:"Rappel",maia:"Préparer.",kevin:"Valider/envoyer."}},
-  {t:"V1.14.1 : valider le visuel + les fonctions avant publication",det:{quoi:"Validation de cet aperçu.",pourquoi:"Ne rien remplacer sans ton OK.",qui:"valid",prochaine:"Tester l'aperçu puis dire « publie ».",etat:"réel",source:"Cette session",maia:"—",kevin:"Valider."}}
- ],
- debts:[{t:"~23 cockpits dupliqués — réduire à 1 actif"},{t:"Deux dossiers « 15_ » (collision)"},{t:"Dossiers 11_/12_/13_ supersédés — archiver"}],
- conns:[
-  {n:"Gmail ia.votrebarman",s:"Lecture seule (tâche matin) · PII filtrée",st:"reel"},
-  {n:"Agendas ia + PRESTATIONS",s:"Lecture seule",st:"reel"},
-  {n:"Make (crédits/scénarios)",s:"Compte actif, mais cockpit NON branché en direct → chiffres indicatifs",st:"non"},
-  {n:"Telegram @maia_sbx_bot",s:"Bot existe · boucle réponse→tâche→cockpit NON bouclée",st:"non"},
-  {n:"Données du cockpit (priorités/projets)",s:"Représentatives tant que COCKPIT_DATA non câblé",st:"sim"}
- ],
- govIssues:[
-  {ic:"🧬",t:"Doublons de cockpits",x:"~23 cockpits HTML (local + cloud). Garder 1 actif."},
-  {ic:"⚠️",t:"Collision « 15_ »",x:"Deux dossiers « 15_ » au sens différent."},
-  {ic:"🔌",t:"Synchro Drive figée",x:"Arrêtée au 07/06 : le cloud ne descend pas en local."}
- ],
- trips:[{when:"Jeu 11/06",where:"Strasbourg (67)",detail:"2 prestations même jour, turnaround serré.",det:{quoi:"Déplacement pro 2 prestations.",pourquoi:"Agenda PRESTATIONS.",qui:"kevin",prochaine:"Valider trajet + créneau serré.",etat:"simulé (démo)",source:"Agenda (représentatif)",maia:"Préparer checklist + comparatif train.",kevin:"Valider la logistique."}}],
- sLieux:[
-  {n:"Zénith d'Orléans / Co'met",s:"Concerts & spectacles",u:"https://sortir.orleans-metropole.fr/"},
-  {n:"L'Astrolabe",s:"Musiques actuelles (rock, électro)",u:"https://www.alterre-astrolabe.fr/"},
-  {n:"Agenda « On sort ! » Orléans Métropole",s:"Tous les événements à venir",u:"https://sortir.orleans-metropole.fr/"},
-  {n:"JDS Orléans",s:"Agenda concerts/expos/sorties",u:"https://www.jds.fr/orleans/agenda/"}
- ],
- kSpots:[
-  {n:"Base de loisirs de l'Île Charlemagne",s:"Location kayak/canoë/paddle · cale de mise à l'eau (PMR) · ~20€/2h",v:"Saint-Jean-le-Blanc (45650)",u:"https://www.orleans.fr/que-faire-a-orleans/equipements-sportifs/la-base-de-loisirs-de-lile-charlemagne"},
-  {n:"Pagaie Orléans Métropole",s:"École de pagaie · 6 mises à l'eau (Chécy ↔ La Chapelle-St-Mesmin)",v:"Orléans Métropole",u:"https://kayak-orleans-pom.fr/"},
-  {n:"Mise à l'eau pont de la Motte-Sanguin",s:"Mise à l'eau gratuite · récup au Parc Floral / confluence",v:"Orléans",u:"https://www.google.com/maps/search/mise+a+l+eau+pont+Motte-Sanguin+Orleans"},
-  {n:"3 Éléments Kayak",s:"Descente Sully-sur-Loire → Orléans (encadré)",v:"Loiret",u:"https://3elementskayak.fr/fr"}
- ]
+dateline:"mardi 9 juin 2026 — bonjour Kevin",
+prio:[{t:"Vérifier la connexion du 05/06 (sécurité)",go:"SEC1"},{t:"Migration modèles Claude (15/06)",go:"VAL1"},{t:"Répondre à l'avocat (contrats)",go:"R1"}],
+hero:{act:"Vérifier la connexion du 05/06",m:"Sécurité d'abord : confirme que la connexion du 05/06 (Galaxy Z Fold7) était bien toi. Puis enchaîne sur la migration Claude (15/06)."},
+items:[
+{id:"SEC1",kind:"securite",prio:"hi",t:"Vérifier la connexion du 05/06 (Galaxy Z Fold7)",meta:"Sécurité",remind:1,link:"https://myaccount.google.com/security",d:"Nouvel appareil + récupération de compte le 05/06.",det:{quoi:"Une connexion d'un nouvel appareil + récupération de compte le 05/06.",pourquoi:"Alertes Google de sécurité dans la boîte ia.votrebarman.",qui:"kevin",prochaine:"Ouvrir myaccount.google.com → Sécurité → Vos appareils.",etat:"réel",source:"E-mails de sécurité Google (lus, lecture seule)",maia:"Te pointer le lien, surveiller d'autres alertes.",kevin:"Confirmer que c'était toi, sinon changer le mot de passe."}},
+{id:"SEC2",kind:"securite",prio:"hi",t:"Révoquer la clé Retell #2",meta:"Sécurité",remind:1,d:"À révoquer côté Retell.",det:{quoi:"Une 2ᵉ clé API Retell à révoquer.",pourquoi:"Incident sécurité ouvert (zone rouge Retell).",qui:"kevin",prochaine:"Révoquer la clé dans la console Retell.",etat:"réel",source:"Suivi sécurité MAIA",maia:"Rappeler, ne JAMAIS toucher la clé (zone rouge).",kevin:"Révoquer manuellement."}},
+{id:"VAL1",kind:"validation",prio:"hi",t:"Migrer les modèles Claude sur Make avant le 15/06",meta:"Décision · échéance 15/06",remind:1,bloc:1,d:"Sonnet 4 / Opus 4 retirés le 15/06.",det:{quoi:"Mettre à jour les modèles Claude utilisés dans les scénarios Make.",pourquoi:"Sonnet 4 / Opus 4 retirés le 15/06 (e-mail Make 03/06).",qui:"valid",prochaine:"Inventaire lecture seule des scénarios Make → mapping.",etat:"réel",source:"E-mail Make (03/06) + échéance agenda",maia:"Préparer l'inventaire et le mapping (lecture seule).",kevin:"Valider le mapping puis la mise en prod."}},
+{id:"VAL2",kind:"validation",prio:"mid",t:"Crédits Make — à vérifier dans Make",meta:"Décision",d:"Valeur non connectée en direct.",det:{quoi:"Niveau de crédits/opérations Make.",pourquoi:"Anciennes alertes e-mail (02–04/06). Le cockpit n'est PAS branché à Make.",qui:"kevin",prochaine:"Vérifier le vrai niveau dans Make (make.com) avant toute décision.",etat:"non connecté / à vérifier",source:"Anciens e-mails d'alerte — PAS une lecture live",maia:"Brancher Make en lecture seule (futur) pour un vrai chiffre.",kevin:"Ne rien acheter tant que le vrai niveau n'est pas confirmé."}},
+{id:"R1",kind:"rappel",prio:"mid",t:"Répondre à l'avocat (contrats + holding)",meta:"Rappel · échéance dépassée",remind:1,d:"Échéance dépassée.",det:{quoi:"Réponse à l'avocat sur contrats + étude holding.",pourquoi:"Rappel posé, échéance 05/06 dépassée.",qui:"kevin",prochaine:"Dire : fait / reporter / ignorer. Brouillon préparable.",etat:"réel",source:"Rappel MAIA",maia:"Préparer un brouillon de réponse (sur demande).",kevin:"Valider/envoyer toi-même (zone rouge e-mail)."}},
+{id:"R2",kind:"rappel",prio:"lo",t:"Déclarer les heures de Michael (intérim)",meta:"Rappel · échéance dépassée",d:"Statut inconnu.",det:{quoi:"Déclaration des heures de l'intérimaire Michael.",pourquoi:"Rappel, échéance dépassée, statut inconnu.",qui:"kevin",prochaine:"Dire : fait / reporter / ignorer.",etat:"réel",source:"Rappel MAIA",maia:"Garder le rappel.",kevin:"Statuer."}}
+],
+week:[{l:"Auj",v:0},{l:"Jeu 11",v:2},{l:"Ven 12",v:0},{l:"Sam 13",v:3},{l:"Lun 15",v:0,dl:1},{l:"Sam 20",v:4}],
+glance:[
+{v:"2",l:"urgences",c:"r",det:{quoi:"2 sujets de sécurité (connexion 05/06, clé Retell #2).",pourquoi:"Marqués sécurité = priorité haute.",qui:"kevin",prochaine:"Onglet Jour → cartes rouges.",etat:"réel",source:"Items sécurité",maia:"Les remonter en tête.",kevin:"Les traiter."}},
+{v:"2",l:"rappels actifs",c:"b",det:{quoi:"2 rappels (avocat, heures Michael).",pourquoi:"Échéances dépassées.",qui:"kevin",prochaine:"Dire fait/reporter/ignorer.",etat:"réel",source:"Rappels MAIA",maia:"Préparer un brouillon avocat.",kevin:"Statuer."}},
+{v:"?",l:"crédits Make",c:"muted",det:{quoi:"Crédits/opérations Make.",pourquoi:"Le « 8% » affiché avant était une vieille valeur, PAS une lecture live.",qui:"kevin",prochaine:"Vérifier dans make.com.",etat:"non connecté",source:"Anciens e-mails — non temps réel",maia:"Brancher Make lecture seule (futur).",kevin:"Ne rien acheter sans le vrai chiffre."}},
+{v:"2",l:"à valider",c:"o",det:{quoi:"2 décisions (migration Claude, crédits Make).",pourquoi:"Demandent un arbitrage.",qui:"valid",prochaine:"Onglet Jour → cartes oranges.",etat:"réel",source:"Items validation",maia:"Préparer les éléments.",kevin:"Décider."}}
+],
+comm:[
+{k:"✋ À répondre",v:"0 client externe",det:{quoi:"File des réponses clients dues.",pourquoi:"Aucune en attente aujourd'hui.",qui:"maia",prochaine:"Rien.",etat:"réel (lecture Gmail ia, filtrée)",source:"Gmail ia.votrebarman (lecture seule)",maia:"Surveiller.",kevin:"Rien."}},
+{k:"🔴 Mails à surveiller",v:"1 sécurité",det:{quoi:"1 mail sécurité (connexion 05/06).",pourquoi:"Sécurité = priorité.",qui:"kevin",prochaine:"Vérifier le compte Google.",etat:"réel",source:"Gmail ia",maia:"Pointer le lien.",kevin:"Vérifier."}},
+{k:"🟠 Décisions",v:"migration Claude · crédits Make",det:{quoi:"2 décisions à prendre.",pourquoi:"Échéance + coûts.",qui:"valid",prochaine:"Voir cartes oranges.",etat:"réel / partiel",source:"E-mails + suivi",maia:"Préparer.",kevin:"Décider."}}
+],
+projects:[
+{id:"P-MAIA",name:"Maïa (cockpit & OS perso)",state:"en_cours",blockers:["Dette gouvernance (~23 cockpits, 2× « 15_ »)","Synchro Drive figée 07/06"],next:"Assainir le terrain (source de vérité unique)",det:{quoi:"Le système de pilotage Maïa lui-même.",pourquoi:"Chantier en cours (V1.14 → V1.14.1).",qui:"claude",prochaine:"Valider V1.14.1 puis assainir les doublons.",etat:"réel",source:"Travaux Claude/Kevin",maia:"Exécuter via Claude.",kevin:"Valider les étapes."}},
+{id:"P-MIG",name:"Migration modèles Claude (Make)",state:"bloque",blockers:["Échéance 15/06","Inventaire non fait"],next:"Inventaire lecture seule des scénarios Make",det:{quoi:"Mise à jour des modèles Claude dans Make.",pourquoi:"Échéance 15/06.",qui:"valid",prochaine:"Lancer l'inventaire (lecture seule).",etat:"réel · bloqué",source:"E-mail Make",maia:"Préparer l'inventaire.",kevin:"Valider la migration."}},
+{id:"P-JUR",name:"Juridique (contrats + holding)",state:"en_cours",blockers:["Réponse avocat en attente"],next:"Valider le brouillon de réponse avocat",det:{quoi:"Contrats barmans/commerciaux + étude holding.",pourquoi:"Réponse avocat due.",qui:"kevin",prochaine:"Valider le brouillon.",etat:"réel",source:"Rappel + e-mails",maia:"Préparer le brouillon.",kevin:"Envoyer."}}
+],
+missions:[
+{proj:"Maïa",title:"Reprise V1.13 + audit",status:"terminee",det:{quoi:"Reprise V1.13 + audit maturité.",pourquoi:"Mission précédente.",qui:"claude",prochaine:"Archivée.",etat:"réel · terminé",source:"Livrables 20_",maia:"—",kevin:"—"}},
+{proj:"Maïa",title:"V1.14 + correctif V1.14.1",status:"en_cours",det:{quoi:"Cockpit opérationnel + corrections.",pourquoi:"Demande Kevin.",qui:"claude",prochaine:"Valider l'aperçu.",etat:"réel · en cours",source:"Cette session",maia:"—",kevin:"Valider visuel + fonctions."}},
+{proj:"Migration Claude",title:"Inventaire scénarios Make",status:"a_lancer",det:{quoi:"Inventaire lecture seule des scénarios Make.",pourquoi:"Préparer la migration.",qui:"claude",prochaine:"Générer le brief (onglet Projets → Piloter).",etat:"réel · à lancer",source:"Échéance 15/06",maia:"Préparer.",kevin:"Lancer."}}
+],
+validations:[
+{t:"Migration Claude : acheter des crédits Make ou réduire la conso",det:{quoi:"Choix sur les crédits Make.",pourquoi:"Conso vs achat.",qui:"valid",prochaine:"Vérifier le vrai niveau Make d'abord.",etat:"non connecté",source:"Anciens e-mails",maia:"Brancher Make (futur).",kevin:"Décider après vérif."}},
+{t:"Réponse avocat : valider le brouillon avant envoi",det:{quoi:"Brouillon de réponse avocat.",pourquoi:"Échéance dépassée.",qui:"valid",prochaine:"Lire + valider le brouillon.",etat:"réel",source:"Rappel",maia:"Préparer.",kevin:"Valider/envoyer."}},
+{t:"V1.14.1 : valider le visuel + les fonctions avant publication",det:{quoi:"Validation de cet aperçu.",pourquoi:"Ne rien remplacer sans ton OK.",qui:"valid",prochaine:"Tester l'aperçu puis dire « publie ».",etat:"réel",source:"Cette session",maia:"—",kevin:"Valider."}}
+],
+debts:[{t:"~23 cockpits dupliqués — réduire à 1 actif"},{t:"Deux dossiers « 15_ » (collision)"},{t:"Dossiers 11_/12_/13_ supersédés — archiver"}],
+conns:[
+{n:"Gmail ia.votrebarman",s:"Lecture seule (tâche matin) · PII filtrée",st:"reel"},
+{n:"Agendas ia + PRESTATIONS",s:"Lecture seule",st:"reel"},
+{n:"Make (crédits/scénarios)",s:"Compte actif, mais cockpit NON branché en direct → chiffres indicatifs",st:"non"},
+{n:"Telegram @maia_sbx_bot",s:"Bot existe · boucle réponse→tâche→cockpit NON bouclée",st:"non"},
+{n:"Données du cockpit (priorités/projets)",s:"Représentatives tant que COCKPIT_DATA non câblé",st:"sim"}
+],
+govIssues:[
+{ic:"🧬",t:"Doublons de cockpits",x:"~23 cockpits HTML (local + cloud). Garder 1 actif."},
+{ic:"⚠️",t:"Collision « 15_ »",x:"Deux dossiers « 15_ » au sens différent."},
+{ic:"🔌",t:"Synchro Drive figée",x:"Arrêtée au 07/06 : le cloud ne descend pas en local."}
+],
+trips:[{when:"Jeu 11/06",where:"Strasbourg (67)",detail:"2 prestations même jour, turnaround serré.",det:{quoi:"Déplacement pro 2 prestations.",pourquoi:"Agenda PRESTATIONS.",qui:"kevin",prochaine:"Valider trajet + créneau serré.",etat:"simulé (démo)",source:"Agenda (représentatif)",maia:"Préparer checklist + comparatif train.",kevin:"Valider la logistique."}}],
+sLieux:[
+{n:"Zénith d'Orléans / Co'met",s:"Concerts & spectacles",u:"https://sortir.orleans-metropole.fr/"},
+{n:"L'Astrolabe",s:"Musiques actuelles (rock, électro)",u:"https://www.alterre-astrolabe.fr/"},
+{n:"Agenda « On sort ! » Orléans Métropole",s:"Tous les événements à venir",u:"https://sortir.orleans-metropole.fr/"},
+{n:"JDS Orléans",s:"Agenda concerts/expos/sorties",u:"https://www.jds.fr/orleans/agenda/"}
+],
+kSpots:[{n:"Rivière du Loiret — Olivet",c:"Olivet (45160)",d:"~8 km",fac:"Très facile · familles/enfants",acc:"Location de canoës (canoës canadiens) au camping d\u2019Olivet",park:"Parking du camping d\u2019Olivet",int:"Rivière calme, moulins, nature préservée",prec:"Courant faible · sections privées : respecter les accès",u:"https://www.google.com/maps/search/cano%C3%A9+rivi%C3%A8re+Loiret+Olivet"},{n:"Le Loiret — Saint-Jean-le-Blanc (boucle 5 km)",c:"Saint-Jean-le-Blanc (45650)",d:"~4 km",fac:"Très facile · initiation",acc:"Boucle d\u2019initiation douce sur le petit Loiret",park:"À proximité (centre-bourg)",int:"Courant très faible, alevins, idéal enfants",prec:"Parfait débutants · gilet conseillé",u:"https://www.google.com/maps/search/cano%C3%A9+Loiret+Saint-Jean-le-Blanc"},{n:"Canal d\u2019Orléans — Combleux",c:"Combleux (45800)",d:"~6 km",fac:"Facile · eau plate",acc:"Base de location à Combleux (eau lisse)",park:"Parking du village d\u2019éclusiers",int:"Village classé, sans remous, très calme",prec:"Pas de courant — confort débutants",u:"https://www.google.com/maps/search/cano%C3%A9+canal+Orl%C3%A9ans+Combleux"},{n:"Canal d\u2019Orléans — Les Bordes",c:"Les Bordes (45460)",d:"~35 km est",fac:"Facile · eau plate",acc:"Base de location aux Bordes",park:"Sur place",int:"Canal calme, rando longue distance possible",prec:"Eau plate, sûr · vérifier ouverture base",u:"https://www.google.com/maps/search/cano%C3%A9+canal+Orl%C3%A9ans+Les+Bordes"},{n:"Le Loing / Lac des Closiers — Montargis",c:"Montargis (45200)",d:"~70 km",fac:"Facile · lac + rivière calme",acc:"Club Canoë-Kayak Montargis Vallée du Loing (FFCK)",park:"Lac des Closiers",int:"Lac + Loing, toutes disciplines, encadrement",prec:"Vérifier les créneaux/permanences du club",u:"https://www.google.com/maps/search/cano%C3%A9+kayak+Lac+des+Closiers+Montargis"},{n:"La Loire — Base de l\u2019Île Charlemagne",c:"Saint-Jean-le-Blanc (45650)",d:"~4 km",fac:"Moyen · Loire (plus large)",acc:"Location kayak/canoë/paddle · cale PMR · ~20€/2h",park:"Parking base de loisirs",int:"Plan d\u2019eau + Loire, accès PMR",prec:"\u26A0 Loire : courant, éviter étiage/crue, gilet obligatoire, prévenir un proche",u:"https://www.google.com/maps/search/base+%C3%AEle+Charlemagne+kayak+Saint-Jean-le-Blanc"}]
 };
 var ENVIES=["repos","eau","nature","insolite","luxe","pas cher","soleil","kayak","montagne","city-trip"];
 var STYPES=["concert","expo","resto","nature","famille","insolite","sport","marché"];
@@ -306,91 +286,90 @@ function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2200);}
 function etatBadge(e){return /non connect|simul/i.test(e)?'<span class="sim">'+esc(e)+'</span>':'<span class="reel">'+esc(e)+'</span>';}
 function detPanel(d){if(!d)return"";return '<div class="dgrid">'
- +'<b>De quoi</b><span>'+esc(d.quoi)+'</span>'
- +'<b>Pourquoi ici</b><span>'+esc(d.pourquoi)+'</span>'
- +'<b>Qui agit</b><span>'+W(d.qui)+'</span>'
- +'<b>Prochaine action</b><span>'+esc(d.prochaine)+'</span>'
- +'<b>État</b><span>'+etatBadge(d.etat)+'</span>'
- +'<b>Source</b><span>'+esc(d.source)+'</span>'
- +'<b>Maïa peut</b><span>'+esc(d.maia)+'</span>'
- +'<b>Kevin décide</b><span>'+esc(d.kevin)+'</span></div>';}
++'<b>De quoi</b><span>'+esc(d.quoi)+'</span>'
++'<b>Pourquoi ici</b><span>'+esc(d.pourquoi)+'</span>'
++'<b>Qui agit</b><span>'+W(d.qui)+'</span>'
++'<b>Prochaine action</b><span>'+esc(d.prochaine)+'</span>'
++'<b>État</b><span>'+etatBadge(d.etat)+'</span>'
++'<b>Source</b><span>'+esc(d.source)+'</span>'
++'<b>Maïa peut</b><span>'+esc(d.maia)+'</span>'
++'<b>Kevin décide</b><span>'+esc(d.kevin)+'</span></div>';}
 var GROUPS=[{k:"securite",t:"🔴 Sécurité (action à toi)"},{k:"validation",t:"🟠 Décisions à valider"},{k:"rappel",t:"🔵 Rappels à confirmer"}];
 var captureType="idee";
 function openCount(){return CTX.items.filter(function(i){return !reported[i.id]&&!done[i.id]&&!archived[i.id];}).length;}
 function softItems(){return CTX.items.filter(function(i){return i.prio==="lo"&&!done[i.id]&&!reported[i.id]&&!archived[i.id];});}
 function overload(){var open=openCount(),h=new Date().getHours(),ti=inbox.length,late=(h>=22||h<7),score=open+ti*0.5+(late?2:0);
- if(ti>=5&&late)return{f:.85,c:"var(--violet)",lab:"Violet · inspiration",msg:"Belle énergie. Je capte, on ne lance pas de chantier là.",open:open,ti:ti,late:late};
- if(score>=7)return{f:.9,c:"var(--red)",lab:"Rouge · clôturer",msg:"Charge haute. Une action, puis on clôture.",open:open,ti:ti,late:late};
- if(score>=4)return{f:.6,c:"var(--orange)",lab:"Orange · ralentir",msg:"Ça s'accumule. On vise l'essentiel.",open:open,ti:ti,late:late};
- return{f:.3,c:"var(--green)",lab:"Vert · ça va",msg:"Charge OK. Tu peux avancer.",open:open,ti:ti,late:late};}
+if(ti>=5&&late)return{f:.85,c:"var(--violet)",lab:"Violet · inspiration",msg:"Belle énergie. Je capte, on ne lance pas de chantier là.",open:open,ti:ti,late:late};
+if(score>=7)return{f:.9,c:"var(--red)",lab:"Rouge · clôturer",msg:"Charge haute. Une action, puis on clôture.",open:open,ti:ti,late:late};
+if(score>=4)return{f:.6,c:"var(--orange)",lab:"Orange · ralentir",msg:"Ça s'accumule. On vise l'essentiel.",open:open,ti:ti,late:late};
+return{f:.3,c:"var(--green)",lab:"Vert · ça va",msg:"Charge OK. Tu peux avancer.",open:open,ti:ti,late:late};}
 function arcGauge(f,color,pct){var C=Math.PI*80,on=Math.max(0,Math.min(1,f))*C;
- return '<svg viewBox="0 0 200 120" width="100%" height="100" style="max-width:230px;display:block;margin:4px auto 0"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#e6ebf4" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="'+color+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+on.toFixed(1)+' 999"/><text x="100" y="96" text-anchor="middle" font-size="30" font-weight="800" fill="#1b2a4a">'+pct+'%</text></svg>';}
+return '<svg viewBox="0 0 200 120" width="100%" height="100" style="max-width:230px;display:block;margin:4px auto 0"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#e6ebf4" stroke-width="14" stroke-linecap="round"/><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="'+color+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+on.toFixed(1)+' 999"/><text x="100" y="96" text-anchor="middle" font-size="30" font-weight="800" fill="#1b2a4a">'+pct+'%</text></svg>';}
 function weekBars(d){var max=Math.max(1,Math.max.apply(null,d.map(function(x){return x.v;}))),W2=320,n=d.length,bw=Math.min(38,(W2-20)/n-10),gap=(W2-20-bw*n)/(n-1||1),s='<svg viewBox="0 0 '+W2+' 130" width="100%" height="140">';
- d.forEach(function(b,i){var x=10+i*(bw+gap),bh=b.v?(80*b.v/max):3,y=100-bh,col=b.dl?"#8b5cf6":(b.v>=4?"#e5484d":b.v>=3?"#e8912f":b.v>0?"#2f6bff":"#c9d3e6");s+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="5" fill="'+col+'"/><text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#1b2a4a">'+(b.dl?'⚑':b.v)+'</text><text x="'+(x+bw/2)+'" y="118" text-anchor="middle" font-size="10.5" fill="#6b7a99">'+esc(b.l)+'</text>';});return s+'</svg>';}
-
+d.forEach(function(b,i){var x=10+i*(bw+gap),bh=b.v?(80*b.v/max):3,y=100-bh,col=b.dl?"#8b5cf6":(b.v>=4?"#e5484d":b.v>=3?"#e8912f":b.v>0?"#2f6bff":"#c9d3e6");s+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="5" fill="'+col+'"/><text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#1b2a4a">'+(b.dl?'⚑':b.v)+'</text><text x="'+(x+bw/2)+'" y="118" text-anchor="middle" font-size="10.5" fill="#6b7a99">'+esc(b.l)+'</text>';});return s+'</svg>';}
 function render(){
- document.getElementById("dateline").textContent=CTX.dateline;
- document.getElementById("prio").innerHTML=CTX.prio.map(function(p,i){return '<div class="p" data-go="'+esc(p.go||"")+'"><div class="n"><span>PRIORITÉ '+(i+1)+'</span><span>›</span></div><div class="t">'+esc(p.t)+'</div></div>';}).join("");
- document.getElementById("heroAct").textContent=CTX.hero.act;document.getElementById("heroM").textContent=CTX.hero.m;
- var vue=document.getElementById("vue"),html="",total=0,nd=0;
- GROUPS.forEach(function(g){var items=CTX.items.filter(function(i){return i.kind===g.k&&!reported[i.id]&&!archived[i.id];});if(!items.length)return;
-  html+='<div class="sec">'+g.t+' <span class="cnt">'+items.length+'</span></div>';
-  items.forEach(function(i){total++;if(done[i.id])nd++;var isd=!!done[i.id];
-   var pc=i.prio==="hi"?'<span class="pchip hi">prioritaire</span>':i.prio==="mid"?'<span class="pchip mid">à suivre</span>':'<span class="pchip lo">souple</span>';
-   html+='<div class="card tcard k-'+i.kind+(isd?' done':'')+'" data-id="'+i.id+'"><div class="chk" data-chk="'+i.id+'">✓</div><div class="tbody"><div class="ttl" data-tog="'+i.id+'">'+esc(i.t)+'</div><div class="meta">'+pc+' '+(i.det?W(i.det.qui):'')+' <span class="tag">'+esc(i.meta||"")+'</span></div><div class="detail"><div class="in">'+detPanel(i.det)
-    +'<div class="acts">'+(i.link?'<a class="chip" href="'+esc(i.link)+'" target="_blank" rel="noopener">🔗 Ouvrir</a>':'')+(i.remind?'<span class="chip" data-rem="'+i.id+'">⏰ Me rappeler</span>':'')+'<span class="chip" data-rep="'+i.id+'">📅 Reporter</span><span class="chip" data-arch="'+i.id+'">🗄️ Archiver / obsolète</span></div>'
-    +(i.bloc?'<div class="force"><div class="ft">⚠ Ça bloque — 3 sorties</div><div class="opt"><span class="chip warn">1 · Je décide</span><span class="chip warn">2 · Maïa prépare, je valide</span><span class="chip warn">3 · On délègue</span></div></div>':'')
-    +'</div></div></div><div class="chev" data-tog="'+i.id+'">▸</div></div>';});});
- vue.innerHTML=html;
- document.getElementById("allgoodWrap").style.display=(total-nd===0)?"block":"none";
- document.getElementById("badge").textContent=(total-nd===0)?"à jour":(total-nd)+" à traiter";
- var ov=overload(),pct=Math.round(ov.f*100);
- document.getElementById("arc").innerHTML=arcGauge(ov.f,ov.c,pct);
- document.getElementById("chPct").innerHTML='<b>'+pct+'%</b> de charge estimée';
- var cl=document.getElementById("chLab");cl.textContent=ov.lab;cl.style.color=ov.c;document.getElementById("chMsg").textContent=ov.msg;
- var soft=softItems();
- document.getElementById("chDetailIn").innerHTML='<div class="dgrid"><b>De quoi</b><span>Une estimation de ta charge mentale du moment.</span><b>Facteurs</b><span><b>'+ov.open+'</b> sujet(s) ouverts, <b>'+ov.ti+'</b> idée(s) en attente'+(ov.late?', heure tardive (mode nuit)':'')+'.</span><b>Trop ouvert ?</b><span>'+(ov.open>3?ov.open+' éléments — on en reporte 1-2.':'rien d\'excessif.')+'</span><b>À sortir du 1er plan</b><span>'+(soft.length?'« '+esc(soft[0].t)+' »':'rien')+'</span><b>État</b><span>'+etatBadge("estimation simulée")+'</span><b>Maïa peut</b><span>Reporter les éléments souples pour alléger.</span></div>';
- document.getElementById("cogOpenX").textContent=ov.open<=3?(ov.open+" sujet(s) ouverts — gérable."):(ov.open+" sujets ouverts. Reporte 1-2 éléments souples.");
- document.getElementById("cogOpen").className="cogbox"+(ov.open>4?" warn":" calm");
- document.getElementById("cogFrontX").textContent=soft.length?("À sortir : « "+soft[0].t+" »."):"Premier plan propre.";
- document.getElementById("cogFront").className="cogbox"+(soft.length?" warn":" calm");
- document.getElementById("pd").textContent=nd;document.getElementById("pt").textContent=total;document.getElementById("pbar").style.width=(total?Math.round(nd/total*100):0)+"%";
- document.getElementById("glance").innerHTML=CTX.glance.map(function(s,i){return '<div class="stat '+s.c+'" data-gl="'+i+'"><div class="v">'+esc(s.v)+'</div><div class="l">'+esc(s.l)+'</div></div>';}).join("");
- document.getElementById("comm").innerHTML=CTX.comm.map(function(m,i){return '<div class="dwrap"><div class="mini" data-cm="'+i+'"><b>'+esc(m.k)+'</b><span class="v">'+esc(m.v)+' ›</span></div><div class="detail"><div class="in">'+detPanel(m.det)+'</div></div></div>';}).join("");
- document.getElementById("weekbars").innerHTML=weekBars(CTX.week);
- bindDay();
+document.getElementById("dateline").textContent=CTX.dateline;
+document.getElementById("prio").innerHTML=CTX.prio.map(function(p,i){return '<div class="p" data-go="'+esc(p.go||"")+'"><div class="n"><span>PRIORITÉ '+(i+1)+'</span><span>›</span></div><div class="t">'+esc(p.t)+'</div></div>';}).join("");
+document.getElementById("heroAct").textContent=CTX.hero.act;document.getElementById("heroM").textContent=CTX.hero.m;
+var vue=document.getElementById("vue"),html="",total=0,nd=0;
+GROUPS.forEach(function(g){var items=CTX.items.filter(function(i){return i.kind===g.k&&!reported[i.id]&&!archived[i.id];});if(!items.length)return;
+html+='<div class="sec">'+g.t+' <span class="cnt">'+items.length+'</span></div>';
+items.forEach(function(i){total++;if(done[i.id])nd++;var isd=!!done[i.id];
+var pc=i.prio==="hi"?'<span class="pchip hi">prioritaire</span>':i.prio==="mid"?'<span class="pchip mid">à suivre</span>':'<span class="pchip lo">souple</span>';
+html+='<div class="card tcard k-'+i.kind+(isd?' done':'')+'" data-id="'+i.id+'"><div class="chk" data-chk="'+i.id+'">✓</div><div class="tbody"><div class="ttl" data-tog="'+i.id+'">'+esc(i.t)+'</div><div class="meta">'+pc+' '+(i.det?W(i.det.qui):'')+' <span class="tag">'+esc(i.meta||"")+'</span></div><div class="detail"><div class="in">'+detPanel(i.det)
++'<div class="acts">'+(i.link?'<a class="chip" href="'+esc(i.link)+'" target="_blank" rel="noopener">🔗 Ouvrir</a>':'')+(i.remind?'<span class="chip" data-rem="'+i.id+'">⏰ Me rappeler</span>':'')+'<span class="chip" data-rep="'+i.id+'">📅 Reporter</span><span class="chip" data-arch="'+i.id+'">🗄️ Archiver / obsolète</span></div>'
++(i.bloc?'<div class="force"><div class="ft">⚠ Ça bloque — 3 sorties</div><div class="opt"><span class="chip warn">1 · Je décide</span><span class="chip warn">2 · Maïa prépare, je valide</span><span class="chip warn">3 · On délègue</span></div></div>':'')
++'</div></div></div><div class="chev" data-tog="'+i.id+'">▸</div></div>';});});
+vue.innerHTML=html;
+document.getElementById("allgoodWrap").style.display=(total-nd===0)?"block":"none";
+document.getElementById("badge").textContent=(total-nd===0)?"à jour":(total-nd)+" à traiter";
+var ov=overload(),pct=Math.round(ov.f*100);
+document.getElementById("arc").innerHTML=arcGauge(ov.f,ov.c,pct);
+document.getElementById("chPct").innerHTML='<b>'+pct+'%</b> de charge estimée';
+var cl=document.getElementById("chLab");cl.textContent=ov.lab;cl.style.color=ov.c;document.getElementById("chMsg").textContent=ov.msg;
+var soft=softItems();
+document.getElementById("chDetailIn").innerHTML='<div class="dgrid"><b>De quoi</b><span>Une estimation de ta charge mentale du moment.</span><b>Facteurs</b><span><b>'+ov.open+'</b> sujet(s) ouverts, <b>'+ov.ti+'</b> idée(s) en attente'+(ov.late?', heure tardive (mode nuit)':'')+'.</span><b>Trop ouvert ?</b><span>'+(ov.open>3?ov.open+' éléments — on en reporte 1-2.':'rien d\'excessif.')+'</span><b>À sortir du 1er plan</b><span>'+(soft.length?'« '+esc(soft[0].t)+' »':'rien')+'</span><b>État</b><span>'+etatBadge("estimation simulée")+'</span><b>Maïa peut</b><span>Reporter les éléments souples pour alléger.</span></div>';
+document.getElementById("cogOpenX").textContent=ov.open<=3?(ov.open+" sujet(s) ouverts — gérable."):(ov.open+" sujets ouverts. Reporte 1-2 éléments souples.");
+document.getElementById("cogOpen").className="cogbox"+(ov.open>4?" warn":" calm");
+document.getElementById("cogFrontX").textContent=soft.length?("À sortir : « "+soft[0].t+" »."):"Premier plan propre.";
+document.getElementById("cogFront").className="cogbox"+(soft.length?" warn":" calm");
+document.getElementById("pd").textContent=nd;document.getElementById("pt").textContent=total;document.getElementById("pbar").style.width=(total?Math.round(nd/total*100):0)+"%";
+document.getElementById("glance").innerHTML=CTX.glance.map(function(s,i){return '<div class="stat '+s.c+'" data-gl="'+i+'"><div class="v">'+esc(s.v)+'</div><div class="l">'+esc(s.l)+'</div></div>';}).join("");
+document.getElementById("comm").innerHTML=CTX.comm.map(function(m,i){return '<div class="dwrap"><div class="mini" data-cm="'+i+'"><b>'+esc(m.k)+'</b><span class="v">'+esc(m.v)+' ›</span></div><div class="detail"><div class="in">'+detPanel(m.det)+'</div></div></div>';}).join("");
+document.getElementById("weekbars").innerHTML=weekBars(CTX.week);
+bindDay();
 }
 function openTask(id){if(!id)return;go("jour");var c=document.querySelector('.tcard[data-id="'+id+'"]');if(c){c.classList.add("open","flash");c.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(function(){c.classList.remove("flash");},1400);}}
 function renderProjets(){
- document.getElementById("projCnt").textContent=CTX.projects.length;
- document.getElementById("projList").innerHTML=CTX.projects.map(function(p,i){var st=projOv[p.id]||p.state,pl=st==="bloque"?'<span class="pill stop">bloqué</span>':st==="termine"?'<span class="pill ok">terminé</span>':st==="attente"?'<span class="pill wait">en attente</span>':'<span class="pill warn">en cours</span>';
-  return '<div class="card pad proj" data-pj="'+i+'"><div class="ph"><span class="pn">'+esc(p.name)+'</span>'+pl+'</div><div class="kv"><b>Prochaine :</b> '+esc(p.next)+' '+(p.det?W(p.det.qui):'')+'</div><div class="detail"><div class="in">'+detPanel(p.det)+'</div></div></div>';}).join("");
- var mis=CTX.missions;document.getElementById("misCnt").textContent=mis.filter(function(m){return m.status==="en_cours"||m.status==="a_lancer";}).length;
- document.getElementById("missions").innerHTML=mis.map(function(m,i){var p=m.status==="terminee"?'<span class="pill ok">terminée</span>':m.status==="a_lancer"?'<span class="pill wait">à lancer</span>':'<span class="pill warn">en cours</span>';return '<div class="dwrap"><div class="mini" data-ms="'+i+'"><b>'+esc(m.title)+' <span class="tag">'+esc(m.proj)+'</span></b><span class="v">'+p+' ›</span></div><div class="detail"><div class="in">'+detPanel(m.det)+'</div></div></div>';}).join("");
- document.getElementById("valCnt").textContent=CTX.validations.length;
- document.getElementById("vals").innerHTML=CTX.validations.map(function(v,i){return '<div class="dwrap"><div class="mini" data-vl="'+i+'"><b>🟠 '+esc(v.t)+'</b><span class="v">›</span></div><div class="detail"><div class="in">'+detPanel(v.det)+'</div></div></div>';}).join("");
- document.getElementById("debtCnt").textContent=CTX.debts.length;
- document.getElementById("debts").innerHTML=CTX.debts.map(function(d){return '<div class="kv">📉 '+esc(d.t)+'</div>';}).join("");
- var sel=document.getElementById("pSel");if(sel.options.length===0){sel.innerHTML=CTX.projects.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("");renderPilote();}
- bindExpand();
+document.getElementById("projCnt").textContent=CTX.projects.length;
+document.getElementById("projList").innerHTML=CTX.projects.map(function(p,i){var st=projOv[p.id]||p.state,pl=st==="bloque"?'<span class="pill stop">bloqué</span>':st==="termine"?'<span class="pill ok">terminé</span>':st==="attente"?'<span class="pill wait">en attente</span>':'<span class="pill warn">en cours</span>';
+return '<div class="card pad proj" data-pj="'+i+'"><div class="ph"><span class="pn">'+esc(p.name)+'</span>'+pl+'</div><div class="kv"><b>Prochaine :</b> '+esc(p.next)+' '+(p.det?W(p.det.qui):'')+'</div><div class="detail"><div class="in">'+detPanel(p.det)+'</div></div></div>';}).join("");
+var mis=CTX.missions;document.getElementById("misCnt").textContent=mis.filter(function(m){return m.status==="en_cours"||m.status==="a_lancer";}).length;
+document.getElementById("missions").innerHTML=mis.map(function(m,i){var p=m.status==="terminee"?'<span class="pill ok">terminée</span>':m.status==="a_lancer"?'<span class="pill wait">à lancer</span>':'<span class="pill warn">en cours</span>';return '<div class="dwrap"><div class="mini" data-ms="'+i+'"><b>'+esc(m.title)+' <span class="tag">'+esc(m.proj)+'</span></b><span class="v">'+p+' ›</span></div><div class="detail"><div class="in">'+detPanel(m.det)+'</div></div></div>';}).join("");
+document.getElementById("valCnt").textContent=CTX.validations.length;
+document.getElementById("vals").innerHTML=CTX.validations.map(function(v,i){return '<div class="dwrap"><div class="mini" data-vl="'+i+'"><b>🟠 '+esc(v.t)+'</b><span class="v">›</span></div><div class="detail"><div class="in">'+detPanel(v.det)+'</div></div></div>';}).join("");
+document.getElementById("debtCnt").textContent=CTX.debts.length;
+document.getElementById("debts").innerHTML=CTX.debts.map(function(d){return '<div class="kv">📉 '+esc(d.t)+'</div>';}).join("");
+var sel=document.getElementById("pSel");if(sel.options.length===0){sel.innerHTML=CTX.projects.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("");renderPilote();}
+bindExpand();
 }
 function curProj(){var id=document.getElementById("pSel").value;return CTX.projects.filter(function(p){return p.id===id;})[0];}
 function renderPilote(){var p=curProj();if(!p)return;var st=projOv[p.id]||p.state;document.getElementById("pState").innerHTML='<b>État :</b> '+esc(st)+' · <b>Blocages :</b> '+((p.blockers||[]).map(esc).join(" · ")||"aucun")+'<br><b>Prochaine :</b> '+esc(p.next);
- document.getElementById("decide").innerHTML='<button class="btn sm" data-dec="relancer">↻ Relancer</button><button class="btn sm" data-dec="attendre">⏳ Attendre Kevin</button><button class="btn sm" data-dec="cloturer">✅ Clôturer</button>';
- document.querySelectorAll("[data-dec]").forEach(function(b){b.onclick=function(){var pp=curProj();projOv[pp.id]=(b.getAttribute("data-dec")==="cloturer"?"termine":b.getAttribute("data-dec")==="attendre"?"attente":"en_cours");save(KPR,projOv);renderProjets();renderPilote();toast("Décision : "+b.getAttribute("data-dec"));};});}
+document.getElementById("decide").innerHTML='<button class="btn sm" data-dec="relancer">↻ Relancer</button><button class="btn sm" data-dec="attendre">⏳ Attendre Kevin</button><button class="btn sm" data-dec="cloturer">✅ Clôturer</button>';
+document.querySelectorAll("[data-dec]").forEach(function(b){b.onclick=function(){var pp=curProj();projOv[pp.id]=(b.getAttribute("data-dec")==="cloturer"?"termine":b.getAttribute("data-dec")==="attendre"?"attente":"en_cours");save(KPR,projOv);renderProjets();renderPilote();toast("Décision : "+b.getAttribute("data-dec"));};});}
 function genBrief(){var p=curProj();if(!p)return;document.getElementById("briefOut").value="🧾 MISSION CLAUDE — "+p.name+"\nÉTAT : "+(projOv[p.id]||p.state)+"\nBLOCAGES : "+((p.blockers||[]).join(" ; ")||"aucun")+"\nPROCHAINE : "+p.next+"\n\nDEMANDE : fais avancer jusqu'au prochain point de décision humaine.\nRÈGLES : lecture seule ; zones rouges intactes ; pas de suppression ; rollback.\nRETOUR : rapport court (✅/⚠️/⛔ · Fait · À valider · Prochaine action).";toast("Brief généré");}
 function analyze(){var r=document.getElementById("reportIn").value.toLowerCase(),o=document.getElementById("analyzeOut");if(!r.trim()){o.textContent="Colle d'abord le rapport.";return;}var s;if(/⛔|bloqu/.test(r))s="⛔ Blocage → <b>Attendre Kevin</b> ou <b>Relancer</b>.";else if(/✅|termin|livré|fini/.test(r)&&!/⚠|dérive|partiel/.test(r))s="✅ Terminé → <b>Clôturer</b>.";else if(/⚠|dérive|risque|partiel/.test(r))s="⚠️ Dérive → <b>Relancer</b> avec recadrage.";else s="ℹ️ Pas de signal net → relire ou <b>Attendre Kevin</b>.";o.innerHTML="<b>Analyse :</b> "+s;toast("Rapport analysé");}
 function classify(t){t=t.toLowerCase();if(/appel|rappel|relanc/.test(t))return"rappel";if(/réserv|hôtel|train|voyage|kayak/.test(t))return"voyage";if(/contrat|avocat|facture/.test(t))return"décision";return"à trier";}
 function similar(t){t=t.toLowerCase().trim();var hit=null;inbox.concat(CTX.items.map(function(i){return{t:i.t};})).forEach(function(x){var a=String(x.t).toLowerCase();if(!hit&&a.length>4&&(a.indexOf(t)>=0||t.indexOf(a)>=0))hit=x.t;});return hit;}
 function saveCapture(){var ta=document.getElementById("ideaText"),t=ta.value.trim();if(!t)return;var dup=similar(t);if(dup&&!confirm("⚠️ Un sujet proche existe déjà :\n« "+dup+" »\nRegrouper plutôt que créer ? (OK = garder · Annuler = non)"))return;
- if(captureType==="rappel"){if(confirm("Je te prépare un rappel :\n« demain matin : "+t+" »\nC'est bien ça ?")){rems.unshift("demain matin : "+t);save(KR,rems);}}else{inbox.unshift({t:t,type:captureType,cls:classify(t)});save(KI,inbox);}
- ta.value="";renderCapture();render();toast("Gardé ✓ (inbox locale)");}
+if(captureType==="rappel"){if(confirm("Je te prépare un rappel :\n« demain matin : "+t+" »\nC'est bien ça ?")){rems.unshift("demain matin : "+t);save(KR,rems);}}else{inbox.unshift({t:t,type:captureType,cls:classify(t)});save(KI,inbox);}
+ta.value="";renderCapture();render();toast("Gardé ✓ (inbox locale)");}
 function renderCapture(){document.getElementById("inboxCnt").textContent=inbox.length;
- document.getElementById("inboxList").innerHTML=inbox.length?inbox.map(function(o,i){return '<div class="it"><span>'+({idee:"💡",pense:"📌",reparler:"🗣️",urgence:"🔥"}[o.type]||"•")+' '+esc(o.t)+' <span class="tag">'+esc(o.cls)+'</span></span><span class="x" data-di="'+i+'">✕</span></div>';}).join(""):'<div class="empty">🌱 Rien encore — dépose une idée.</div>';
- document.getElementById("remCnt").textContent=rems.length;
- document.getElementById("remList").innerHTML=rems.length?rems.map(function(t,i){return '<div class="it"><span>⏰ '+esc(t)+'</span><span class="x" data-dr="'+i+'">✕</span></div>';}).join(""):'<div class="empty">Aucun rappel préparé.</div>';
- document.querySelectorAll("[data-di]").forEach(function(x){x.onclick=function(){inbox.splice(+x.getAttribute("data-di"),1);save(KI,inbox);renderCapture();render();};});
- document.querySelectorAll("[data-dr]").forEach(function(x){x.onclick=function(){rems.splice(+x.getAttribute("data-dr"),1);save(KR,rems);renderCapture();};});}
+document.getElementById("inboxList").innerHTML=inbox.length?inbox.map(function(o,i){return '<div class="it"><span>'+({idee:"💡",pense:"📌",reparler:"🗣️",urgence:"🔥"}[o.type]||"•")+' '+esc(o.t)+' <span class="tag">'+esc(o.cls)+'</span></span><span class="x" data-di="'+i+'">✕</span></div>';}).join(""):'<div class="empty">🌱 Rien encore — dépose une idée.</div>';
+document.getElementById("remCnt").textContent=rems.length;
+document.getElementById("remList").innerHTML=rems.length?rems.map(function(t,i){return '<div class="it"><span>⏰ '+esc(t)+'</span><span class="x" data-dr="'+i+'">✕</span></div>';}).join(""):'<div class="empty">Aucun rappel préparé.</div>';
+document.querySelectorAll("[data-di]").forEach(function(x){x.onclick=function(){inbox.splice(+x.getAttribute("data-di"),1);save(KI,inbox);renderCapture();render();};});
+document.querySelectorAll("[data-dr]").forEach(function(x){x.onclick=function(){rems.splice(+x.getAttribute("data-dr"),1);save(KR,rems);renderCapture();};});}
 function makeUrgence(){var t=prompt("Décris l'urgence (Maïa la PRÉPARE dans l'inbox, RIEN n'est envoyé) :");if(!t||!t.trim())return;inbox.unshift({t:t.trim(),type:"urgence",cls:"urgence à valider"});save(KI,inbox);go("capture");renderCapture();render();toast("🔥 Urgence préparée (à valider) — rien envoyé.");}
 function renderChips(el,list,sel){document.getElementById(el).innerHTML=list.map(function(x){return '<span class="chip'+(sel[x]?" on":"")+'" data-fx="'+el+'" data-val="'+esc(x)+'">'+esc(x)+'</span>';}).join("");}
 function bindChips(){document.querySelectorAll("[data-fx]").forEach(function(c){c.onclick=function(){var g=c.getAttribute("data-fx"),v=c.getAttribute("data-val"),store=g==="vEnvies"?envSel:stypeSel,key=g==="vEnvies"?KE:KS;if(store[v])delete store[v];else store[v]=1;save(key,store);c.classList.toggle("on");};});}
@@ -398,42 +377,38 @@ function selList(o){var r=[];for(var k in o)if(o[k])r.push(k);return r;}
 function voyageBrief(kind){var dep=document.getElementById("vDep").value,dates=document.getElementById("vDates").value,bud=document.getElementById("vBudget").value,env=selList(envSel);var b="🌍 RECHERCHE VOYAGE\nDépart : "+(dep||"?")+"\nDates : "+(dates||"à préciser")+"\nBudget : "+(bud||"à préciser")+"\nEnvies : "+(env.join(", ")||"—")+"\nObjectif : "+kind+"\n\nMaïa préparera : comparateurs (vols/train), hôtels selon budget+envies, dates flexibles ±3j, alertes prix. 2–3 options + plan. AUCUNE réservation/paiement sans ta validation.\n(à brancher sur la recherche live)";var o=document.getElementById("vOut");o.textContent=b;o.classList.add("show");toast("Recherche préparée ("+kind+")");}
 function sortiesPrep(){var v=document.getElementById("sVille").value,r=document.getElementById("sRayon").value,p=document.getElementById("sPeriode").value,ty=selList(stypeSel);var o=document.getElementById("sOut");o.textContent="🎟️ SORTIES — "+(v||"Orléans")+" · "+r+" · "+p+"\nEnvies : "+(ty.join(", ")||"toutes")+"\n→ Ouvre l'agenda officiel pour la liste datée (bouton ci-dessus). Lieux réels listés en dessous.";o.classList.add("show");toast("Recherche sorties préparée");}
 function renderSorties(){document.getElementById("sLieux").innerHTML=CTX.sLieux.map(function(l){var liked=sPrefs[l.n]==="y",no=sPrefs[l.n]==="n";return '<div class="mini" style="cursor:default"><b>📍 '+esc(l.n)+(liked?" ⭐":no?" 🚫":"")+'<br><span style="font-weight:400;color:#6b7a99">'+esc(l.s)+'</span></b><span class="v"><a class="chip" href="'+esc(l.u)+'" target="_blank" rel="noopener">↗</a> <span class="chip" data-sp="'+esc(l.n)+'" data-v="y">👍</span> <span class="chip" data-sp="'+esc(l.n)+'" data-v="n">👎</span></span></div>';}).join("");
- document.querySelectorAll("[data-sp]").forEach(function(x){x.onclick=function(){sPrefs[x.getAttribute("data-sp")]=x.getAttribute("data-v");save(KSP,sPrefs);renderSorties();toast("Préférence mémorisée");};});}
-function kayakShow(){var v=document.getElementById("kVille").value||"Orléans";document.getElementById("kMap").href="https://www.google.com/maps/search/"+encodeURIComponent("mise a l eau canoe kayak "+v);
- document.getElementById("kList").innerHTML='<div class="sec" style="margin-top:10px">Points réels près d\'Orléans <span class="reel">sources</span></div>'+CTX.kSpots.map(function(s,i){var fav=kFav.indexOf(s.n)>=0;return '<div class="mini" style="cursor:default"><b>🛶 '+esc(s.n)+'<br><span style="font-weight:400;color:#6b7a99">'+esc(s.s)+' · '+esc(s.v)+'</span></b><span class="v"><a class="chip" href="'+esc(s.u)+'" target="_blank" rel="noopener">🗺️</a> <span class="chip'+(fav?" on":"")+'" data-kf="'+i+'">'+(fav?"★":"☆")+' favori</span></span></div>';}).join("");
- document.querySelectorAll("[data-kf]").forEach(function(x){x.onclick=function(){var n=CTX.kSpots[+x.getAttribute("data-kf")].n,p=kFav.indexOf(n);if(p>=0)kFav.splice(p,1);else kFav.unshift(n);save(KKF,kFav);kayakShow();renderKFav();toast("Favoris mis à jour");};});toast("Points kayak affichés");}
+document.querySelectorAll("[data-sp]").forEach(function(x){x.onclick=function(){sPrefs[x.getAttribute("data-sp")]=x.getAttribute("data-v");save(KSP,sPrefs);renderSorties();toast("Préférence mémorisée");};});}
+function kayakShow(){var v=document.getElementById("kVille").value||"Orl\u00e9ans";document.getElementById("kMap").href="https://www.google.com/maps/search/"+encodeURIComponent("cano\u00e9 kayak mise a l eau "+v);document.getElementById("kList").innerHTML='<div class="sec" style="margin-top:10px">Points r\u00e9els (Loiret &amp; alentours, calme d\u2019abord) <span class="reel">sources</span></div>'+CTX.kSpots.map(function(s,i){var fav=kFav.indexOf(s.n)>=0;return '<div class="dwrap"><div class="mini" data-ksp="'+i+'"><b>\ud83d\udef6 '+esc(s.n)+'<br><span style="font-weight:400;color:#6b7a99">'+esc(s.c)+' \u00b7 '+esc(s.d)+' \u00b7 '+esc(s.fac)+'</span></b><span class="v"><a class="chip" href="'+esc(s.u)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">\ud83d\uddfa\ufe0f</a> <span class="chip'+(fav?" on":"")+'" data-kf="'+i+'" onclick="event.stopPropagation()">'+(fav?"\u2605":"\u2606")+'</span> \u203a</span></div><div class="detail"><div class="in"><div class="dgrid"><b>Acc\u00e8s</b><span>'+esc(s.acc)+'</span><b>Parking</b><span>'+esc(s.park)+'</span><b>Int\u00e9r\u00eat</b><span>'+esc(s.int)+'</span><b>Pr\u00e9cautions</b><span>'+esc(s.prec)+'</span><b>Distance</b><span>'+esc(s.d)+' depuis Orl\u00e9ans</span></div><div class="note" style="margin-top:7px">Donn\u00e9es indicatives \u00b7 <b>\u00e0 confirmer sur place</b> (acc\u00e8s, niveau d\u2019eau, ouverture).</div></div></div></div>';}).join("");document.querySelectorAll("[data-ksp]").forEach(function(e){e.onclick=function(ev){if(ev.target.closest("a")||ev.target.closest("[data-kf]"))return;e.closest(".dwrap").classList.toggle("open");};});document.querySelectorAll("#kList [data-kf]").forEach(function(x){x.onclick=function(ev){ev.stopPropagation();var n=CTX.kSpots[+x.getAttribute("data-kf")].n,p=kFav.indexOf(n);if(p>=0)kFav.splice(p,1);else kFav.unshift(n);save(KKF,kFav);kayakShow();renderKFav();toast("Favoris mis \u00e0 jour");};});toast("Points kayak affich\u00e9s");}
 function renderKFav(){document.getElementById("kFavCnt").textContent=kFav.length;document.getElementById("kFavList").innerHTML=kFav.length?kFav.map(function(n,i){return '<div class="it"><span>⭐ '+esc(n)+'</span><span class="x" data-kx="'+i+'">✕</span></div>';}).join(""):'<div class="empty">Aucun favori — ajoute un spot depuis la liste.</div>';
- document.querySelectorAll("[data-kx]").forEach(function(x){x.onclick=function(){kFav.splice(+x.getAttribute("data-kx"),1);save(KKF,kFav);renderKFav();kayakShow();};});}
+document.querySelectorAll("[data-kx]").forEach(function(x){x.onclick=function(){kFav.splice(+x.getAttribute("data-kx"),1);save(KKF,kFav);renderKFav();kayakShow();};});}
 function renderLogi(){renderChips("vEnvies",ENVIES,envSel);renderChips("sTypes",STYPES,stypeSel);bindChips();renderSorties();kayakShow();renderKFav();
-
- document.getElementById("trips").innerHTML=CTX.trips.map(function(t,i){return '<div class="card pad proj" style="border-left-color:var(--blue)" data-tp="'+i+'"><div class="pn" style="font-weight:750">🧳 '+esc(t.when)+' — '+esc(t.where)+'</div><div class="kv">'+esc(t.detail)+'</div><div class="detail"><div class="in">'+detPanel(t.det)+'</div></div></div>';}).join("");bindExpand();}
+document.getElementById("trips").innerHTML=CTX.trips.map(function(t,i){return '<div class="card pad proj" style="border-left-color:var(--blue)" data-tp="'+i+'"><div class="pn" style="font-weight:750">🧳 '+esc(t.when)+' — '+esc(t.where)+'</div><div class="kv">'+esc(t.detail)+'</div><div class="detail"><div class="in">'+detPanel(t.det)+'</div></div></div>';}).join("");bindExpand();}
 function renderGov(){document.getElementById("connList").innerHTML=CTX.conns.map(function(c){var b=c.st==="reel"?'<span class="reel">réel</span>':c.st==="non"?'<span class="sim">non connecté</span>':'<span class="sim">simulé</span>';return '<div class="mini" style="cursor:default"><b>'+esc(c.n)+'</b><span class="v">'+b+'<br>'+esc(c.s)+'</span></div>';}).join("");
- document.getElementById("govCnt").textContent=CTX.govIssues.length;document.getElementById("govList").innerHTML=CTX.govIssues.map(function(g){return '<div class="g"><span class="ic">'+g.ic+'</span><div><div class="gt">'+esc(g.t)+'</div><div class="gx">'+esc(g.x)+'</div></div></div>';}).join("");}
+document.getElementById("govCnt").textContent=CTX.govIssues.length;document.getElementById("govList").innerHTML=CTX.govIssues.map(function(g){return '<div class="g"><span class="ic">'+g.ic+'</span><div><div class="gt">'+esc(g.t)+'</div><div class="gx">'+esc(g.x)+'</div></div></div>';}).join("");}
 function bindExpand(){document.querySelectorAll("[data-pj],[data-ms],[data-vl],[data-cm],[data-gl],[data-tp]").forEach(function(e){e.onclick=function(ev){if(ev.target.closest("a"))return;
-  if(e.hasAttribute("data-gl")){var idx=+e.getAttribute("data-gl");openModalDetail(CTX.glance[idx].l,CTX.glance[idx].det);return;}
-  var wrap=e.closest(".dwrap")||e;wrap.classList.toggle("open");};});}
+if(e.hasAttribute("data-gl")){var idx=+e.getAttribute("data-gl");openModalDetail(CTX.glance[idx].l,CTX.glance[idx].det);return;}
+var wrap=e.closest(".dwrap")||e;wrap.classList.toggle("open");};});}
 function openModalDetail(title,d){go("jour");var el=document.getElementById("glance");var ex=document.getElementById("glanceDetail");if(!ex){ex=document.createElement("div");ex.id="glanceDetail";ex.className="card pad";ex.style.marginTop="10px";el.parentNode.insertBefore(ex,el.nextSibling);}ex.innerHTML='<div class="gtit">'+esc(title)+'</div><div class="kv">'+detPanel(d)+'</div>';ex.scrollIntoView({behavior:"smooth",block:"center"});toast("Détail : "+title);}
 function bindDay(){
- document.querySelectorAll(".prio .p").forEach(function(e){e.onclick=function(){openTask(e.getAttribute("data-go"));};});
- document.querySelectorAll("[data-tog]").forEach(function(e){e.onclick=function(){var c=e.closest(".tcard");if(c)c.classList.toggle("open");};});
- document.querySelectorAll("[data-chk]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var id=b.getAttribute("data-chk");if(done[id])delete done[id];else done[id]=1;save(KD,done);render();};});
- document.querySelectorAll("[data-rem]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var it=CTX.items.filter(function(x){return x.id===b.getAttribute("data-rem");})[0];if(it&&confirm("Rappel :\n« demain matin : "+it.t+" »\nC'est bien ça ?")){rems.unshift("demain matin : "+it.t);save(KR,rems);toast("Rappel préparé");}};});
- document.querySelectorAll("[data-rep]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();reported[b.getAttribute("data-rep")]=1;save(KP,reported);render();toast("Reporté à demain");};});
- document.querySelectorAll("[data-arch]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();archived[b.getAttribute("data-arch")]=1;save(KA,archived);render();toast("Archivé / marqué obsolète");};});
- bindExpand();
+document.querySelectorAll(".prio .p").forEach(function(e){e.onclick=function(){openTask(e.getAttribute("data-go"));};});
+document.querySelectorAll("[data-tog]").forEach(function(e){e.onclick=function(){var c=e.closest(".tcard");if(c)c.classList.toggle("open");};});
+document.querySelectorAll("[data-chk]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var id=b.getAttribute("data-chk");if(done[id])delete done[id];else done[id]=1;save(KD,done);render();};});
+document.querySelectorAll("[data-rem]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var it=CTX.items.filter(function(x){return x.id===b.getAttribute("data-rem");})[0];if(it&&confirm("Rappel :\n« demain matin : "+it.t+" »\nC'est bien ça ?")){rems.unshift("demain matin : "+it.t);save(KR,rems);toast("Rappel préparé");}};});
+document.querySelectorAll("[data-rep]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();reported[b.getAttribute("data-rep")]=1;save(KP,reported);render();toast("Reporté à demain");};});
+document.querySelectorAll("[data-arch]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();archived[b.getAttribute("data-arch")]=1;save(KA,archived);render();toast("Archivé / marqué obsolète");};});
+bindExpand();
 }
 function go(v){document.querySelectorAll(".view").forEach(function(s){s.classList.remove("active");});var el=document.getElementById("view-"+v);if(el)el.classList.add("active");document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});save(KV,v);if(v==="projets")renderProjets();if(v==="capture")renderCapture();if(v==="logistique")renderLogi();if(v==="gouv")renderGov();}
 function openC(o){document.getElementById("composer").classList[o?"add":"remove"]("open");if(o)document.getElementById("ideaText").focus();}
 function applyNight(on){document.body.classList[on?"add":"remove"]("night");save(KN,on?1:0);document.getElementById("nightBtn").textContent=on?"☀️":"🌙";}
 var MAIA_VOICE=null;
 function pickVoice(){try{var vs=speechSynthesis.getVoices();if(!vs.length)return;var fr=vs.filter(function(v){return /fr/i.test(v.lang);});
- var pref=["Audrey","Amelie","Amélie","Marie","Virginie","Thomas","Google français","Denise","Hortense","Julie"];
- for(var i=0;i<pref.length;i++){var m=fr.filter(function(v){return v.name.indexOf(pref[i])>=0;})[0];if(m){MAIA_VOICE=m;break;}}
- if(!MAIA_VOICE&&fr.length)MAIA_VOICE=fr.filter(function(v){return /female|femme|Audrey|Amelie|Denise|Hortense|Julie|Marie/i.test(v.name);})[0]||fr[0];
- var lbl=document.getElementById("voicelbl");if(MAIA_VOICE&&lbl)lbl.innerHTML="🔊 Voix : <b>"+esc(MAIA_VOICE.name)+"</b> (système, provisoire) — la vraie voix Maïa reste à connecter.";
+var pref=["Audrey","Amelie","Amélie","Marie","Virginie","Thomas","Google français","Denise","Hortense","Julie"];
+for(var i=0;i<pref.length;i++){var m=fr.filter(function(v){return v.name.indexOf(pref[i])>=0;})[0];if(m){MAIA_VOICE=m;break;}}
+if(!MAIA_VOICE&&fr.length)MAIA_VOICE=fr.filter(function(v){return /female|femme|Audrey|Amelie|Denise|Hortense|Julie|Marie/i.test(v.name);})[0]||fr[0];
+var lbl=document.getElementById("voicelbl");if(MAIA_VOICE&&lbl)lbl.innerHTML="🔊 Voix : <b>"+esc(MAIA_VOICE.name)+"</b> (système, provisoire) — la vraie voix Maïa reste à connecter.";
 }catch(e){}}
 function speakDay(){try{var u=new SpeechSynthesisUtterance("Bonjour Kevin. Priorité du jour : vérifier la connexion du 5 juin. Tu as deux décisions et deux rappels. Tout est en lecture seule.");u.lang="fr-FR";u.rate=.96;u.pitch=1.05;if(MAIA_VOICE)u.voice=MAIA_VOICE;speechSynthesis.cancel();speechSynthesis.speak(u);toast(MAIA_VOICE?("Voix : "+MAIA_VOICE.name):"Voix système par défaut");}catch(e){toast("Lecture audio non dispo ici.");}}
-
 document.getElementById("urgBtn").onclick=makeUrgence;
 document.getElementById("ideaBtn").onclick=function(){go("jour");openC(!document.getElementById("composer").classList.contains("open"));};
 document.getElementById("ideaClose").onclick=function(){openC(false);};
@@ -452,10 +427,9 @@ document.getElementById("audioBtn").onclick=speakDay;
 document.getElementById("nightBtn").onclick=function(){applyNight(!document.body.classList.contains("night"));};
 document.getElementById("nightBtn2").onclick=function(){applyNight(!document.body.classList.contains("night"));toast(document.body.classList.contains("night")?"Capture nuit ON":"Capture nuit OFF");};
 document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(){go(a.getAttribute("data-v"));window.scrollTo(0,0);};});
-
 (function(){setTimeout(function(){document.body.classList.add("splash-done");},3400);
- var h=new Date().getHours(),ns=load(KN,null);if(ns===null?(h>=22||h<7):ns===1)applyNight(true);
- if(typeof speechSynthesis!=="undefined"){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
- render();})();
+var h=new Date().getHours(),ns=load(KN,null);if(ns===null?(h>=22||h<7):ns===1)applyNight(true);
+if(typeof speechSynthesis!=="undefined"){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+render();})();
 </script>
 </body></html>
