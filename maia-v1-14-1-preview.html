@@ -8,12 +8,8 @@
 <title>Maïa V1.14.1 — Aperçu corrigé</title>
 <link rel="icon" type="image/png" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
 <link rel="apple-touch-icon" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
-<!--
-  MAÏA V1.14.1 — APERÇU CORRECTIF (non publié en remplacement).
-  Conserve : style clair premium, lumière animée derrière le logo, modules Voyage/Sorties/Kayak, onglets Jour/Projets/Capture/Logistique/Ordre.
-  Corrige : Parler à Maïa -> Telegram @maia_sbx_bot (séparé de Déposer une idée) · voix améliorée + libellé · blocs DÉTAILLABLES partout (quoi/pourquoi/qui/prochaine/état/source/Maïa peut/Kevin décide) · priorités cliquables · charge % + facteurs · crédits honnêtes (non connectés) · tâches avec responsable+source+archiver · Sorties & Kayak avec données RÉELLES sourcées (Orléans).
-  Données = représentatives sauf mention « réel · source ». Aucune zone rouge.
--->
+<link rel="manifest" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-manifest.json">
+<!-- Maïa V1.14.1 aperçu correctif (non publié). Telegram @maia_sbx_bot. Données représentatives sauf « réel · source ». Aucune zone rouge. -->
 <style>
 :root{--bg:#eef2f8;--card:#fff;--ink:#1b2a4a;--muted:#6b7a99;--line:#e6ebf4;--line2:#eef1f7;--blue:#2f6bff;--teal:#2bb6c9;--silver:#b9c6e0;--brown:#7a6a55;--green:#3fa66a;--orange:#e8912f;--red:#e5484d;--violet:#8b5cf6;--shadow:0 6px 22px -12px #2b3a5e40;--shadow2:0 12px 34px -16px #2b3a5e55;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
@@ -409,14 +405,14 @@ function kayakShow(){var v=document.getElementById("kVille").value||"Orléans";d
 function renderKFav(){document.getElementById("kFavCnt").textContent=kFav.length;document.getElementById("kFavList").innerHTML=kFav.length?kFav.map(function(n,i){return '<div class="it"><span>⭐ '+esc(n)+'</span><span class="x" data-kx="'+i+'">✕</span></div>';}).join(""):'<div class="empty">Aucun favori — ajoute un spot depuis la liste.</div>';
  document.querySelectorAll("[data-kx]").forEach(function(x){x.onclick=function(){kFav.splice(+x.getAttribute("data-kx"),1);save(KKF,kFav);renderKFav();kayakShow();};});}
 function renderLogi(){renderChips("vEnvies",ENVIES,envSel);renderChips("sTypes",STYPES,stypeSel);bindChips();renderSorties();kayakShow();renderKFav();
+
  document.getElementById("trips").innerHTML=CTX.trips.map(function(t,i){return '<div class="card pad proj" style="border-left-color:var(--blue)" data-tp="'+i+'"><div class="pn" style="font-weight:750">🧳 '+esc(t.when)+' — '+esc(t.where)+'</div><div class="kv">'+esc(t.detail)+'</div><div class="detail"><div class="in">'+detPanel(t.det)+'</div></div></div>';}).join("");bindExpand();}
 function renderGov(){document.getElementById("connList").innerHTML=CTX.conns.map(function(c){var b=c.st==="reel"?'<span class="reel">réel</span>':c.st==="non"?'<span class="sim">non connecté</span>':'<span class="sim">simulé</span>';return '<div class="mini" style="cursor:default"><b>'+esc(c.n)+'</b><span class="v">'+b+'<br>'+esc(c.s)+'</span></div>';}).join("");
  document.getElementById("govCnt").textContent=CTX.govIssues.length;document.getElementById("govList").innerHTML=CTX.govIssues.map(function(g){return '<div class="g"><span class="ic">'+g.ic+'</span><div><div class="gt">'+esc(g.t)+'</div><div class="gx">'+esc(g.x)+'</div></div></div>';}).join("");}
-function bindExpand(){document.querySelectorAll("[data-pj],[data-ms],[data-vl],[data-cm],[data-gl],[data-tp]").forEach(function(e){e.onclick=function(ev){if(ev.target.closest("a")||ev.target.closest("[data-sp]")||ev.target.closest("[data-kf]"))return;var w=e.closest(".dwrap")||(e.classList.contains("proj")?e:e.parentElement);
-  if(e.hasAttribute("data-gl")){var idx=+e.getAttribute("data-gl"),d=CTX.glance[idx].det;openModalDetail(CTX.glance[idx].l,d);return;}
+function bindExpand(){document.querySelectorAll("[data-pj],[data-ms],[data-vl],[data-cm],[data-gl],[data-tp]").forEach(function(e){e.onclick=function(ev){if(ev.target.closest("a"))return;
+  if(e.hasAttribute("data-gl")){var idx=+e.getAttribute("data-gl");openModalDetail(CTX.glance[idx].l,CTX.glance[idx].det);return;}
   var wrap=e.closest(".dwrap")||e;wrap.classList.toggle("open");};});}
-function openModalDetail(title,d){go("jour");toast("Détail : "+title);var el=document.getElementById("glance");/* expand inline below glance via a temporary card */
- var ex=document.getElementById("glanceDetail");if(!ex){ex=document.createElement("div");ex.id="glanceDetail";ex.className="card pad";ex.style.marginTop="10px";el.parentNode.insertBefore(ex,el.nextSibling);}ex.innerHTML='<div class="gtit">'+esc(title)+'</div><div class="kv">'+detPanel(d)+'</div>';ex.scrollIntoView({behavior:"smooth",block:"center"});}
+function openModalDetail(title,d){go("jour");var el=document.getElementById("glance");var ex=document.getElementById("glanceDetail");if(!ex){ex=document.createElement("div");ex.id="glanceDetail";ex.className="card pad";ex.style.marginTop="10px";el.parentNode.insertBefore(ex,el.nextSibling);}ex.innerHTML='<div class="gtit">'+esc(title)+'</div><div class="kv">'+detPanel(d)+'</div>';ex.scrollIntoView({behavior:"smooth",block:"center"});toast("Détail : "+title);}
 function bindDay(){
  document.querySelectorAll(".prio .p").forEach(function(e){e.onclick=function(){openTask(e.getAttribute("data-go"));};});
  document.querySelectorAll("[data-tog]").forEach(function(e){e.onclick=function(){var c=e.closest(".tcard");if(c)c.classList.toggle("open");};});
@@ -429,13 +425,12 @@ function bindDay(){
 function go(v){document.querySelectorAll(".view").forEach(function(s){s.classList.remove("active");});var el=document.getElementById("view-"+v);if(el)el.classList.add("active");document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});save(KV,v);if(v==="projets")renderProjets();if(v==="capture")renderCapture();if(v==="logistique")renderLogi();if(v==="gouv")renderGov();}
 function openC(o){document.getElementById("composer").classList[o?"add":"remove"]("open");if(o)document.getElementById("ideaText").focus();}
 function applyNight(on){document.body.classList[on?"add":"remove"]("night");save(KN,on?1:0);document.getElementById("nightBtn").textContent=on?"☀️":"🌙";}
-/* ===== Voix améliorée ===== */
 var MAIA_VOICE=null;
-function pickVoice(){try{var vs=speechSynthesis.getVoices();if(!vs.length)return;var fr=vs.filter(function(v){return /fr(-|_)?FR/i.test(v.lang)||/fr/i.test(v.lang);});
- var pref=["Audrey","Amelie","Amélie","Marie","Virginie","Thomas","Google français","Microsoft Denise","Microsoft Hortense","Microsoft Julie"];
+function pickVoice(){try{var vs=speechSynthesis.getVoices();if(!vs.length)return;var fr=vs.filter(function(v){return /fr/i.test(v.lang);});
+ var pref=["Audrey","Amelie","Amélie","Marie","Virginie","Thomas","Google français","Denise","Hortense","Julie"];
  for(var i=0;i<pref.length;i++){var m=fr.filter(function(v){return v.name.indexOf(pref[i])>=0;})[0];if(m){MAIA_VOICE=m;break;}}
  if(!MAIA_VOICE&&fr.length)MAIA_VOICE=fr.filter(function(v){return /female|femme|Audrey|Amelie|Denise|Hortense|Julie|Marie/i.test(v.name);})[0]||fr[0];
- var lbl=document.getElementById("voicelbl");if(MAIA_VOICE)lbl.innerHTML="🔊 Voix : <b>"+esc(MAIA_VOICE.name)+"</b> (système, provisoire) — la vraie voix Maïa reste à connecter.";
+ var lbl=document.getElementById("voicelbl");if(MAIA_VOICE&&lbl)lbl.innerHTML="🔊 Voix : <b>"+esc(MAIA_VOICE.name)+"</b> (système, provisoire) — la vraie voix Maïa reste à connecter.";
 }catch(e){}}
 function speakDay(){try{var u=new SpeechSynthesisUtterance("Bonjour Kevin. Priorité du jour : vérifier la connexion du 5 juin. Tu as deux décisions et deux rappels. Tout est en lecture seule.");u.lang="fr-FR";u.rate=.96;u.pitch=1.05;if(MAIA_VOICE)u.voice=MAIA_VOICE;speechSynthesis.cancel();speechSynthesis.speak(u);toast(MAIA_VOICE?("Voix : "+MAIA_VOICE.name):"Voix système par défaut");}catch(e){toast("Lecture audio non dispo ici.");}}
 

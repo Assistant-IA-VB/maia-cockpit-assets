@@ -1,0 +1,15 @@
+{
+  "name": "Maïa",
+  "short_name": "Maïa",
+  "description": "Cockpit personnel Maïa (aperçu V1.14.1)",
+  "start_url": "https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-v1-14-1-preview.html",
+  "scope": "https://assistant-ia-vb.github.io/maia-cockpit-assets/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef2f8",
+  "theme_color": "#eef2f8",
+  "icons": [
+    { "src": "https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
