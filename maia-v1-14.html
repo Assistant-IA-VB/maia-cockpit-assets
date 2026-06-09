@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#eef2f8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Maïa">
+<title>Maïa V1.14 — Cockpit</title>
+<link rel="icon" type="image/png" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<link rel="apple-touch-icon" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<!--
+  MAÏA V1.14 OPÉRATIONNEL — design CLAIR premium (V1.12/V1.13) conservé, zéro librairie, lecture seule.
+  Construit sur la base claire V1.13 + modules d'usage quotidien + 1re couche pilotage projet + gouvernance.
+  Données = représentatives (la version live remplacera "var CTX = {…}" par le Sheet COCKPIT_DATA).
+  Web-app V1.12 live NON touchée. Vrai logo chargé depuis GitHub. Favicon + apple-touch-icon prévus.
+-->
+<style>
+:root{
+  --bg:#eef2f8;--card:#fff;--ink:#1b2a4a;--muted:#6b7a99;--line:#e6ebf4;--line2:#eef1f7;
+  --blue:#2f6bff;--teal:#2bb6c9;--brown:#7a6a55;--green:#3fa66a;--orange:#e8912f;--red:#e5484d;--violet:#8b5cf6;
+  --shadow:0 6px 22px -12px #2b3a5e40;--shadow2:0 10px 30px -16px #2b3a5e55;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:760px;margin:0 auto;padding:0 14px 104px;line-height:1.45}
+.banner{background:#e7f5ec;color:#2c7a4d;border:1px solid #bce3cc;border-radius:0 0 12px 12px;font-size:12px;font-weight:600;text-align:center;padding:7px;margin-bottom:14px}
+.hdr{display:flex;align-items:center;gap:13px;margin:6px 0 4px}
+.logo{flex:none;position:relative;width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+.logo::before{content:"";position:absolute;inset:-2px;border-radius:17px;background:conic-gradient(from 0deg,transparent 0deg,transparent 52%,#2bb6c9 76%,#2f6bff 90%,#9ec1ff 96%,transparent 100%);animation:spin 3.2s linear infinite;z-index:0}
+.logo .inner{position:relative;z-index:1;width:54px;height:54px;border-radius:15px;background:#fff;box-shadow:var(--shadow);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.logo .inner img{width:100%;height:100%;object-fit:contain;animation:breathe 5.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* écran d'ouverture (splash) */
+#splash{position:fixed;inset:0;background:radial-gradient(circle at 50% 38%,#ffffff,var(--bg));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:100;animation:splashOut .55s ease 1.7s forwards}
+#splash .sl{position:relative;width:120px;height:120px;border-radius:31px;display:flex;align-items:center;justify-content:center;animation:slIn .7s cubic-bezier(.2,.8,.2,1)}
+#splash .sl::before{content:"";position:absolute;inset:-4px;border-radius:35px;background:conic-gradient(from 0deg,transparent 0deg,transparent 48%,#2bb6c9 74%,#2f6bff 90%,#9ec1ff 97%,transparent 100%);animation:spin 1.6s linear infinite}
+#splash .sl .in{position:relative;z-index:1;width:120px;height:120px;border-radius:31px;background:#fff;box-shadow:var(--shadow2);overflow:hidden;display:flex;align-items:center;justify-content:center}
+#splash .sl .in img{width:86%;height:86%;object-fit:contain;animation:breathe 3s ease-in-out infinite}
+#splash .sn{font-size:25px;font-weight:800;color:var(--ink);letter-spacing:.3px}
+#splash .sn span{color:var(--blue)}
+@keyframes splashOut{to{opacity:0;visibility:hidden;pointer-events:none}}
+@keyframes slIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+body.splash-done #splash{display:none}
+.htext{flex:1;min-width:0}
+.htext h1{font-size:21px;margin:0;font-weight:800;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.htext h1 .ver{font-size:12px;font-weight:800;color:var(--blue);background:#eaf1ff;border:1px solid #cfe0ff;border-radius:999px;padding:2px 9px;letter-spacing:.3px}
+.htext .d{color:var(--muted);font-size:13px;margin-top:2px}
+.badge{flex:none;font-size:11px;font-weight:800;color:var(--green);background:#e7f5ec;border:1px solid #bce3cc;border-radius:999px;padding:4px 10px;height:fit-content}
+.status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:2px 0 12px}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--blue);animation:pulse 2.4s infinite}
+.st-attend .sdot{background:var(--green);animation:none}.st-alerte .sdot{background:var(--red)}.st-travaille .sdot{background:var(--blue)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #2f6bff55}70%{box-shadow:0 0 0 7px #2f6bff00}100%{box-shadow:0 0 0 0 #2f6bff00}}
+@media (prefers-reduced-motion:reduce){.sdot,.logo .inner img,.logo::before{animation:none}.logo::before{opacity:.4}#splash{animation:splashOut .3s ease .4s forwards}#splash .sl,#splash .sl::before,#splash .sl .in img{animation:none}}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:10px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);display:inline-flex;align-items:center;gap:7px;min-height:40px}
+.btn:hover{border-color:var(--blue)}.btn:active{transform:translateY(1px)}
+.btn.brown{background:var(--brown);color:#fff;border-color:var(--brown)}.btn.acc{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.sm{padding:7px 11px;font-size:12px;min-height:34px;box-shadow:none}
+.nightbar{display:none;background:#efeafd;border:1px solid #d6c9f7;color:#5b3fa3;border-radius:13px;padding:11px 14px;margin-bottom:14px;font-size:13px}
+body.night .nightbar{display:block}
+.composer{display:none;margin-bottom:14px}.composer.open{display:block}
+.composer textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:11px;font:inherit;font-size:14px;padding:11px;color:var(--ink)}
+.ctype{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.ctype .seg{font-size:12px;font-weight:700;border:1px solid var(--line);background:#f7f9fc;color:#4a5a78;border-radius:9px;padding:6px 11px;cursor:pointer}
+.ctype .seg.on{background:#eaf1ff;border-color:var(--blue);color:var(--blue)}
+.row{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.sec{margin:18px 0 8px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:800;display:flex;align-items:center;gap:8px}
+.sec .cnt{background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 8px;font-size:11px;text-transform:none;letter-spacing:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.pad{padding:14px 16px}
+.allgood{display:flex;align-items:center;gap:12px;color:var(--green);font-size:13px;font-weight:600}
+.allgood .big{font-size:22px}
+.resume{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eaf1ff;border:1px solid #cfe0ff;border-radius:13px;padding:11px 14px;margin-bottom:12px;font-size:13px;color:#284a8e;cursor:pointer}
+.resume b{color:var(--blue)}
+.prio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.prio .p{background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:13px;padding:11px 12px;box-shadow:var(--shadow)}
+.prio .p .n{font-size:11px;color:var(--muted);font-weight:700}.prio .p .t{font-size:13.5px;font-weight:650;margin-top:3px;line-height:1.3}
+@media(max-width:560px){.prio{grid-template-columns:1fr}}
+.hero{border-left:5px solid var(--blue);margin:14px 0}
+.hero .lbl{color:var(--blue);font-size:11px;letter-spacing:.6px;text-transform:uppercase;font-weight:800}
+.hero .act{font-size:18px;font-weight:800;margin-top:3px}.hero .m{font-size:13px;color:var(--muted);margin-top:5px}
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media(max-width:560px){.gauges{grid-template-columns:1fr}}
+.gauge{display:flex;align-items:center;gap:14px}
+.ring{flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--green) 89%,#e6ebf4 0)}
+.ring i{width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;font-style:normal}
+.gtit{font-weight:750;font-size:14px}.gsub{font-size:12px;color:var(--muted);margin-top:2px}
+.charge .lab{font-weight:800;font-size:13px}.charge .msg{font-size:12px;color:var(--muted);line-height:1.45;margin-top:2px}
+.cogrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
+@media(max-width:560px){.cogrow{grid-template-columns:1fr}}
+.cogbox{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 13px;box-shadow:var(--shadow)}
+.cogbox .h{font-weight:750;font-size:13px;display:flex;align-items:center;gap:7px}
+.cogbox .x{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.cogbox.warn{background:#fff7ee;border-color:#f3d9b3}.cogbox.calm{background:#f1f8f3;border-color:#cfe9d8}
+.prog{display:flex;align-items:center;gap:11px;margin:14px 0;font-size:13px;font-weight:600}
+.bar{flex:1;height:9px;border-radius:999px;background:#e6ebf4;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#7ad6a5);transition:width .5s}
+.tcard{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;margin-bottom:9px;border-left:4px solid var(--blue)}
+.k-securite{border-left-color:var(--red);background:#fdf3f3}.k-validation{border-left-color:var(--orange)}.k-rappel{border-left-color:var(--blue)}.k-projet{border-left-color:var(--violet)}
+.chk{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #c4cfe0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:15px;color:transparent;cursor:pointer;transition:.15s}
+.chk:hover{border-color:var(--green)}
+.tbody{flex:1;min-width:0}.ttl{font-size:14.5px;font-weight:650;line-height:1.35;cursor:pointer}.meta{font-size:12px;color:var(--muted);margin-top:3px}
+.pchip{display:inline-block;font-size:10px;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+.pchip.hi{background:#fdeaea;color:#c0392b;border:1px solid #f3c2c2}.pchip.mid{background:#fdf3e7;color:#a8671a;border:1px solid #f3d9b3}.pchip.lo{background:#eef1f7;color:#6b7a99;border:1px solid var(--line)}
+.detail{max-height:0;overflow:hidden;transition:max-height .28s}.detail .in{padding-top:10px;margin-top:9px;border-top:1px dashed var(--line);font-size:13px;color:#54627e;line-height:1.55}
+.tcard.open .detail{max-height:460px}.tcard.done{opacity:.5}.tcard.done .ttl{text-decoration:line-through}.tcard.done .chk{background:var(--green);border-color:var(--green);color:#fff}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{font-size:11.5px;border:1px solid var(--line);background:#f7f9fc;color:#4a5a78;border-radius:8px;padding:5px 10px;cursor:pointer;text-decoration:none;display:inline-flex;gap:5px;align-items:center}
+.chip:hover{border-color:var(--blue);color:var(--blue)}.chip.warn{background:#fdf3e7;border-color:#f3d9b3;color:#a8671a}
+.chev{flex:none;color:#b6c0d4;cursor:pointer;font-size:13px;margin-top:3px;transition:transform .2s}.tcard.open .chev{transform:rotate(90deg)}
+.force{margin-top:10px;background:#fff6f6;border:1px solid #f4cdcd;border-radius:11px;padding:10px 12px}.force .ft{font-size:12px;font-weight:800;color:var(--red)}.force .opt{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+.glance{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+@media(max-width:560px){.glance{grid-template-columns:1fr 1fr}}
+.stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-size:24px;font-weight:800}.stat .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+.stat.r .v{color:var(--red)}.stat.g .v{color:var(--green)}.stat.o .v{color:var(--orange)}.stat.b .v{color:var(--blue)}
+.mini{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line2);font-size:13px}.mini:last-child{border-bottom:0}.mini b{font-weight:650}.mini .v{color:var(--muted);text-align:right}
+.proj{border-left:4px solid var(--violet);margin-bottom:10px}
+.proj .ph{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.proj .pn{font-weight:750;font-size:15px}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid var(--line)}
+.pill.ok{background:#e7f5ec;color:#2c7a4d;border-color:#bce3cc}.pill.warn{background:#fdf3e7;color:#a8671a;border-color:#f3d9b3}.pill.stop{background:#fdeaea;color:#c0392b;border-color:#f3c2c2}.pill.wait{background:#eef1f7;color:#6b7a99}
+.kv{font-size:12.5px;color:#54627e;margin-top:6px;line-height:1.5}.kv b{color:var(--ink)}
+.pilote{background:#f7f9fc;border:1px dashed #cfd9ea;border-radius:13px;padding:13px;margin-top:8px}
+.pilote select,.pilote textarea{width:100%;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;padding:9px;color:var(--ink);background:#fff}
+.pilote textarea{min-height:70px;resize:vertical;margin-top:8px}
+.decide{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.kept .it{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:13px}.kept .it:last-child{border-bottom:0}.kept .x{cursor:pointer;color:#b6c0d4}
+.tag{display:inline-block;font-size:10px;background:#eef1f7;color:#6b7a99;border:1px solid var(--line);padding:1px 7px;border-radius:6px;margin-left:6px}
+.gov .g{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line2)}.gov .g:last-child{border-bottom:0}
+.gov .ic{flex:none;font-size:18px}.gov .gt{font-weight:700;font-size:13.5px}.gov .gx{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+.rules{font-size:12.5px;color:#54627e;line-height:1.7}.rules b{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px;color:var(--muted);margin-top:6px}.legend span{display:inline-flex;align-items:center;gap:5px}.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.empty{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}
+.foot{margin-top:18px;color:#9aa7c0;font-size:11px;text-align:center;line-height:1.6}
+.ro{display:inline-block;background:#e7f5ec;color:#2c7a4d;border:1px solid #bce3cc;border-radius:8px;padding:3px 9px;font-size:11px}
+.view{display:none}.view.active{display:block}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:#fffffff2;backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:7px 4px calc(7px + env(safe-area-inset-bottom));z-index:20}
+.nav a{flex:1;text-align:center;color:var(--muted);font-size:11px;font-weight:700;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px;cursor:pointer;border-radius:10px}
+.nav a .ic{font-size:19px}.nav a.on{color:var(--blue);background:#eaf1ff}
+.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#1b2a4a;color:#fff;font-size:13px;padding:9px 15px;border-radius:11px;box-shadow:var(--shadow2);opacity:0;pointer-events:none;transition:opacity .25s;z-index:30}
+.toast.show{opacity:1}
+</style></head>
+<body class="st-attend">
+<div id="splash"><div class="sl"><span class="in"><img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png" alt="Maïa"></span></div><div class="sn">Maïa <span>V1.14</span></div></div>
+<div class="banner">● V1.14 OPÉRATIONNEL · style clair conservé · usage quotidien + mobile · lecture seule (ta V1.12 live n'est pas touchée)</div>
+
+<div class="hdr">
+  <div class="logo"><span class="inner"><img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png" alt="Maïa"></span></div>
+  <div class="htext"><h1>Maïa <span class="ver">V1.14</span></h1><div class="d" id="dateline">mardi 9 juin 2026 — bonjour Kevin</div></div>
+  <span class="badge" id="badge">à jour</span>
+</div>
+<div class="status"><span class="sdot"></span><span id="statusTxt">Maïa prête — à toi de piloter</span></div>
+
+<div class="btns">
+  <button class="btn brown" onclick="openC(true)">💬 Parler à Maïa</button>
+  <button class="btn" onclick="go('jour');scrollTo(0,0)">🔥 Urgences</button>
+  <button class="btn acc" id="ideaBtn">💡 Déposer une idée</button>
+  <button class="btn" id="audioBtn">▶ Écouter ma journée</button>
+  <button class="btn" id="nightBtn" title="Mode nuit">🌙</button>
+</div>
+
+<div class="nightbar" id="nightbar">🌙 <b>Capture nuit.</b> Je garde tout, on ne lance aucun nouveau chantier. Vide ta tête — je classe. <b>Demain je te ressors les 3 meilleures.</b></div>
+
+<div class="composer" id="composer"><div class="card pad">
+  <div class="ctype" id="ctype">
+    <span class="seg on" data-t="idee">💡 Idée</span>
+    <span class="seg" data-t="pense">📌 Pense-bête</span>
+    <span class="seg" data-t="reparler">🗣️ À reparler</span>
+    <span class="seg" data-t="rappel">⏰ Me rappeler</span>
+  </div>
+  <textarea id="ideaText" placeholder="Vide ta tête : une idée, un truc à ne pas perdre… (pas besoin d'un roman)"></textarea>
+  <div class="row"><button class="btn acc sm" id="ideaSave">Garder</button><button class="btn sm" id="ideaClose">Fermer</button></div>
+</div></div>
+
+<!-- ================= VUE JOUR ================= -->
+<div class="view active" id="view-jour">
+  <div class="resume" id="resume" style="display:none"><span>↩️ <b>Reprendre</b> là où tu t'es arrêté : <b id="resumeLbl">—</b></span><span>›</span></div>
+
+  <div class="sec">🎯 Mes 3 priorités du jour</div>
+  <div class="prio" id="prio"></div>
+
+  <div class="card pad hero">
+    <div class="lbl">▶ Prochaine action unique</div>
+    <div class="act" id="heroAct">—</div><div class="m" id="heroM"></div>
+  </div>
+
+  <div class="gauges">
+    <div class="card pad gauge"><div class="ring" id="ring"><i>89</i></div><div><div class="gtit">Santé Maïa</div><div class="gsub">Système sain · 5/6 verts</div></div></div>
+    <div class="card pad charge"><div class="gtit">Ta charge cognitive</div><div id="arc"></div><div class="lab" id="chLab">—</div><div class="msg" id="chMsg"></div></div>
+  </div>
+
+  <div class="cogrow">
+    <div class="cogbox" id="cogOpen"><div class="h">🧩 <span>Trop de choses ouvertes ?</span></div><div class="x" id="cogOpenX">—</div></div>
+    <div class="cogbox" id="cogFront"><div class="h">🌫️ <span>À sortir du premier plan</span></div><div class="x" id="cogFrontX">—</div></div>
+  </div>
+
+  <div class="prog">✅ <span id="pd">0</span>/<span id="pt">0</span> validé(s) <span class="bar"><i id="pbar"></i></span></div>
+  <div class="card pad" id="allgoodWrap" style="display:none"><div class="allgood"><span class="big">✅</span><span>Tout est à jour — rien ne réclame ton attention maintenant. Profite, ou dépose une idée.</span></div></div>
+
+  <div id="vue"></div>
+
+  <div class="sec">📊 Charge de la semaine (prestations / jour)</div>
+  <div class="card pad"><div id="weekbars"></div></div>
+  <div class="sec">🗓️ Timeline de la semaine</div>
+  <div class="card pad"><div id="timeline"></div></div>
+
+  <div class="sec">👀 Aujourd'hui en un coup d'œil</div>
+  <div class="glance">
+    <div class="stat r"><div class="v" id="gUrg">2</div><div class="l">urgences</div></div>
+    <div class="stat b"><div class="v" id="gRapp">2</div><div class="l">rappels actifs</div></div>
+    <div class="stat g"><div class="v">8%</div><div class="l">crédits Make</div></div>
+    <div class="stat o"><div class="v" id="gVal">2</div><div class="l">à valider</div></div>
+  </div>
+
+  <div class="sec">✉️ Communication & quotidien</div>
+  <div class="card pad" id="comm"></div>
+
+  <div class="sec">📈 Bilan de la semaine</div>
+  <div class="card pad" id="weekly"></div>
+</div>
+
+<!-- ================= VUE PROJETS ================= -->
+<div class="view" id="view-projets">
+  <div class="sec">🚀 Projets actifs <span class="cnt" id="projCnt">0</span></div>
+  <div id="projList"></div>
+
+  <div class="sec">🤖 Missions Claude en cours <span class="cnt" id="misCnt">0</span></div>
+  <div class="card pad" id="missions"></div>
+
+  <div class="sec">🟠 Validations en attente (toi) <span class="cnt" id="valCnt">0</span></div>
+  <div class="card pad" id="vals"></div>
+
+  <div class="sec">⛔ Points bloqués <span class="cnt" id="blkCnt">0</span></div>
+  <div class="card pad" id="blocks"></div>
+
+  <div class="sec">➡️ Prochaines actions</div>
+  <div class="card pad" id="nexts"></div>
+
+  <div class="sec">📉 Dettes ouvertes <span class="cnt" id="debtCnt">0</span></div>
+  <div class="card pad" id="debts"></div>
+
+  <div class="sec">🧭 Piloter un projet (1re couche)</div>
+  <div class="card pad">
+    <div class="pilote">
+      <select id="pSel" onchange="renderPilote()"></select>
+      <div class="kv" id="pState"></div>
+      <div class="row">
+        <button class="btn acc sm" id="genBrief">🧾 Générer une mission Claude</button>
+        <button class="btn sm" id="copyBrief">📋 Copier</button>
+      </div>
+      <textarea id="briefOut" placeholder="Le brief de mission Claude s'affichera ici (prêt à copier dans Claude)…"></textarea>
+      <textarea id="reportIn" placeholder="Colle ici le rapport court de Claude (verdict ✅ / ⚠️ / ⛔, fait, à valider, prochaine action)…"></textarea>
+      <div class="row"><button class="btn sm" id="analyzeBtn">🔍 Analyser le rapport</button></div>
+      <div class="kv" id="analyzeOut"></div>
+      <div class="decide" id="decide"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= VUE CAPTURE ================= -->
+<div class="view" id="view-capture">
+  <div class="sec">⚡ Capture rapide</div>
+  <div class="btns">
+    <button class="btn acc" data-cap="idee">💡 Déposer une idée</button>
+    <button class="btn" data-cap="pense">📌 Pense-bête</button>
+    <button class="btn" data-cap="reparler">🗣️ À reparler</button>
+    <button class="btn" data-cap="rappel">⏰ Me rappeler</button>
+    <button class="btn" id="nightBtn2">🌙 Capture nuit</button>
+  </div>
+  <div class="sec">🗃️ Inbox brute (classement provisoire) <span class="cnt" id="inboxCnt">0</span></div>
+  <div class="card pad kept" id="inboxList"></div>
+  <div class="sec">⏰ Rappels préparés (à valider) <span class="cnt" id="remCnt">0</span></div>
+  <div class="card pad kept" id="remList"></div>
+</div>
+
+<!-- ================= VUE LOGISTIQUE ================= -->
+<div class="view" id="view-logistique">
+  <div class="sec">🧳 Déplacements à venir</div>
+  <div id="trips"></div>
+  <div class="sec">🏨 Hôtels à réserver / vérifier</div>
+  <div class="card pad" id="hotels"></div>
+  <div class="sec">🚆 Trajets à préparer</div>
+  <div class="card pad" id="trajets"></div>
+  <div class="sec">🗓️ Rendez-vous à préparer</div>
+  <div id="rdv"></div>
+  <div class="sec">❓ Informations manquantes</div>
+  <div class="card pad" id="missing"></div>
+  <div class="sec">🧷 Logistique à ne pas oublier</div>
+  <div class="card pad" id="logi"></div>
+</div>
+
+<!-- ================= VUE GOUVERNANCE ================= -->
+<div class="view" id="view-gouv">
+  <div class="sec">🧹 Anti-prolifération — règles actives</div>
+  <div class="card pad rules">
+    <b>Avant de créer, Maïa vérifie :</b><br>
+    • Ne pas créer un document si un équivalent existe déjà → <b>proposer de compléter l'existant</b>.<br>
+    • Ne pas créer une mission si une mission équivalente existe → <b>regrouper</b>.<br>
+    • Signaler doublons, projets morts, documents obsolètes.<br>
+    • <b>Regrouper avant de créer.</b> Une seule version active par sujet.
+  </div>
+  <div class="sec">🔎 Désordre détecté <span class="cnt" id="govCnt">0</span></div>
+  <div class="card pad gov" id="govList"></div>
+  <div class="sec">📊 Dette d'organisation</div>
+  <div class="glance">
+    <div class="stat o"><div class="v" id="dCock">—</div><div class="l">cockpits dupliqués</div></div>
+    <div class="stat r"><div class="v" id="dColl">—</div><div class="l">collisions d'ID</div></div>
+    <div class="stat b"><div class="v" id="dOld">—</div><div class="l">dossiers à archiver</div></div>
+    <div class="stat"><div class="v" id="dSync">—</div><div class="l">synchro</div></div>
+  </div>
+</div>
+
+<div class="foot"><span class="ro">🔒 Lecture seule · rien envoyé / créé / réservé / payé</span><br>Maïa V1.14 opérationnel · clair premium conservé · visuels SVG (zéro librairie) · favicon + icône écran d'accueil prévus</div>
+
+<nav class="nav" id="nav">
+  <a data-v="jour" class="on"><span class="ic">📋</span>Jour</a>
+  <a data-v="projets"><span class="ic">🚀</span>Projets</a>
+  <a data-v="capture"><span class="ic">⚡</span>Capture</a>
+  <a data-v="logistique"><span class="ic">🧳</span>Logistique</a>
+  <a data-v="gouv"><span class="ic">🧹</span>Ordre</a>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DONNÉES (représentatives — la version live lira COCKPIT_DATA) ============ */
+var CTX = {
+ "dateline":"mardi 9 juin 2026 — bonjour Kevin",
+ "prio":[{"t":"Vérifier la connexion du 05/06 (sécurité)"},{"t":"Migration modèles Claude (échéance 15/06)"},{"t":"Répondre à l'avocat (contrats)"}],
+ "hero":{"act":"Vérifier la connexion du 05/06","m":"Sécurité d'abord : confirme que la connexion du 05/06 (Galaxy Z Fold7) était bien toi. Puis enchaîne sur la migration Claude (15/06)."},
+ "items":[
+  {"id":"SEC1","kind":"securite","prio":"hi","t":"Vérifier la connexion du 05/06 (Galaxy Z Fold7)","meta":"Sécurité · action à toi","remind":1,"link":"https://myaccount.google.com/security","d":"Nouvel appareil + récupération de compte le 05/06. Vérifie que c'était bien toi. Maïa ne touche pas au compte."},
+  {"id":"SEC2","kind":"securite","prio":"hi","t":"Révoquer la clé Retell #2","meta":"Sécurité · action à toi","remind":1,"d":"À révoquer côté Retell. Action manuelle — Maïa n'y touche jamais (zone rouge)."},
+  {"id":"VAL1","kind":"validation","prio":"hi","t":"Migrer les modèles Claude sur Make avant le 15/06","meta":"Décision · échéance 15/06","remind":1,"bloc":1,"d":"Sonnet 4 / Opus 4 retirés le 15/06. Inventaire → mapping → staging → test → validation → prod. Maïa ne touche pas Make."},
+  {"id":"VAL2","kind":"validation","prio":"mid","t":"Crédits Make — optimiser","meta":"Décision","d":"Liés aux scénarios sandbox en erreur (à nettoyer)."},
+  {"id":"R1","kind":"rappel","prio":"mid","t":"Répondre à l'avocat (contrats + holding)","meta":"Rappel · échéance dépassée","remind":1,"d":"Échéance dépassée. Dis : fait / reporter / ignorer. (Brouillon préparable sur demande.)"},
+  {"id":"R2","kind":"rappel","prio":"lo","t":"Déclarer les heures de Michael (intérim)","meta":"Rappel · échéance dépassée","d":"Statut inconnu. Dis : fait / reporter / ignorer."}
+ ],
+ "week":[{"l":"Auj","v":0},{"l":"Jeu 11","v":2},{"l":"Ven 12","v":0},{"l":"Sam 13","v":3},{"l":"Lun 15","v":0,"dl":1},{"l":"Sam 20","v":4}],
+ "timeline":[{"d":"Auj 09","t":"rien de bloquant"},{"d":"Jeu 11","t":"2 prestas · Strasbourg"},{"d":"Sam 13","t":"3 prestas"},{"d":"Lun 15","t":"⚠ échéance Claude"},{"d":"Sam 20","t":"4 prestas"}],
+ "zones":[{"l":"67 Strasbourg","v":2},{"l":"51 Reims","v":1},{"l":"31 Toulouse","v":1},{"l":"68","v":1},{"l":"77","v":1},{"l":"27 Giverny","v":1}],
+ "comm":[
+  {"k":"✋ À répondre","v":"0 — aucun client externe en attente"},
+  {"k":"🔴 Mails à surveiller","v":"1 sécurité (connexion 05/06)"},
+  {"k":"🟠 Décisions à prendre","v":"migration Claude (15/06) · crédits Make"},
+  {"k":"🗣️ Sujets à reparler","v":"holding (avocat) · contrats barmans"},
+  {"k":"✍️ Messages à préparer","v":"réponse avocat (brouillon sur demande)"},
+  {"k":"📅 Agenda à venir","v":"Jeu 11 Strasbourg · Sam 13 (3) · Sam 20 (4)"}
+ ],
+ "projects":[
+  {"id":"P-MAIA","name":"Maïa (cockpit & OS perso)","state":"en_cours","health":"warn","blockers":["Dette de gouvernance : ~23 cockpits, 2 dossiers « 15_ »","Synchro Drive figée au 07/06"],"next":"Assainir le terrain (source de vérité unique) avant d'ajouter des fonctions","debt":"Doublons de versions"},
+  {"id":"P-MIG","name":"Migration modèles Claude (Make)","state":"bloque","health":"stop","blockers":["Échéance 15/06","Inventaire des scénarios non fait"],"next":"Inventaire lecture seule des scénarios Make → mapping","debt":""},
+  {"id":"P-JUR","name":"Juridique (contrats + holding)","state":"en_cours","health":"warn","blockers":["Réponse avocat en attente"],"next":"Valider le brouillon de réponse avocat","debt":""},
+  {"id":"P-STAFF","name":"Staffing prestations (juin)","state":"en_cours","health":"ok","blockers":["Sam 13 & Sam 20 = grosses journées"],"next":"Vérifier le staffing du 13/06 (Sylvain sur 2 lieux ?)","debt":""}
+ ],
+ "missions":[
+  {"proj":"Maïa","title":"Reprise V1.13 + audit maturité","status":"terminee","note":"Livré 09/06 · QA PARTIAL PASS"},
+  {"proj":"Maïa","title":"Construire V1.14 opérationnel","status":"en_cours","note":"Cette version"},
+  {"proj":"Migration Claude","title":"Inventaire scénarios Make","status":"a_lancer","note":"Brief à générer"}
+ ],
+ "validations":[{"t":"Migration Claude : choisir d'acheter des crédits Make ou réduire la conso"},{"t":"Réponse avocat : valider le brouillon avant envoi"},{"t":"V1.14 : valider la mise en ligne (Apps Script, zone rouge)"}],
+ "debts":[{"t":"~23 cockpits dupliqués (local + cloud) — à réduire à 1 actif"},{"t":"Deux dossiers « 15_ » (collision d'identifiants)"},{"t":"Dossiers 11_/12_/13_ supersédés — à archiver"}],
+ "travel":{
+  "trips":[
+   {"when":"Jeu 11/06","where":"Strasbourg (67)","detail":"2 prestations même jour (BAM 10:15→16:15 puis BAC 18:00→01:00). Turnaround serré.","checklist":["Matériel chargé","Trajet + horaires train/voiture","Créneau serré BAM→BAC validé","Barman confirmé (Vladimir)"]},
+   {"when":"Sam 13/06","where":"Reims (51) · Courans (53) · Beaulieu (45)","detail":"3 prestations, équipes Sylvain/Kévin. Vérifier Sylvain sur 2 lieux distants.","checklist":["Affectation équipes confirmée","Logistique 3 lieux","Matériel ×3"]}
+  ],
+  "hotels":[{"t":"Strasbourg 11/06","s":"À vérifier : nuit nécessaire si fin 01:00 ?","st":"warn"},{"t":"Sam 20/06 (4 prestas)","s":"Vérifier hébergements équipes","st":"warn"}],
+  "trajets":[{"t":"Strasbourg 11/06","s":"Comparatif train prêt · départ à caler"},{"t":"Sam 20 — 31/68/77/27","s":"4 zones distantes : optimiser les trajets équipes"}],
+  "rdv":[{"t":"RDV avocat (contrats + holding)","when":"créneaux : mer 10/06 10h ou jeu 11/06 15h","missing":"confirmer le créneau"}],
+  "missing":["Heure d'arrivée souhaitée Strasbourg","Nuit d'hôtel 11/06 : oui/non","Créneau RDV avocat à confirmer"],
+  "logi":["Recharger le matériel la veille","Vérifier la météo (extérieur ?)","Confirmer les barmans 48h avant","Emporter le contrat client signé"]
+ },
+ "weekly":"<b>Fait cette semaine :</b> cockpit restauré clair + V1.14 + accès PC réparé + audit maturité.<br><b>Reste :</b> migration Claude (15/06), réponse avocat, clé Retell #2.<br><b>Grosses journées :</b> sam 13/06 (3) et sam 20/06 (4 prestations)."
+};
+/* gouvernance (représentatif — sera alimenté par l'indexeur en V2) */
+var GOV={
+ issues:[
+  {ic:"🧬",t:"Doublons de cockpits",x:"~23 cockpits HTML (local + cloud). Garder 1 actif (V1.14), archiver le reste."},
+  {ic:"⚠️",t:"Collision d'identifiants « 15_ »",x:"Deux dossiers « 15_ » au sens différent (local VERSION_DEFINITIVE vs cloud OPTIMISATION_NUIT)."},
+  {ic:"🗂️",t:"Dossiers supersédés",x:"11_/12_/13_ remplacés par 15_/19_/V1.14 — candidats à l'archivage contrôlé."},
+  {ic:"🔌",t:"Synchro Drive figée",x:"Synchro PC arrêtée au 07/06 : le cloud (V1.13/V1.14) ne descend pas en local."}
+ ],
+ stats:{cockpits:"23",collisions:"2",archive:"3",sync:"figée 07/06"}
+};
+
+/* ============ STOCKAGE LOCAL ============ */
+var KD="maiav14_done",KI="maiav14_inbox",KR="maiav14_rem",KP="maiav14_report",KN="maiav14_night",KV="maiav14_view",KPR="maiav14_proj";
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var done=load(KD,{}),inbox=load(KI,[]),rems=load(KR,[]),reported=load(KP,{}),projOv=load(KPR,{});
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},1900);}
+
+var GROUPS=[{k:"securite",t:"🔴 Sécurité (action à toi)"},{k:"validation",t:"🟠 Décisions à valider"},{k:"rappel",t:"🔵 Rappels à confirmer"}];
+var PAL=["#2f6bff","#2bb6c9","#8b5cf6","#3fa66a","#e8912f","#e5484d"];
+var captureType="idee";
+
+/* ============ CHARGE COGNITIVE ============ */
+function openCount(){return CTX.items.filter(function(i){return !reported[i.id]&&!done[i.id];}).length;}
+function overload(){
+ var open=openCount(),h=new Date().getHours(),ti=inbox.length;
+ var late=(h>=22||h<7),score=open+ti*0.5+(late?2:0);
+ if(ti>=5&&late)return{f:.85,c:"var(--violet)",lab:"Violet · inspiration",msg:"Belle énergie. Je capte tout, on ne lance pas de chantier là."};
+ if(score>=7)return{f:.9,c:"var(--red)",lab:"Rouge · clôturer",msg:"Charge haute. Une seule action, puis on clôture en douceur."};
+ if(score>=4)return{f:.6,c:"var(--orange)",lab:"Orange · ralentir",msg:"Ça s'accumule. On vise l'essentiel."};
+ return{f:.3,c:"var(--green)",lab:"Vert · ça va",msg:"Charge OK. Tu peux avancer sur la prochaine action."};
+}
+
+/* ============ VISUELS SVG (zéro librairie) ============ */
+function arcGauge(f,color){var C=Math.PI*80,on=Math.max(0,Math.min(1,f))*C;
+ return '<svg viewBox="0 0 200 110" width="100%" height="92" style="max-width:230px;display:block;margin:4px auto 2px">'
+ +'<path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#e6ebf4" stroke-width="14" stroke-linecap="round"/>'
+ +'<path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="'+color+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+on.toFixed(1)+' 999"/></svg>';}
+function weekBars(d){var max=Math.max(1,Math.max.apply(null,d.map(function(x){return x.v;})));
+ var W=320,n=d.length,bw=Math.min(38,(W-20)/n-10),gap=(W-20-bw*n)/(n-1||1),s='<svg viewBox="0 0 '+W+' 130" width="100%" height="140">';
+ d.forEach(function(b,i){var x=10+i*(bw+gap),bh=b.v?(80*b.v/max):3,y=100-bh;
+  var col=b.dl?"#8b5cf6":(b.v>=4?"#e5484d":b.v>=3?"#e8912f":b.v>0?"#2f6bff":"#c9d3e6");
+  s+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="5" fill="'+col+'"/>';
+  s+='<text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#1b2a4a">'+(b.dl?'⚑':b.v)+'</text>';
+  s+='<text x="'+(x+bw/2)+'" y="118" text-anchor="middle" font-size="10.5" fill="#6b7a99">'+esc(b.l)+'</text>';});
+ return s+'</svg>';}
+function timeline(ev){var W=320,n=ev.length,gap=(W-20)/(n-1||1),s='<svg viewBox="0 0 '+W+' 86" width="100%" height="90">';
+ s+='<line x1="10" y1="22" x2="'+(W-10)+'" y2="22" stroke="#dbe3f0" stroke-width="2"/>';
+ ev.forEach(function(e,i){var x=10+i*gap,al=e.t.indexOf("⚠")>=0;
+  s+='<circle cx="'+x+'" cy="22" r="6" fill="'+(al?"#e8912f":"#2f6bff")+'"/>';
+  s+='<text x="'+x+'" y="44" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b2a4a">'+esc(e.d)+'</text>';
+  s+='<text x="'+x+'" y="60" text-anchor="middle" font-size="9.5" fill="#6b7a99">'+esc(e.t).slice(0,16)+'</text>';});
+ return s+'</svg>';}
+
+/* ============ RENDU JOUR ============ */
+function render(){
+ document.getElementById("dateline").textContent=CTX.dateline;
+ document.getElementById("prio").innerHTML=CTX.prio.map(function(p,i){return '<div class="p"><div class="n">PRIORITÉ '+(i+1)+'</div><div class="t">'+esc(p.t)+'</div></div>';}).join("");
+ document.getElementById("heroAct").textContent=CTX.hero.act;
+ document.getElementById("heroM").textContent=CTX.hero.m;
+ var vue=document.getElementById("vue"),html="",total=0,nd=0;
+ GROUPS.forEach(function(g){
+  var items=CTX.items.filter(function(i){return i.kind===g.k&&!reported[i.id];});
+  if(!items.length)return;
+  html+='<div class="sec">'+g.t+' <span class="cnt">'+items.length+'</span></div>';
+  items.forEach(function(i){total++;if(done[i.id])nd++;var isd=!!done[i.id];
+   var pc=i.prio==="hi"?'<span class="pchip hi">prioritaire</span>':i.prio==="mid"?'<span class="pchip mid">à suivre</span>':'<span class="pchip lo">souple</span>';
+   html+='<div class="card tcard k-'+i.kind+(isd?' done':'')+'" data-id="'+i.id+'"><div class="chk" data-chk="'+i.id+'">✓</div>'
+    +'<div class="tbody"><div class="ttl" data-tog="'+i.id+'">'+esc(i.t)+pc+'</div><div class="meta">'+esc(i.meta||"")+'</div>'
+    +'<div class="detail"><div class="in">'+esc(i.d||"")
+    +'<div class="acts">'+(i.link?'<a class="chip" href="'+esc(i.link)+'" target="_blank" rel="noopener">🔗 Ouvrir</a>':'')
+    +(i.remind?'<span class="chip" data-rem="'+i.id+'">⏰ Me rappeler</span>':'')
+    +'<span class="chip" data-rep="'+i.id+'">📅 Reporter à demain</span></div>'
+    +(i.bloc?'<div class="force"><div class="ft">⚠ Ça bloque vraiment — 3 sorties</div><div class="opt"><span class="chip warn">1 · Je décide maintenant</span><span class="chip warn">2 · Maïa prépare, je valide</span><span class="chip warn">3 · On délègue (ChatGPT/Valérie)</span></div></div>':'')
+    +'</div></div></div><div class="chev" data-tog="'+i.id+'">▸</div></div>';});
+ });
+ vue.innerHTML=html;
+ document.getElementById("allgoodWrap").style.display=(total-nd===0)?"block":"none";
+ document.getElementById("badge").textContent=(total-nd===0)?"à jour":(total-nd)+" à traiter";
+ var ov=overload();
+ document.getElementById("arc").innerHTML=arcGauge(ov.f,ov.c);
+ var cl=document.getElementById("chLab");cl.textContent=ov.lab;cl.style.color=ov.c;
+ document.getElementById("chMsg").textContent=ov.msg;
+ var open=openCount();
+ var co=document.getElementById("cogOpen"),cf=document.getElementById("cogFront");
+ document.getElementById("cogOpenX").textContent=open<=3?(open+" sujet(s) ouverts — c'est gérable."):(open+" sujets ouverts. Suggestion : reporte 1 ou 2 éléments souples pour dégager la tête.");
+ co.className="cogbox"+(open>4?" warn":" calm");
+ var soft=CTX.items.filter(function(i){return i.prio==="lo"&&!done[i.id]&&!reported[i.id];});
+ document.getElementById("cogFrontX").textContent=soft.length?("À sortir du premier plan : « "+soft[0].t+" » — reporte-le, je le garde."):"Rien à mettre de côté — le premier plan est propre.";
+ cf.className="cogbox"+(soft.length?" warn":" calm");
+ document.getElementById("pd").textContent=nd;document.getElementById("pt").textContent=total;
+ document.getElementById("pbar").style.width=(total?Math.round(nd/total*100):0)+"%";
+ document.getElementById("gUrg").textContent=CTX.items.filter(function(i){return i.kind==="securite"&&!reported[i.id];}).length;
+ document.getElementById("gRapp").textContent=CTX.items.filter(function(i){return i.kind==="rappel"&&!reported[i.id];}).length;
+ document.getElementById("gVal").textContent=CTX.items.filter(function(i){return i.kind==="validation"&&!reported[i.id];}).length;
+ document.getElementById("comm").innerHTML=CTX.comm.map(function(m){return '<div class="mini"><b>'+esc(m.k)+'</b><span class="v">'+esc(m.v)+'</span></div>';}).join("");
+ document.getElementById("weekbars").innerHTML=weekBars(CTX.week);
+ document.getElementById("timeline").innerHTML=timeline(CTX.timeline);
+ document.getElementById("weekly").innerHTML=CTX.weekly;
+ bindDay();
+}
+
+/* ============ RENDU PROJETS ============ */
+function pState(p){return p.state==="bloque"?'<span class="pill stop">bloqué</span>':p.state==="termine"?'<span class="pill ok">terminé</span>':p.state==="attente"?'<span class="pill wait">en attente</span>':'<span class="pill warn">en cours</span>';}
+function renderProjets(){
+ document.getElementById("projCnt").textContent=CTX.projects.length;
+ document.getElementById("projList").innerHTML=CTX.projects.map(function(p){
+  var st=projOv[p.id]||p.state;var pp=Object.assign({},p,{state:st});
+  return '<div class="card pad proj"><div class="ph"><span class="pn">'+esc(p.name)+'</span>'+pState(pp)+'</div>'
+   +(p.blockers&&p.blockers.length?'<div class="kv"><b>Blocages :</b> '+p.blockers.map(esc).join(" · ")+'</div>':'')
+   +'<div class="kv"><b>Prochaine action :</b> '+esc(p.next)+'</div>'
+   +(p.debt?'<div class="kv">📉 Dette : '+esc(p.debt)+'</div>':'')+'</div>';
+ }).join("");
+ var mis=CTX.missions;document.getElementById("misCnt").textContent=mis.filter(function(m){return m.status==="en_cours"||m.status==="a_lancer";}).length;
+ document.getElementById("missions").innerHTML=mis.map(function(m){
+  var p=m.status==="terminee"?'<span class="pill ok">terminée</span>':m.status==="bloquee"?'<span class="pill stop">bloquée</span>':m.status==="a_lancer"?'<span class="pill wait">à lancer</span>':'<span class="pill warn">en cours</span>';
+  return '<div class="mini"><b>'+esc(m.title)+' <span class="tag">'+esc(m.proj)+'</span></b><span class="v">'+p+'<br>'+esc(m.note||"")+'</span></div>';}).join("");
+ document.getElementById("valCnt").textContent=CTX.validations.length;
+ document.getElementById("vals").innerHTML=CTX.validations.map(function(v){return '<div class="mini"><b>🟠 '+esc(v.t)+'</b></div>';}).join("");
+ var blk=CTX.projects.filter(function(p){return (projOv[p.id]||p.state)==="bloque";});
+ document.getElementById("blkCnt").textContent=blk.length;
+ document.getElementById("blocks").innerHTML=blk.length?blk.map(function(p){return '<div class="mini"><b>⛔ '+esc(p.name)+'</b><span class="v">'+esc((p.blockers||[])[0]||"")+'</span></div>';}).join(""):'<div class="empty">✅ Aucun projet totalement bloqué.</div>';
+ document.getElementById("nexts").innerHTML=CTX.projects.map(function(p){return '<div class="mini"><b>'+esc(p.name)+'</b><span class="v">'+esc(p.next)+'</span></div>';}).join("");
+ document.getElementById("debtCnt").textContent=CTX.debts.length;
+ document.getElementById("debts").innerHTML=CTX.debts.map(function(d){return '<div class="mini"><b>📉 '+esc(d.t)+'</b></div>';}).join("");
+ var sel=document.getElementById("pSel");if(sel.options.length===0){sel.innerHTML=CTX.projects.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("");renderPilote();}
+}
+
+/* ============ PILOTAGE PROJET (1re couche) ============ */
+function curProj(){var id=document.getElementById("pSel").value;return CTX.projects.filter(function(p){return p.id===id;})[0];}
+function renderPilote(){var p=curProj();if(!p)return;var st=projOv[p.id]||p.state;
+ document.getElementById("pState").innerHTML='<b>État :</b> '+esc(st)+' · <b>Blocages :</b> '+((p.blockers||[]).map(esc).join(" · ")||"aucun")+'<br><b>Prochaine action recommandée :</b> '+esc(p.next);
+ document.getElementById("decide").innerHTML='<button class="btn sm" data-dec="relancer">↻ Relancer</button><button class="btn sm" data-dec="classer">🗂️ Classer</button><button class="btn sm" data-dec="attendre">⏳ Attendre Kevin</button><button class="btn sm" data-dec="cloturer">✅ Clôturer</button>';
+ document.querySelectorAll("[data-dec]").forEach(function(b){b.onclick=function(){decide(b.getAttribute("data-dec"));};});
+}
+function genBrief(){var p=curProj();if(!p)return;
+ var b="🧾 MISSION CLAUDE — "+p.name+"\n"
+  +"Date: "+CTX.dateline+"\n\n"
+  +"ÉTAT ACTUEL: "+(projOv[p.id]||p.state)+"\n"
+  +"BLOCAGES: "+((p.blockers||[]).join(" ; ")||"aucun")+"\n"
+  +"PROCHAINE ACTION RECOMMANDÉE: "+p.next+"\n\n"
+  +"DEMANDE: Fais avancer ce projet jusqu'au prochain point de décision humaine.\n"
+  +"RÈGLES: lecture seule par défaut ; zones rouges intactes (Make/Retell/Gmail/Agenda/paiements) ; pas de suppression ; documente ; rollback prévu.\n"
+  +"FORMAT DE RETOUR: rapport court (Verdict ✅/⚠️/⛔ · Fait · À valider par Kevin · Prochaine action unique).";
+ document.getElementById("briefOut").value=b;toast("Brief de mission généré");
+}
+function analyze(){var r=document.getElementById("reportIn").value.toLowerCase(),out=document.getElementById("analyzeOut"),sug="";
+ if(!r.trim()){out.textContent="Colle d'abord le rapport de Claude.";return;}
+ var done=/⛔|bloqu|stop|en attente d'une décision|à valider/.test(r),fini=/✅|termin|done|livré|fini/.test(r),warn=/⚠|dérive|risque|partiel/.test(r);
+ if(/⛔|bloqu/.test(r))sug="⛔ Blocage détecté → décision : <b>Attendre Kevin</b> ou <b>Relancer</b> avec une consigne de déblocage.";
+ else if(fini&&!warn)sug="✅ Mission terminée → décision : <b>Clôturer</b> et archiver.";
+ else if(warn)sug="⚠️ Dérive/partiel détecté → décision : <b>Relancer</b> avec recadrage.";
+ else sug="ℹ️ Pas de signal net. Relire le rapport ; sinon <b>Attendre Kevin</b>.";
+ out.innerHTML="<b>Analyse :</b> "+sug;toast("Rapport analysé");
+}
+function decide(d){var p=curProj();if(!p)return;
+ if(d==="cloturer"){projOv[p.id]="termine";}else if(d==="attendre"){projOv[p.id]="attente";}else if(d==="relancer"){projOv[p.id]="en_cours";}else if(d==="classer"){projOv[p.id]="attente";}
+ save(KPR,projOv);renderProjets();renderPilote();toast("Décision: "+d);
+}
+
+/* ============ CAPTURE / INBOX ============ */
+function classify(t){t=t.toLowerCase();
+ if(/appel|télépho|rappel|relanc/.test(t))return"rappel";
+ if(/réserv|hôtel|train|trajet|dépl|voyage/.test(t))return"logistique";
+ if(/idée|et si|on pourrait|concept/.test(t))return"idée";
+ if(/contrat|avocat|facture|paie/.test(t))return"décision";
+ return"à trier";}
+function similar(t){t=t.toLowerCase().trim();var hit=null;
+ inbox.concat(CTX.items.map(function(i){return{t:i.t};})).forEach(function(x){var a=String(x.t).toLowerCase();
+  if(!hit&&a.length>4&&(a.indexOf(t)>=0||t.indexOf(a)>=0))hit=x.t;});
+ return hit;}
+function saveCapture(){var ta=document.getElementById("ideaText"),t=ta.value.trim();if(!t)return;
+ var dup=similar(t);
+ if(dup&&!confirm("⚠️ Un sujet proche existe déjà :\n« "+dup+" »\n\nRegrouper plutôt que créer un doublon ?\n(OK = garder quand même · Annuler = ne pas créer)")){return;}
+ if(captureType==="rappel"){if(confirm("Je te prépare un rappel :\n« demain matin : "+t+" »\nC'est bien ça ? (aucune alarme créée sans toi)")){rems.unshift("demain matin : "+t);save(KR,rems);}}
+ else{inbox.unshift({t:t,type:captureType,cls:classify(t),ts:Date.now()});save(KI,inbox);}
+ ta.value="";renderCapture();render();toast("Gardé ✓ — je classe");
+}
+function renderCapture(){
+ document.getElementById("inboxCnt").textContent=inbox.length;
+ document.getElementById("inboxList").innerHTML=inbox.length?inbox.map(function(o,i){return '<div class="it"><span>'+({idee:"💡",pense:"📌",reparler:"🗣️"}[o.type]||"•")+' '+esc(o.t)+' <span class="tag">'+esc(o.cls)+'</span></span><span class="x" data-di="'+i+'">✕</span></div>';}).join(""):'<div class="empty">🌱 Rien encore — dépose une idée, je la garde et la classe.</div>';
+ document.getElementById("remCnt").textContent=rems.length;
+ document.getElementById("remList").innerHTML=rems.length?rems.map(function(t,i){return '<div class="it"><span>⏰ '+esc(t)+'</span><span class="x" data-dr="'+i+'">✕</span></div>';}).join(""):'<div class="empty">Aucun rappel préparé.</div>';
+ document.querySelectorAll("[data-di]").forEach(function(x){x.onclick=function(){inbox.splice(+x.getAttribute("data-di"),1);save(KI,inbox);renderCapture();render();};});
+ document.querySelectorAll("[data-dr]").forEach(function(x){x.onclick=function(){rems.splice(+x.getAttribute("data-dr"),1);save(KR,rems);renderCapture();};});
+}
+
+/* ============ LOGISTIQUE ============ */
+function renderLogi(){var T=CTX.travel;
+ document.getElementById("trips").innerHTML=T.trips.map(function(t){
+  return '<div class="card pad" style="border-left:4px solid var(--blue);margin-bottom:10px"><div class="pn" style="font-weight:750">🧳 '+esc(t.when)+' — '+esc(t.where)+'</div><div class="kv">'+esc(t.detail)+'</div>'
+   +'<div class="kv"><b>Check-list :</b><br>'+t.checklist.map(function(c){return '• '+esc(c);}).join("<br>")+'</div></div>';}).join("");
+ document.getElementById("hotels").innerHTML=T.hotels.map(function(h){return '<div class="mini"><b>🏨 '+esc(h.t)+'</b><span class="v">'+esc(h.s)+'</span></div>';}).join("");
+ document.getElementById("trajets").innerHTML=T.trajets.map(function(h){return '<div class="mini"><b>🚆 '+esc(h.t)+'</b><span class="v">'+esc(h.s)+'</span></div>';}).join("");
+ document.getElementById("rdv").innerHTML=T.rdv.map(function(r){return '<div class="card pad" style="border-left:4px solid var(--orange);margin-bottom:10px"><div style="font-weight:700">🗓️ '+esc(r.t)+'</div><div class="kv">'+esc(r.when)+' · <b>manque :</b> '+esc(r.missing)+'</div></div>';}).join("");
+ document.getElementById("missing").innerHTML=T.missing.map(function(m){return '<div class="mini"><b>❓ '+esc(m)+'</b></div>';}).join("");
+ document.getElementById("logi").innerHTML=T.logi.map(function(m){return '<div class="mini"><b>🧷 '+esc(m)+'</b></div>';}).join("");
+}
+
+/* ============ GOUVERNANCE ============ */
+function renderGov(){
+ document.getElementById("govCnt").textContent=GOV.issues.length;
+ document.getElementById("govList").innerHTML=GOV.issues.map(function(g){return '<div class="g"><span class="ic">'+g.ic+'</span><div><div class="gt">'+esc(g.t)+'</div><div class="gx">'+esc(g.x)+'</div></div></div>';}).join("");
+ document.getElementById("dCock").textContent=GOV.stats.cockpits;
+ document.getElementById("dColl").textContent=GOV.stats.collisions;
+ document.getElementById("dOld").textContent=GOV.stats.archive;
+ document.getElementById("dSync").textContent="07/06";
+}
+
+/* ============ BIND JOUR ============ */
+function bindDay(){
+ document.querySelectorAll("[data-tog]").forEach(function(e){e.onclick=function(){var c=e.closest(".tcard");if(c)c.classList.toggle("open");};});
+ document.querySelectorAll("[data-chk]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var id=b.getAttribute("data-chk");if(done[id])delete done[id];else done[id]=1;save(KD,done);render();};});
+ document.querySelectorAll("[data-rem]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var it=CTX.items.filter(function(x){return x.id===b.getAttribute("data-rem");})[0];if(it&&confirm("Je te prépare un rappel :\n« demain matin : "+it.t+" »\nC'est bien ça ?")){rems.unshift("demain matin : "+it.t);save(KR,rems);renderCapture();toast("Rappel préparé");}};});
+ document.querySelectorAll("[data-rep]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();reported[b.getAttribute("data-rep")]=1;save(KP,reported);render();toast("Reporté à demain");};});
+}
+
+/* ============ NAVIGATION ============ */
+function go(v){
+ document.querySelectorAll(".view").forEach(function(s){s.classList.remove("active");});
+ var el=document.getElementById("view-"+v);if(el)el.classList.add("active");
+ document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});
+ save(KV,v);
+ if(v==="projets")renderProjets();if(v==="capture")renderCapture();if(v==="logistique")renderLogi();if(v==="gouv")renderGov();
+ var labels={jour:"Jour",projets:"Projets",capture:"Capture",logistique:"Logistique",gouv:"Ordre"};
+ var last=load(KV,"jour");
+}
+
+/* ============ DIVERS ============ */
+function openC(o){document.getElementById("composer").classList[o?"add":"remove"]("open");if(o)document.getElementById("ideaText").focus();}
+function applyNight(on){document.body.classList[on?"add":"remove"]("night");save(KN,on?1:0);document.getElementById("nightBtn").textContent=on?"☀️":"🌙";}
+
+document.getElementById("ideaBtn").onclick=function(){go("jour");openC(!document.getElementById("composer").classList.contains("open"));};
+document.getElementById("ideaClose").onclick=function(){openC(false);};
+document.getElementById("ideaSave").onclick=saveCapture;
+document.querySelectorAll("#ctype .seg").forEach(function(s){s.onclick=function(){document.querySelectorAll("#ctype .seg").forEach(function(x){x.classList.remove("on");});s.classList.add("on");captureType=s.getAttribute("data-t");};});
+document.querySelectorAll("[data-cap]").forEach(function(b){b.onclick=function(){go("jour");captureType=b.getAttribute("data-cap");document.querySelectorAll("#ctype .seg").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-t")===captureType);});openC(true);};});
+document.getElementById("genBrief").onclick=genBrief;
+document.getElementById("copyBrief").onclick=function(){var t=document.getElementById("briefOut");t.select();try{navigator.clipboard.writeText(t.value);toast("Copié");}catch(e){try{document.execCommand("copy");toast("Copié");}catch(e2){toast("Sélectionne puis copie");}}};
+document.getElementById("analyzeBtn").onclick=analyze;
+document.getElementById("audioBtn").onclick=function(){try{var u=new SpeechSynthesisUtterance("Bonjour Kevin. Priorité du jour : vérifier la connexion du 5 juin. Tu as 2 décisions et 2 rappels. Grosses journées samedi 13 et samedi 20. Tout est en lecture seule.");u.lang="fr-FR";speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){toast("Lecture audio non dispo ici.");}};
+document.getElementById("nightBtn").onclick=function(){applyNight(!document.body.classList.contains("night"));};
+document.getElementById("nightBtn2").onclick=function(){applyNight(!document.body.classList.contains("night"));toast(document.body.classList.contains("night")?"Capture nuit ON":"Capture nuit OFF");};
+document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(){go(a.getAttribute("data-v"));window.scrollTo(0,0);};});
+document.getElementById("resume").onclick=function(){var v=load(KV,"jour");go(v);};
+
+/* ============ INIT ============ */
+(function(){
+ setTimeout(function(){document.body.classList.add("splash-done");},2500);
+ var h=new Date().getHours(),ns=load(KN,null);if(ns===null?(h>=22||h<7):ns===1)applyNight(true);
+ var last=load(KV,"jour");
+ if(last&&last!=="jour"){var lbl={projets:"Projets",capture:"Capture",logistique:"Logistique",gouv:"Ordre"}[last];
+  if(lbl){document.getElementById("resume").style.display="flex";document.getElementById("resumeLbl").textContent=lbl;}}
+ render();
+})();
+</script>
+</body></html>
