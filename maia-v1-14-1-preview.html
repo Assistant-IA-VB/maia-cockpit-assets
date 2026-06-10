@@ -411,6 +411,21 @@ document.querySelectorAll("[data-rep]").forEach(function(b){b.onclick=function(e
 document.querySelectorAll("[data-arch]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();archived[b.getAttribute("data-arch")]=1;save(KA,archived);render();toast("Archivé / marqué obsolète");};});
 bindExpand();
 }
+function parseCSV(txt){var rows=[],i=0,f='',row=[],q=false;function pushF(){row.push(f);f='';}function pushR(){pushF();rows.push(row);row=[];}
+for(;i<txt.length;i++){var c=txt[i];if(q){if(c=='"'){if(txt[i+1]=='"'){f+='"';i++;}else q=false;}else f+=c;}else{if(c=='"')q=true;else if(c==',')pushF();else if(c=='\n')pushR();else if(c=='\r'){}else f+=c;}}
+if(f.length||row.length)pushR();return rows;}
+function loadAgendaLive(){
+renderAgenda();
+try{var SHEET='1luwYlrveviY293cjKrKeynBn5ZWOfTM04Vg3-cZn440';var u='https://docs.google.com/spreadsheets/d/'+SHEET+'/gviz/tq?tqx=out:csv';
+fetch(u,{cache:'no-store'}).then(function(x){return x.text();}).then(function(txt){
+var rows=parseCSV(txt);if(!rows.length)return;var h=rows[0].map(function(z){return z.trim();});if(h.indexOf('title')<0)return;
+function col(n){return h.indexOf(n);}
+var ci={id:col('event_id_maya'),title:col('title'),cat:col('category'),s:col('start_datetime'),e:col('end_datetime'),st:col('status'),tg:col('calendar_target'),nd:col('needs_confirmation'),lk:col('google_calendar_link'),src:col('source')};
+var out=[];
+for(var rr=1;rr<rows.length;rr++){var R=rows[rr];if(!R||!R[ci.title])continue;var st=(R[ci.st]||'').trim();
+out.push({id:R[ci.id]||('r'+rr),title:R[ci.title]||'',cat:(R[ci.cat]||'a_confirmer').trim(),start:(R[ci.s]||'').trim(),end:(R[ci.e]||'').trim(),status:st=='created_in_calendar'?'created':st,target:(R[ci.tg]||'').trim(),needs:/^true$/i.test((R[ci.nd]||'').trim()),link:(R[ci.lk]||'').trim(),source:(R[ci.src]||'').trim()});}
+if(out.length){CTX.agenda=out;renderAgenda();}
+}).catch(function(){});}catch(e){}}
 function renderAgenda(){
   var A=(CTX.agenda||[]).slice();
   var now=new Date(), dk=function(d){return d.toISOString().slice(0,10);};
@@ -437,7 +452,7 @@ function renderAgenda(){
   var nonCrees=A.filter(function(e){return e.status!=="created";}).length;var ban=document.getElementById("agBanner");
   if(ban){ban.style.display=nonCrees?"block":"none";ban.innerHTML="⚠️ "+nonCrees+" RDV préparé(s) en attente — rien n'est créé dans Google Agenda tant que tu ne valides pas.";}
 }
-function go(v){document.querySelectorAll(".view").forEach(function(s){s.classList.remove("active");});var el=document.getElementById("view-"+v);if(el)el.classList.add("active");document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});save(KV,v);if(v==="projets")renderProjets();if(v==="capture")renderCapture();if(v==="logistique")renderLogi();if(v==="gouv")renderGov();if(v==="agenda")renderAgenda();}
+function go(v){document.querySelectorAll(".view").forEach(function(s){s.classList.remove("active");});var el=document.getElementById("view-"+v);if(el)el.classList.add("active");document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});save(KV,v);if(v==="projets")renderProjets();if(v==="capture")renderCapture();if(v==="logistique")renderLogi();if(v==="gouv")renderGov();if(v==="agenda")loadAgendaLive();}
 function openC(o){document.getElementById("composer").classList[o?"add":"remove"]("open");if(o)document.getElementById("ideaText").focus();}
 function applyNight(on){document.body.classList[on?"add":"remove"]("night");save(KN,on?1:0);document.getElementById("nightBtn").textContent=on?"☀️":"🌙";}
 var MAIA_VOICE=null;
