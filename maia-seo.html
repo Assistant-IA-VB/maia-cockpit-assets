@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAÏA SEO — Cockpit</title>
+<style>
+:root{
+  --bg0:#070b16; --bg1:#0c1426; --bg2:#111b33;
+  --card:rgba(20,31,56,.72); --card-line:rgba(120,150,210,.16);
+  --ink:#eaf0ff; --muted:#9fb0d6; --faint:#6c7da6;
+  --gold:#e9c46a; --gold2:#f4d98b;
+  --teal:#39d3c3; --blue:#5b8def; --green:#46d18a; --red:#f0688a; --amber:#f6b65b;
+  --glow:0 0 40px rgba(91,141,239,.25);
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 700px at 80% -10%, rgba(91,141,239,.18), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(57,211,195,.12), transparent 55%),
+    linear-gradient(180deg,var(--bg0),var(--bg1) 40%,var(--bg0));min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px}
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.logo{display:flex;align-items:center;gap:14px}.logomark{width:54px;height:54px;flex:0 0 auto}
+.brand h1{margin:0;font-size:22px;letter-spacing:3px;font-weight:700}
+.brand .sub{font-size:11px;letter-spacing:4px;color:var(--gold);font-weight:600;text-transform:uppercase}
+.spacer{flex:1}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;padding:7px 12px;border-radius:999px;border:1px solid var(--card-line);background:var(--card);color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.subtitle{color:var(--faint);font-size:12.5px;margin:2px 0 18px;letter-spacing:.3px}
+.lm-ring{transform-origin:60px 60px;animation:spin 14s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.lm-scan{animation:scan 3.4s ease-in-out infinite}@keyframes scan{0%,100%{transform:translateY(-14px);opacity:.25}50%{transform:translateY(14px);opacity:1}}
+.lm-bar{transform-origin:bottom;animation:grow 2.6s ease-in-out infinite}.lm-bar.b2{animation-delay:.25s}.lm-bar.b3{animation-delay:.5s}.lm-bar.b4{animation-delay:.75s}
+@keyframes grow{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:9px 15px;border-radius:12px;border:1px solid var(--card-line);background:var(--card);transition:.18s}
+.tab:hover{color:var(--ink);border-color:rgba(120,150,210,.4)}
+.tab.active{color:#0a1020;background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:transparent;box-shadow:var(--glow)}
+.tab small{display:block;font-weight:500;font-size:10.5px;opacity:.7}
+.grid{display:grid;gap:14px}.kpis{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--card-line);border-radius:18px;padding:16px;backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.kpi .lab{font-size:11.5px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.kpi .val{font-size:30px;font-weight:800;margin:6px 0 2px;letter-spacing:.5px}
+.kpi .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chip{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
+.up{color:var(--green);background:rgba(70,209,138,.12)}.down{color:var(--red);background:rgba(240,104,138,.12)}
+.good{color:var(--green);background:rgba(70,209,138,.12)}.neutral{color:var(--muted);background:rgba(120,150,210,.12)}
+.section-title{display:flex;align-items:center;gap:9px;margin:24px 2px 12px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.section-title .ic{color:var(--gold)}
+.two{grid-template-columns:1.55fr 1fr}
+.chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.chart-head h3{margin:0;font-size:15px;font-weight:700}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--faint);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:7px 6px;border-bottom:1px solid var(--card-line)}
+td{padding:9px 6px;border-bottom:1px solid rgba(120,150,210,.07)}tr:last-child td{border-bottom:none}
+.q{font-weight:600;color:var(--ink)}.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}.pos{font-weight:700}
+.bar-cell{position:relative}.bar-cell .b{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(91,141,239,.22),rgba(57,211,195,.10));border-radius:6px;z-index:0}.bar-cell span{position:relative;z-index:1}
+.insights li{margin:0 0 10px;padding-left:24px;position:relative;font-size:13.5px;line-height:1.5;color:#dbe5ff}
+.insights li:before{content:"";position:absolute;left:0;top:6px;width:9px;height:9px;border-radius:3px;background:var(--gold)}
+.insights li.warn:before{background:var(--amber)}.insights li.win:before{background:var(--green)}.insights li.opp:before{background:var(--blue)}
+.notice{text-align:center;padding:30px 16px;color:var(--muted)}
+.notice .big{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.gsc{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}.gsc .left{flex:1;min-width:240px}
+.gsc .badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--green);background:rgba(70,209,138,.1);border:1px solid rgba(70,209,138,.25);padding:6px 11px;border-radius:999px;margin-bottom:10px}
+.gsc ol{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.7}.gsc ol b{color:var(--ink)}
+.gsc code{background:#0a1124;border:1px solid var(--card-line);padding:1px 6px;border-radius:6px;color:var(--teal);font-size:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;font-size:13px;padding:11px 16px;border-radius:12px;border:1px solid transparent;color:#0a1020;background:linear-gradient(180deg,var(--gold2),var(--gold));box-shadow:var(--glow);text-decoration:none}
+.btn.ghost{background:transparent;border-color:var(--card-line);color:var(--ink)}
+.foot{margin-top:26px;text-align:center;color:var(--faint);font-size:11.5px;letter-spacing:.4px}
+.real{color:var(--green);font-weight:700}
+@media(max-width:840px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.brand h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">
+      <svg class="logomark" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="MAIA SEO">
+        <circle class="lm-ring" cx="60" cy="60" r="50" stroke="url(#g1)" stroke-width="2" stroke-dasharray="6 10" opacity=".55"/>
+        <circle cx="60" cy="60" r="38" stroke="rgba(120,150,210,.25)" stroke-width="1"/>
+        <g transform="translate(40,72)">
+          <rect class="lm-bar" x="0" y="-18" width="7" height="18" rx="2" fill="var(--teal)"/>
+          <rect class="lm-bar b2" x="11" y="-26" width="7" height="26" rx="2" fill="var(--blue)"/>
+          <rect class="lm-bar b3" x="22" y="-14" width="7" height="14" rx="2" fill="var(--gold)"/>
+          <rect class="lm-bar b4" x="33" y="-30" width="7" height="30" rx="2" fill="var(--teal)"/>
+        </g>
+        <line class="lm-scan" x1="22" y1="60" x2="98" y2="60" stroke="var(--gold)" stroke-width="1.5" opacity=".7"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="120" y2="120"><stop stop-color="#5b8def"/><stop offset="1" stop-color="#39d3c3"/></linearGradient></defs>
+      </svg>
+      <div class="brand"><div class="sub">Maïa · Cockpit</div><h1>MAÏA&nbsp;SEO</h1></div>
+    </div>
+    <div class="spacer"></div>
+    <span class="pill"><span class="dot"></span> Search Console : <b style="color:var(--green)">connecté (lecture)</b></span>
+    <span class="pill">Relevé : 14 juin 2026</span>
+  </div>
+  <div class="subtitle"><span class="real">Données réelles</span> Google Search Console. Période disponible : ~8–14 juin 2026 (suivi récent). Astuce : la flèche verte sur la position = amélioration.</div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="body"></div>
+
+  <div class="section-title"><span class="ic">🔌</span> Connexion & rafraîchissement</div>
+  <div class="card gsc">
+    <div class="left">
+      <span class="badge">● Lu en direct depuis ta Search Console (lecture seule)</span>
+      <p style="margin:0 0 6px;color:var(--muted);font-size:13.5px">Ces chiffres viennent de ta vraie console. Deux points à régler pour aller plus loin&nbsp;:</p>
+      <ol>
+        <li><b>votrebarman.fr n'est PAS dans Search Console</b> → angle mort total. À ajouter/vérifier en priorité (propriété par préfixe d'URL ou domaine).</li>
+        <li>Pour un <b>rafraîchissement automatique</b> du cockpit (sans que je rouvre ton navigateur), on branche l'<b>API Search Console</b> via un <code>Apps Script</code> qui écrit un Sheet <code>SEO_DATA</code> chaque jour.</li>
+      </ol>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:200px">
+      <a class="btn" id="connectBtn">⚡ Ajouter votrebarman.fr à GSC</a>
+      <a class="btn ghost" id="autoBtn">🔁 Auto-refresh (API + Sheet)</a>
+      <span style="font-size:11.5px;color:var(--faint);text-align:center">Maïa ne saisit jamais tes secrets : l'autorisation Google se fait par toi.</span>
+    </div>
+  </div>
+
+  <div class="foot">MAÏA SEO · cockpit visuel premium — données réelles relevées dans Google Search Console le 14/06/2026. Pour la mise à jour, redemande-moi un relevé ou branche l'auto-refresh.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const DATA = {
+  sites: [
+    {
+      id:"be", nom:"Bar Événementiel", url:"bar-evenementiel.com", tracked:true,
+      tag:"Données réelles · GSC",
+      kpis:{ clics:2, impr:465, ctr:0.4, pos:9.5 },
+      serie:{ jours:["8 juin","9","10","11","12","13","14"],
+        clics:[1,0,1,0,0,0,0],
+        impr:[96,90,85,90,52,30,22] },
+      requetes:[
+        ["punch boisson",0,74,8.2],["négroni",0,20,7.1],["boisson punch",0,18,9.0],
+        ["bar evenementiel",0,15,11.4],["ponch boisson",0,13,8.8],
+        ["bar personnalisé haut de gamme pour événements",0,13,6.0],
+        ["services de bar pour événement professionnel",0,11,7.3],["bar événementiel",0,6,12.2]
+      ],
+      nbReq:72,
+      insights:[
+        ["warn","Tu apparais surtout sur des requêtes de <b>boissons/cocktails</b> (« punch boisson » 74 impressions, « négroni », « boisson punch »…) — du trafic sans rapport avec ton offre, et <b>0 clic</b>."],
+        ["opp","Tes <b>vraies requêtes business</b> (« bar personnalisé haut de gamme pour événements », « services de bar pour événement professionnel ») existent mais avec peu d'impressions → contenu/pages à renforcer pour les faire monter."],
+        ["warn","<b>CTR ≈ 0%</b> : même en position moyenne 9,5, quasiment personne ne clique → titres &amp; metas à réécrire pour donner envie."],
+        ["opp","Suivi GSC très récent (~depuis le 8 juin) : peu d'historique. Le vrai enjeu = <b>générer de la visibilité</b> sur tes mots-clés métier (72 requêtes au total, presque toutes à 0 clic)."]
+      ]
+    },
+    {
+      id:"vb", nom:"Votre Barman", url:"votrebarman.fr", tracked:false,
+      tag:"Non suivi dans Search Console"
+    }
+  ]
+};
+
+const fmt=n=>n>=1000?(n/1000).toFixed(n>=10000?0:1).replace(".",",")+"k":(""+n);
+const tabsEl=document.getElementById('tabs');let chart,active=0;
+DATA.sites.forEach((s,i)=>{const t=document.createElement('div');t.className='tab'+(i===0?' active':'');
+  t.innerHTML=`${s.nom}<small>${s.url}${s.tracked?'':' · non suivi'}</small>`;
+  t.onclick=()=>{active=i;document.querySelectorAll('.tab').forEach((x,j)=>x.classList.toggle('active',j===i));render();};
+  tabsEl.appendChild(t);});
+
+function render(){
+  const s=DATA.sites[active], b=document.getElementById('body');
+  if(!s.tracked){
+    b.innerHTML=`<div class="card notice"><div class="big">Ce site n'est pas dans Google Search Console</div>
+      <div style="max-width:540px;margin:0 auto;line-height:1.6">${s.url} n'a aucune propriété vérifiée dans ta console — donc aucune donnée de recherche n'est disponible.
+      C'est ton site principal : <b style="color:var(--gold)">à ajouter en priorité</b> (Search Console → Ajouter une propriété → préfixe d'URL ou domaine). Dès qu'il est vérifié, je remonte ses vrais chiffres ici.</div></div>`;
+    return;
+  }
+  const k=s.kpis;
+  b.innerHTML=`
+    <div class="grid kpis" id="kpis"></div>
+    <div class="section-title"><span class="ic">📈</span> Évolution & performance — ${s.nom}</div>
+    <div class="grid two">
+      <div class="card"><div class="chart-head"><h3>Clics &amp; impressions</h3>
+        <div class="legend"><span><i style="background:var(--gold)"></i>Clics</span><span><i style="background:var(--blue)"></i>Impressions</span></div></div>
+        <canvas id="chart" height="150"></canvas></div>
+      <div class="card"><h3 style="margin:0 0 10px;font-size:15px">Top requêtes (impressions)</h3>
+        <table id="queries"><thead><tr><th>Requête</th><th class="num">Impr.</th><th class="num">Clics</th></tr></thead><tbody></tbody></table>
+        <div style="font-size:11.5px;color:var(--faint);margin-top:8px">${s.nbReq} requêtes au total · toutes à 0 clic sur la période.</div></div>
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <div class="card"><h3 style="margin:0 0 12px;font-size:15px">🔎 Analyse Maïa</h3><ul class="insights" id="insights" style="list-style:none;margin:0;padding:0"></ul></div>
+      <div class="card"><h3 style="margin:0 0 10px;font-size:15px">Lecture rapide</h3>
+        <ul class="insights" style="list-style:none;margin:0;padding:0">
+          <li class="opp">Position moyenne <b>9,5</b> = bas de page 1. Tu y es presque, mais le clic ne suit pas.</li>
+          <li class="warn">Trafic d'intention « recettes/boissons », pas « réservation de bar ».</li>
+          <li class="win">Bonne base technique : Google t'indexe et te montre déjà.</li>
+        </ul></div>
+    </div>`;
+  const kc=(lab,val)=>`<div class="card kpi"><div class="lab">${lab}</div><div class="val">${val}</div>
+    <div class="row"><span class="chip neutral">récent · pas d'historique</span></div></div>`;
+  document.getElementById('kpis').innerHTML =
+    kc("Clics",fmt(k.clics))+kc("Impressions",fmt(k.impr))+
+    kc("CTR",k.ctr.toFixed(1).replace('.',',')+'%')+kc("Position moy.",k.pos.toFixed(1).replace('.',','));
+  const qmax=Math.max(...s.requetes.map(r=>r[2]));
+  document.querySelector('#queries tbody').innerHTML=s.requetes.map(r=>`
+    <tr><td class="q bar-cell"><div class="b" style="width:${r[2]/qmax*100}%"></div><span>${r[0]}</span></td>
+    <td class="num">${r[2]}</td><td class="num" style="color:${r[1]>0?'var(--green)':'var(--faint)'}">${r[1]}</td></tr>`).join('');
+  document.getElementById('insights').innerHTML=s.insights.map(i=>`<li class="${i[0]}">${i[1]}</li>`).join('');
+  const ctx=document.getElementById('chart');if(chart)chart.destroy();
+  const g=ctx.getContext('2d');const grad=g.createLinearGradient(0,0,0,170);
+  grad.addColorStop(0,'rgba(233,196,106,.35)');grad.addColorStop(1,'rgba(233,196,106,0)');
+  chart=new Chart(ctx,{type:'line',data:{labels:s.serie.jours,datasets:[
+    {label:'Clics',data:s.serie.clics,borderColor:'#e9c46a',backgroundColor:grad,fill:true,tension:.35,pointRadius:2,borderWidth:2.4,yAxisID:'y'},
+    {label:'Impressions',data:s.serie.impr,borderColor:'#5b8def',backgroundColor:'transparent',tension:.35,pointRadius:0,borderWidth:1.8,borderDash:[4,4],yAxisID:'y1'}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#0b1426',borderColor:'rgba(120,150,210,.3)',borderWidth:1,titleColor:'#9fb0d6',padding:10}},
+    scales:{x:{grid:{display:false},ticks:{color:'#6c7da6',font:{size:10}}},
+      y:{position:'left',min:0,grid:{color:'rgba(120,150,210,.08)'},ticks:{color:'#6c7da6',font:{size:10},stepSize:1}},
+      y1:{position:'right',min:0,grid:{display:false},ticks:{color:'#6c7da6',font:{size:10}}}}}});
+}
+render();
+document.getElementById('connectBtn').onclick=()=>alert("Ajouter votrebarman.fr à Search Console\n\n1) search.google.com/search-console → « Ajouter une propriété ».\n2) Choisis « Préfixe de l'URL » : https://www.votrebarman.fr/ (le plus simple), valide via la balise HTML ou ton DNS.\n3) Dis-moi quand c'est fait : je remonte ses vrais chiffres dans ce cockpit.");
+document.getElementById('autoBtn').onclick=()=>alert("Auto-refresh (sans rouvrir ton navigateur)\n\nOn branche l'API Search Console via un petit Apps Script qui écrit un Sheet SEO_DATA chaque jour ; le cockpit lit le Sheet. Dis « go auto-refresh » et je te prépare le script + la procédure. Aucune clé stockée dans la page.");
+</script>
+</body>
+</html>
