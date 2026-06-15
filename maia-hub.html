@@ -121,7 +121,7 @@ ${inner}
 <line x1="311" y1="150" x2="311" y2="212" stroke="#eef3ff" stroke-width="5" stroke-linecap="round"/>
 <circle cx="311" cy="132" r="30" fill="url(#hg)"/><circle class="bre" cx="311" cy="132" r="13" fill="url(#hc)"/><circle cx="311" cy="132" r="4" fill="#fff"/>
 </svg>`;document.getElementById('hero').innerHTML=hero;})();
-document.getElementById('apps').innerHTML=APPS.map(p=>`<a class="app" style="--ac:${p.core}" href="${p.url}"><span class="halo"></span><span class="lg">${logo(p,118)}</span><div class="nm" style="color:${p.light}">MAÏA ${p.name}</div><div class="ds">${p.sub}</div><span class="go">Ouvrir <span class="ar">→</span></span></a>`).join('');
+document.getElementById('apps').innerHTML=APPS.map(p=>`<a class="app" target="_blank" rel="noopener" style="--ac:${p.core}" href="${p.url}"><span class="halo"></span><span class="lg">${logo(p,118)}</span><div class="nm" style="color:${p.light}">MAÏA ${p.name}</div><div class="ds">${p.sub}</div><span class="go">Ouvrir <span class="ar">→</span></span></a>`).join('');
 setTimeout(function(){document.getElementById('splash').classList.add('gone');document.body.classList.add('ready');},3600);
 </script>
 </body></html>
