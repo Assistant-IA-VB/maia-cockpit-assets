@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#e9c46a;--gold2:#f6dd9a;--teal:#52b6d6;--sky:#7fd0e8;--violet:#8b87f2;--emerald:#2ecf8f;
+:root{--gold:#e9c46a;--gold2:#f6dd9a;--teal:#52b6d6;--sky:#7fd0e8;--violet:#8b87f2;--emerald:#2ecf8f;--coral:#e0556b;
 --ink:#eef3ff;--muted:#9fb2da;--faint:#6a7da9;--line:rgba(160,190,235,.12)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%}
 body{font-family:Jost,system-ui,Segoe UI,sans-serif;color:var(--ink);overflow-x:hidden;
@@ -32,7 +32,7 @@ background:
 .rule b{font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--faint);font-weight:500}
 .rule .st{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
 /* grid */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
 .app{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;padding:34px 20px 24px;border-radius:24px;text-decoration:none;color:inherit;
  background:linear-gradient(180deg,rgba(24,36,66,.5),rgba(9,16,34,.42));border:1px solid var(--line);
  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(12px);
@@ -41,6 +41,7 @@ body.ready .app{opacity:1;transform:none}
 body.ready .app:nth-child(1){transition:opacity .7s .55s,transform .7s .55s}
 body.ready .app:nth-child(2){transition:opacity .7s .7s,transform .7s .7s}
 body.ready .app:nth-child(3){transition:opacity .7s .85s,transform .7s .85s}
+body.ready .app:nth-child(4){transition:opacity .7s 1s,transform .7s 1s}
 .app::before{content:"";position:absolute;top:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.6}
 .app .halo{position:absolute;top:18px;left:50%;width:170px;height:170px;margin-left:-85px;border-radius:50%;
  background:radial-gradient(circle,var(--ac) 0%,transparent 62%);opacity:.16;filter:blur(6px);transition:opacity .35s}
@@ -76,14 +77,14 @@ body.ready .app:nth-child(3){transition:opacity .7s .85s,transform .7s .85s}
 <svg class="bggal" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><g opacity=".5">
 <ellipse cx="300" cy="300" rx="280" ry="96" fill="none" stroke="rgba(127,208,232,.10)" stroke-width="1" transform="rotate(-18 300 300)"/>
 <ellipse cx="300" cy="300" rx="210" ry="70" fill="none" stroke="rgba(139,135,242,.08)" stroke-width="1" transform="rotate(-18 300 300)"/>
-<g transform="rotate(-18 300 300)"><circle cx="580" cy="300" r="2" fill="#7fd0e8"/><circle cx="20" cy="300" r="2" fill="#8b87f2"/><circle cx="470" cy="360" r="1.6" fill="#2ecf8f"/><circle cx="130" cy="240" r="1.6" fill="#e9c46a"/></g></g></svg>
+<g transform="rotate(-18 300 300)"><circle cx="580" cy="300" r="2" fill="#7fd0e8"/><circle cx="20" cy="300" r="2" fill="#8b87f2"/><circle cx="470" cy="360" r="1.6" fill="#2ecf8f"/><circle cx="130" cy="240" r="1.6" fill="#e9c46a"/><circle cx="360" cy="372" r="1.8" fill="#e0556b"/></g></g></svg>
 <div class="vig"></div>
 <!-- SPLASH -->
 <div id="splash"><svg viewBox="0 0 600 560" xmlns="http://www.w3.org/2000/svg"><defs>
 <radialGradient id="sc" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#f6dd9a"/><stop offset="1" stop-color="#e9c46a"/></radialGradient>
 <radialGradient id="sg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e9c46a" stop-opacity=".55"/><stop offset="1" stop-color="#e9c46a" stop-opacity="0"/></radialGradient></defs>
 <g class="oC"><g transform="translate(300,300)"><ellipse class="ring" rx="230" ry="88" fill="none" stroke="rgba(127,208,232,.16)" stroke-width="1.4" transform="rotate(-12)"/><g transform="rotate(-12)"><circle class="ist" style="--d:.2s" cx="230" r="6" fill="#52b6d6"/><circle class="ist" style="--d:1.4s" cx="-230" r="6" fill="#8b87f2"/></g></g></g>
-<g class="oB"><g transform="translate(300,300)"><ellipse class="ring" rx="178" ry="68" fill="none" stroke="rgba(139,135,242,.15)" stroke-width="1.3" transform="rotate(-12)"/><g transform="rotate(-12)"><circle class="ist" style="--d:.5s" cx="178" r="5" fill="#2ecf8f"/><circle class="ist" style="--d:1s" cx="-178" r="5" fill="#e9c46a"/></g></g></g>
+<g class="oB"><g transform="translate(300,300)"><ellipse class="ring" rx="178" ry="68" fill="none" stroke="rgba(139,135,242,.15)" stroke-width="1.3" transform="rotate(-12)"/><g transform="rotate(-12)"><circle class="ist" style="--d:.5s" cx="178" r="5" fill="#2ecf8f"/><circle class="ist" style="--d:1s" cx="-178" r="5" fill="#e0556b"/></g></g></g>
 <g class="oA"><g transform="translate(300,300)"><ellipse class="ring" rx="128" ry="48" fill="none" stroke="rgba(127,208,232,.13)" stroke-width="1.2" transform="rotate(-12)"/><g transform="rotate(-12)"><circle class="ist" style="--d:.8s" cx="128" r="4.5" fill="#7fd0e8"/><circle class="ist" style="--d:1.2s" cx="-128" r="4.5" fill="#c4c0ff"/></g></g></g>
 <g class="iword" fill="#eaf1ff" font-family="Jost,sans-serif" font-weight="300" font-size="120"><text x="220" y="338" text-anchor="middle">M</text><text x="278" y="338" text-anchor="middle">A</text><text x="378" y="338" text-anchor="middle">A</text></g>
 <line class="iword" x1="328" y1="252" x2="328" y2="338" stroke="#eaf1ff" stroke-width="7" stroke-linecap="round"/>
@@ -103,16 +104,17 @@ body.ready .app:nth-child(3){transition:opacity .7s .85s,transform .7s .85s}
 </div>
 <script>
 const APPS=[
+ {id:'commercial',name:'COMMERCIAL',sub:'cockpit de vente',core:'#e0556b',light:'#f5a6b3',url:'https://sites.google.com/view/cockpit-commercial-votre-barma/cockpit-v3-premium'},
  {id:'cockpit',name:'COCKPIT',sub:'privé · code',core:'#52b6d6',light:'#9fe0f0',url:'https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-cockpit.html'},
  {id:'seo',name:'SEO',sub:'visibilité web',core:'#8b87f2',light:'#c4c0ff',url:'https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-seo.html'},
  {id:'finance',name:'FINANCE',sub:'tableau chiffré',core:'#2ecf8f',light:'#9af0c8',url:'https://votrebarman.com/maia'},
 ];
-const ST=[['#52b6d6',1],['#8b87f2',1],['#2ecf8f',.85],['#e9c46a',.85],['#7fd0e8',.7],['#c4c0ff',.7]];
+const ST=[['#52b6d6',1],['#8b87f2',1],['#2ecf8f',.85],['#e0556b',.85],['#7fd0e8',.7],['#c4c0ff',.7]];
 function logo(p,size){let s=`<svg width="${size}" height="${size}" viewBox="0 0 240 240"><defs><radialGradient id="c_${p.id}" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="${p.light}"/><stop offset="1" stop-color="${p.core}"/></radialGradient><radialGradient id="g_${p.id}" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${p.core}" stop-opacity=".55"/><stop offset="1" stop-color="${p.core}" stop-opacity="0"/></radialGradient></defs>`;
 const orb=[['oC',96,36,0],['oB',74,28,2],['oA',54,20,4]];for(const[cls,rx,ry,i] of orb){s+=`<g class="${cls}"><g transform="translate(120,120)"><ellipse rx="${rx}" ry="${ry}" fill="none" stroke="rgba(127,208,232,.16)" stroke-width="1.1" transform="rotate(-14)"/><g transform="rotate(-14)"><circle cx="${rx}" r="${2.4*ST[i][1]+1.4}" fill="${ST[i][0]}"/><circle cx="${-rx}" r="${2.4*ST[i+1][1]+1.4}" fill="${ST[i+1][0]}"/></g></g></g>`;}
 s+=`<circle cx="120" cy="120" r="46" fill="url(#g_${p.id})"/><circle class="bre" cx="120" cy="120" r="20" fill="url(#c_${p.id})"/><circle cx="120" cy="120" r="6" fill="#fff"/></svg>`;return s;}
 // hero wordmark MAÏA + galaxy + gold core
-(function(){const S=ST;let g='';const orb=[['oC',250,92],['oB',196,70],['oA',150,54]];const cols=[['#52b6d6','#8b87f2'],['#2ecf8f','#e9c46a'],['#7fd0e8','#c4c0ff']];
+(function(){const S=ST;let g='';const orb=[['oC',250,92],['oB',196,70],['oA',150,54]];const cols=[['#52b6d6','#8b87f2'],['#2ecf8f','#e0556b'],['#7fd0e8','#c4c0ff']];
 let inner='';orb.forEach((o,k)=>{inner+=`<g class="${o[0]}"><g transform="translate(300,180)"><ellipse rx="${o[1]}" ry="${o[2]}" fill="none" stroke="rgba(127,208,232,.14)" stroke-width="1" transform="rotate(-12)"/><g transform="rotate(-12)"><circle cx="${o[1]}" r="3" fill="${cols[k][0]}"/><circle cx="${-o[1]}" r="3" fill="${cols[k][1]}"/></g></g></g>`;});
 const hero=`<svg width="min(86vw,520px)" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" style="display:block">
 <defs><radialGradient id="hc" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#f6dd9a"/><stop offset="1" stop-color="#e9c46a"/></radialGradient><radialGradient id="hg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e9c46a" stop-opacity=".5"/><stop offset="1" stop-color="#e9c46a" stop-opacity="0"/></radialGradient></defs>
@@ -121,7 +123,4 @@ ${inner}
 <line x1="311" y1="150" x2="311" y2="212" stroke="#eef3ff" stroke-width="5" stroke-linecap="round"/>
 <circle cx="311" cy="132" r="30" fill="url(#hg)"/><circle class="bre" cx="311" cy="132" r="13" fill="url(#hc)"/><circle cx="311" cy="132" r="4" fill="#fff"/>
 </svg>`;document.getElementById('hero').innerHTML=hero;})();
-document.getElementById('apps').innerHTML=APPS.map(p=>`<a class="app" target="_blank" rel="noopener" style="--ac:${p.core}" href="${p.url}"><span class="halo"></span><span class="lg">${logo(p,118)}</span><div class="nm" style="color:${p.light}">MAÏA ${p.name}</div><div class="ds">${p.sub}</div><span class="go">Ouvrir <span class="ar">→</span></span></a>`).join('');
-setTimeout(function(){document.getElementById('splash').classList.add('gone');document.body.classList.add('ready');},3600);
-</script>
-</body></html>
+document.getElementById('apps').innerHTML=APPS.map(p=>`<a class="app" target="_blank" rel="noopener" style="--ac:${p.core}" href="${p.url}"><span class="halo"></span><span class="lg">${logo(p,118)}</span
