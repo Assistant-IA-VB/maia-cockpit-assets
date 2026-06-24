@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "version": "V3.0",
+    "snapshot_ts": "2026-06-24T18:15:00+02:00",
+    "freshness_hours_warn": 72,
+    "freshness_hours_stale": 240,
+    "source": "Registre central CERVEAU_IA + logs Hermès + mémoire projet (lecture seule)",
+    "mode": "snapshot"
+  },
+  "hero": {
+    "act": "Préparer la correction du standard téléphonique (anti-digression)",
+    "why": "Anomalie active : l'agent part en bavardage hors sujet. Action préparable par Claude sans toucher la prod.",
+    "urg": "haute",
+    "action_id": "A-STD-PROMPT"
+  },
+  "actions": [
+    {
+      "id":"A-STD-PROMPT","titre":"Corriger le prompt anti-digression de l'agent","projet":"Standard téléphonique IA","urg":"haute",
+      "lane":"claude","statut":"a_faire",
+      "primary":"prepare_mission_claude","secondary":["voir_risque","ouvrir_source","reporter","marquer_bloque"],
+      "pourquoi":"L'agent téléphonique part en digressions hors sujet (histoires absurdes, détails personnels type nez, bavardage). Nuit à l'image pro et à la qualification client.",
+      "risque":"Appels clients dégradés, image non professionnelle, qualification ratée.",
+      "claude":"Rédiger un prompt agent sobre + checklist sécurité, sur clone uniquement.",
+      "chatgpt":"Valider le périmètre du correctif (cadre renforcé déjà acté).",
+      "kevin":"Valider avant toute mise en prod ; roter la clé Retell.",
+      "interdits":"Ne pas toucher Retell/Twilio/Make prod. Pas de test sur le numéro public. Pas de modif agent live.",
+      "source":"https://drive.google.com/drive/folders/1lC-ApDaqTF07yODKZdCrhf8wTdbJfwIA",
+      "payload":"MISSION CLAUDE — Standard téléphonique IA : correction anti-digression\nOBJECTIF : produire un prompt agent SOBRE, professionnel, court, orienté qualification, SANS bavardage ni digression (pas d'histoires absurdes, pas de détails personnels type nez).\nCADRE : sur clone/staging UNIQUEMENT. Interdit : Retell/Twilio/Make prod, numéro public, agent live.\nLIVRABLES : 1) prompt corrigé ; 2) checklist sécurité avant tout test ; 3) plan de test hors client.\nRETOUR : rapport court (✅/⚠️/⛔ · fait · à valider · prochaine action)."
+    },
+    {
+      "id":"A-MIG-INV","titre":"Inventaire + mapping des modèles Claude (Make)","projet":"Migration modèles Claude","urg":"haute",
+      "lane":"claude","statut":"a_faire",
+      "primary":"prepare_mission_claude","secondary":["voir_risque","reporter","marquer_bloque"],
+      "pourquoi":"Sonnet 4 / Opus 4 retirés (échéance 15/06 dépassée). 2 scénarios Make restants à vérifier.",
+      "risque":"Scénarios Make qui échouent silencieusement quand l'ancien modèle est coupé.",
+      "claude":"Inventaire lecture seule des scénarios anthropic-claude + mapping de remplacement proposé.",
+      "chatgpt":"—",
+      "kevin":"Valider le mapping puis la mise en prod.",
+      "interdits":"Lecture seule Make. Aucune activation, aucun Run once, aucune écriture prod.",
+      "source":"",
+      "payload":"MISSION CLAUDE — Migration modèles Claude (Make)\nOBJECTIF : inventaire LECTURE SEULE des scénarios Make utilisant un modèle Anthropic, puis proposer un mapping de remplacement (modèle retiré -> modèle actuel).\nCADRE : lecture seule, aucune activation/désactivation, aucun Run once.\nLIVRABLES : tableau scénario_id | modèle actuel | modèle cible | risque.\nRETOUR : mapping prêt à valider par Kevin."
+    },
+    {
+      "id":"A-SECU-RETELL","titre":"Roter la clé Retell","projet":"Sécurité (zones rouges)","urg":"haute",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"voir_prochaine_etape","secondary":["voir_risque","marquer_traite"],
+      "pourquoi":"Clé Retell exposée (zone rouge sécurité).",
+      "risque":"Accès non autorisé possible tant que la clé n'est pas rotée.",
+      "claude":"Ne JAMAIS toucher la clé (zone rouge). Peut rappeler seulement.",
+      "chatgpt":"—",
+      "kevin":"Roter la clé manuellement dans la console Retell.",
+      "interdits":"Claude ne touche aucun secret. Action 100% manuelle Kevin.",
+      "source":"",
+      "payload":"ÉTAPE KEVIN (manuelle) :\n1. Ouvrir la console Retell.\n2. Révoquer/roter la clé API exposée.\n3. Mettre à jour la clé côté appelant si nécessaire (avec précaution prod).\nClaude ne peut PAS le faire : action sécurité réservée à Kevin."
+    },
+    {
+      "id":"A-JUR-AVOCAT","titre":"Répondre à l'avocat (contrats + holding)","projet":"Juridique","urg":"moyenne",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"deleguer_claude","secondary":["reporter","marquer_traite"],
+      "pourquoi":"Réponse avocat en attente (rappel R-35).",
+      "risque":"Retard juridique sur contrats et étude holding.",
+      "claude":"Préparer un brouillon de réponse (sans l'envoyer).",
+      "chatgpt":"—",
+      "kevin":"Relire, valider et envoyer toi-même (zone rouge e-mail).",
+      "interdits":"Claude ne touche pas Gmail, n'envoie aucun e-mail.",
+      "source":"",
+      "payload":"MISSION CLAUDE — Brouillon réponse avocat\nOBJECTIF : préparer un brouillon de réponse à l'avocat (contrats barmans/commerciaux + étude holding).\nCADRE : brouillon uniquement, AUCUN envoi (Gmail = zone rouge Kevin).\nLIVRABLE : texte de réponse prêt à relire par Kevin."
+    },
+    {
+      "id":"A-MAIL-GMAIL","titre":"Décider la connexion Gmail lecture seule","projet":"Assistant commercial / mails","urg":"moyenne",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"voir_prochaine_etape","secondary":["voir_risque","reporter"],
+      "pourquoi":"Sans Gmail connecté, l'assistant commercial reste partiel. OAuth = décision sensible.",
+      "risque":"Mails commerciaux non traités automatiquement.",
+      "claude":"Préparer l'architecture de connexion (déjà documentée).",
+      "chatgpt":"—",
+      "kevin":"Donner le GO OAuth (action sensible, décision Kevin).",
+      "interdits":"Pas de connexion OAuth sans GO explicite Kevin.",
+      "source":"",
+      "payload":"DÉCISION KEVIN : autoriser ou non la connexion Gmail en LECTURE SEULE (OAuth).\nSi GO : Claude prépare l'architecture, Kevin réalise l'autorisation OAuth lui-même.\nSi non : l'assistant commercial reste partiel."
+    },
+    {
+      "id":"A-HERMES-USE","titre":"Faire arbitrer une décision par ChatGPT (Variante E)","projet":"Hermès","urg":"moyenne",
+      "lane":"chatgpt","statut":"a_faire",
+      "primary":"prepare_echange_chatgpt","secondary":["ouvrir_source","marquer_traite"],
+      "pourquoi":"Le transport Variante E est prouvé. Toute décision inter-IA peut passer par là sans transport de contenu par Kevin.",
+      "risque":"Sans l'utiliser, Kevin continue à porter les échanges manuellement.",
+      "claude":"Pré-crée le Doc décision dans le dossier 04, relit, logue, clôture.",
+      "chatgpt":"Édite les champs du Doc pré-créé.",
+      "kevin":"Une instruction courte (\"édite le Doc prévu\"), zéro copier-coller de contenu.",
+      "interdits":"Pas d'API ChatGPT (coût). Variante E fichier uniquement.",
+      "source":"https://drive.google.com/drive/folders/1nuPhjUTIaeAiCysoHppSj_iY-9dsBdK-",
+      "payload":"PROTOCOLE HERMÈS VARIANTE E :\n1. Claude pré-crée DECISION_ATTENDUE_<mission> dans le dossier 04 (champs à trous).\n2. Kevin dit à ChatGPT : \"édite le Doc de décision prévu\".\n3. ChatGPT remplit decision + date, passe statut -> DECISION_RECUE.\n4. Claude relit, apparie, logue, clôture.\nKevin ne transporte aucun contenu."
+    }
+  ],
+  "projects": [
+    {"id":"P-STD","name":"Standard téléphonique IA","statut":"bloque","etat":"a_arbitrer","resp":"claude","kevin":true,"urg":4,"action_id":"A-STD-PROMPT",
+     "next":"Préparer un prompt agent sobre anti-digression (sur clone, jamais en prod)",
+     "bloc":"ANOMALIE_AGENT_DIGRESSION_HORS_SUJET_V1 + clé Retell à roter","maj":"2026-06-24","relance":"2026-06-26","charge_kevin":"moyenne",
+     "avance":"Audit validé par ChatGPT (cadre renforcé). Numéro public actif, intact.","src":"Make 5683079/5683140 (prod — ne pas toucher)"},
+    {"id":"P-MIG","name":"Migration modèles Claude (Make)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":4,"action_id":"A-MIG-INV",
+     "next":"Valider le mapping des modèles (échéance 15/06 dépassée)","bloc":"Sonnet 4 / Opus 4 retirés ; 2 scénarios à vérifier","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"5990234 déjà migré en claude-haiku-4-5","src":"mail Make 03/06 (U-02)"},
+    {"id":"P-SECU","name":"Sécurité (zones rouges)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":5,"action_id":"A-SECU-RETELL",
+     "next":"Roter la clé Retell (action manuelle Kevin)","bloc":"Webhooks sans clé, secrets en clair, clé Retell exposée","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"Design sécurisation webhooks terminé, non exécuté","src":"GO A sécurisation webhooks"},
+    {"id":"P-MAIA","name":"Maïa / cockpit (cette app)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"",
+     "next":"Utiliser la V3 au quotidien comme centre de pilotage","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"V1.14.1 → V1.15 → V2 → V3 Action Center publiée 24/06","src":"GitHub maia-cockpit-assets"},
+    {"id":"P-HERMES","name":"Hermès (transport IA)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"A-HERMES-USE",
+     "next":"Appliquer Variante E sur la prochaine vraie décision","bloc":"Écriture Drive directe ChatGPT limitée — contournée par Variante E","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"D1, N1a, lecture Drive, Variante E tous PASS (24/06)","src":"Drive HERMES_SHARED_WORKSPACE_V1"},
+    {"id":"P-SUP","name":"Superviseur opérationnel (Make)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":2,"action_id":"",
+     "next":"Surveiller la conso Make (6 scénarios actifs)","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-28","charge_kevin":"nulle",
+     "avance":"P0 coût stabilisé : 6 scénarios actifs sur 10","src":"Make team 1531272"},
+    {"id":"P-JUR","name":"Juridique (contrats + holding)","statut":"encours","etat":"vivant","resp":"kevin","kevin":true,"urg":3,"action_id":"A-JUR-AVOCAT",
+     "next":"Répondre à l'avocat (Maïa peut préparer le brouillon)","bloc":"réponse avocat en attente (R-35)","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"moyenne",
+     "avance":"rappel actif","src":"Rappels MAIA"},
+    {"id":"P-MAIL","name":"Assistant commercial / mails","statut":"attente","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":2,"action_id":"A-MAIL-GMAIL",
+     "next":"Décider la connexion Gmail lecture seule (OAuth = GO séparé)","bloc":"Gmail non connecté ; OAuth en attente","maj":"2026-06-24","relance":"2026-06-30","charge_kevin":"faible",
+     "avance":"Architecture documentée ; bot Telegram commercial actif","src":"Make 5434085"},
+    {"id":"P-REC","name":"Recrutement barmans","statut":"attente","etat":"dormant","resp":"kevin","kevin":true,"urg":2,"action_id":"",
+     "next":"Finaliser la carte interactive des barmans + contrats","bloc":"rappels R-36 / R-37 en attente","maj":"2026-06-24","relance":"2026-07-01","charge_kevin":"moyenne",
+     "avance":"rappels actifs, pas de chantier en cours","src":"Rappels MAIA"},
+    {"id":"P-SITE","name":"Site Votre Barman / SEO","statut":"attente","etat":"dormant","resp":"maia","kevin":false,"urg":1,"action_id":"",
+     "next":"Cadrer le périmètre SEO réellement utile","bloc":"non démarré","maj":"2026-06-24","relance":"2026-07-05","charge_kevin":"nulle",
+     "avance":"évoqué, pas de chantier","src":"—"}
+  ],
+  "exchanges": [
+    {"mid":"HERMES_TEST_006 — Variante E","statut":"TERMINE","kevin":false,"dem":"Quelle forme d'écriture ChatGPT ne déclenche pas le blocage ?","att":"Variante validée","rep":"Variante E : ChatGPT édite un Doc pré-créé par Claude. Validée."},
+    {"mid":"HERMES_TEST_005B — écriture Drive","statut":"TERMINE","kevin":false,"dem":"ChatGPT peut-il écrire/ranger dans 04 ?","att":"oui/non + cause","rep":"Lecture OK, création OK, écriture+rangement bloqués par l'outil OpenAI."},
+    {"mid":"HERMES_TEST_002 — prochaine étape","statut":"TERMINE","kevin":false,"dem":"Prochaine étape Hermès après D1 ?","att":"A/B/C","rep":"B — passer en N1b (connecteur Drive)."}
+  ],
+  "hermes": [
+    {"k":"Boucle fichier D1","v":"PASS","c":"ok"},
+    {"k":"N1a copier-coller","v":"PASS","c":"ok"},
+    {"k":"Lecture Drive ChatGPT","v":"PASS","c":"ok"},
+    {"k":"Variante E (édition Doc)","v":"PASS","c":"ok"},
+    {"k":"Écriture/rangement direct ChatGPT","v":"bloqué (outil OpenAI)","c":"ko"},
+    {"k":"Commentaire Drive","v":"FAIL","c":"ko"}
+  ],
+  "hermesNote": "Mode officiel : Variante E — Claude pré-crée le Doc décision dans 04, ChatGPT édite, Claude relit. Kevin ne transporte aucun contenu. 0 €, aucun modèle externe."
+}

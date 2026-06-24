@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070d18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAÏA">
+<title>MAÏA V3 — Centre de commandement</title>
+<link rel="icon" type="image/png" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<link rel="apple-touch-icon" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<style>
+:root{
+ --bg:#070d18;--bg2:#0b1424;--panel:#0f1a2e;--panel2:#13203a;--line:#1e2c47;--line2:#172339;
+ --ink:#eef3fc;--mut:#93a6c9;--mut2:#5e7299;
+ --blue:#5b8dff;--cyan:#34d6e6;--green:#33cf85;--amber:#f6a93b;--red:#ff5c63;--violet:#a385ff;
+ --r:16px;--sh:0 14px 40px -22px #000d;--shin:inset 0 1px 0 #ffffff0a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:
+ radial-gradient(1100px 520px at 78% -8%,#15233f 0,transparent 55%),
+ radial-gradient(900px 500px at 10% 0,#101c33 0,transparent 50%),
+ var(--bg);
+ color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:880px;margin:0 auto;padding:0 15px 112px;line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased;letter-spacing:.1px}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.3px}
+::-webkit-scrollbar{width:0}
+/* topbar */
+.bar{display:flex;align-items:center;gap:13px;padding:18px 2px 6px}
+.wm{font-size:21px;font-weight:800;letter-spacing:3px;background:linear-gradient(90deg,#cfe0ff,#9db8ff 60%,#a385ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bar .vchip{font-size:9.5px;font-weight:800;letter-spacing:1px;color:#bcd0ff;border:1px solid #2c416e;border-radius:6px;padding:2px 7px;margin-left:2px}
+.bar .right{margin-left:auto;text-align:right}
+.bar .right .s1{font-size:11px;color:var(--mut)}
+/* freshness */
+.fresh{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--mut);background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:6px 0 16px;box-shadow:var(--shin)}
+.fdot{width:9px;height:9px;border-radius:50%;flex:none}
+.fdot.snap{background:var(--amber);box-shadow:0 0 0 4px #f6a93b22}
+.fdot.stale{background:var(--red);box-shadow:0 0 0 4px #ff5c6322}
+.fresh .rf{margin-left:auto;color:#bcd0ff;background:#14233f;border:1px solid #25395e;border-radius:9px;padding:5px 11px;font-weight:700;font-size:11.5px;cursor:pointer}
+.fresh .rf:active{transform:translateY(1px)}
+/* section header */
+.sh{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin:18px 4px 10px}
+.sh .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.sh .n{font-size:11px;font-weight:800;color:#fff;border-radius:999px;padding:1px 9px;background:#26385c}
+.sh .n.r{background:#7a2730}.sh .n.a{background:#7a5512}.sh .n.g{background:#1d6b48}
+/* hero / next decision */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#18294d,#191f47 70%);border:1px solid #2c416e;border-radius:var(--r);padding:17px;margin-bottom:8px;box-shadow:var(--sh)}
+.hero:before{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(closest-side,#5b8dff2e,transparent)}
+.hero .lab{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#86abff}
+.hero .act{font-size:19px;font-weight:800;margin:6px 0 5px;line-height:1.25}
+.hero .why{font-size:13px;color:#c6d6f3}
+.hero .u{position:absolute;right:14px;top:14px;font-size:9.5px;font-weight:800;letter-spacing:.5px;color:#ffd9ad;background:#5a3b14;border:1px solid #7a5512;border-radius:999px;padding:3px 10px}
+.hero .ha{margin-top:13px}
+/* buttons */
+.btn{border:1px solid var(--line);background:#13213b;color:var(--ink);border-radius:11px;padding:9px 13px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:transform .08s,border-color .12s,background .12s}
+.btn:hover{border-color:#36507f}.btn:active{transform:translateY(1px)}
+.btn.pri{background:linear-gradient(180deg,#3f74ff,#2f63f0);border-color:#4f80ff;color:#fff;box-shadow:0 8px 20px -10px #3f74ff}
+.btn.ok{background:#123a28;border-color:#1d6b48;color:#8ef0bd}
+.btn.dng{background:#3a161a;border-color:#7a2730;color:#ffb3b6}
+.btn.gh{background:transparent}
+.btn.sm{padding:6px 10px;font-size:11.5px;border-radius:9px}
+.btnrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+/* action / project cards */
+.card{position:relative;background:linear-gradient(180deg,var(--panel) 0,var(--bg2) 100%);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:11px;box-shadow:var(--sh)}
+.card .lane{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px}
+.lane-claude{background:#f6a93b}.lane-kevin{background:#5b8dff}.lane-chatgpt{background:#33cf85}.lane-maia{background:#a385ff}.lane-bloc{background:#ff5c63}
+.card .ct{display:flex;align-items:flex-start;gap:10px;padding-left:9px}
+.card .nm{font-weight:700;font-size:14.5px;flex:1;min-width:0;line-height:1.3}
+.card .proj{font-size:11px;color:var(--mut);margin-top:2px}
+.bdg{font-size:9.5px;font-weight:800;letter-spacing:.4px;border-radius:7px;padding:3px 8px;white-space:nowrap}
+.b-vivant{background:#103528;color:#6fe6ad;border:1px solid #1d6b48}
+.b-bloque{background:#3a161a;color:#ff9ba0;border:1px solid #7a2730}
+.b-dormant{background:#172339;color:#93a6c9;border:1px solid #25395e}
+.b-arb{background:#3a2d0e;color:#ffd08a;border:1px solid #7a5512}
+.u-haute{background:#3a161a;color:#ff9ba0;border:1px solid #7a2730}
+.u-moyenne{background:#3a2d0e;color:#ffd08a;border:1px solid #7a5512}
+.card .why{font-size:12.5px;color:#c0d2f0;margin:9px 0 0;padding-left:9px}
+.card .risk{font-size:11.5px;color:#ffb6b9;margin-top:6px;padding-left:9px}
+.card .nx{font-size:12.5px;color:#bcd0f0;margin-top:9px;padding-left:9px;display:flex;gap:6px}
+.card .nx .ar{color:var(--blue);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;padding-left:9px}
+.chip{font-size:10.5px;border-radius:7px;padding:3px 8px;border:1px solid var(--line);color:var(--mut);background:#0d1830}
+.chip.who{font-weight:800}
+.who-kevin{color:#9cc0ff}.who-claude{color:#ffcf8d}.who-chatgpt{color:#7fe7b3}.who-maia{color:#c6afff}
+.chip.kev{color:#9cc0ff;border-color:#2c416e;background:#13233f}
+.chip.urg{color:#ffb0b3;border-color:#7a2730;background:#2a1216}
+.chip.done{color:#7fe7b3;border-color:#1d6b48;background:#103528}
+.statusline{font-size:11px;color:var(--mut);margin-top:9px;padding-left:9px}
+.statusline b{color:#bcd0f0}
+/* project detail */
+.det{display:none;margin-top:11px;padding:11px 0 0 9px;border-top:1px dashed var(--line);font-size:12.5px}
+.card.open .det{display:block}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px}
+.kv b{color:var(--mut);font-weight:700;font-size:11px}
+/* controls */
+.ctrl{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.search{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);font:inherit;font-size:13.5px;box-shadow:var(--shin)}
+.search::placeholder{color:#5e7299}
+.filters{display:flex;flex-wrap:wrap;gap:7px}
+.ft{font-size:11.5px;font-weight:700;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+.ft.on{color:#fff;background:linear-gradient(180deg,#2c4a82,#243f6f);border-color:#3a5896}
+/* mini lists (today lanes) */
+.mini{display:flex;gap:11px;padding:11px 2px;border-bottom:1px solid var(--line2);align-items:flex-start;cursor:pointer}
+.mini:last-child{border-bottom:0}
+.mini .ic{flex:none;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.ic.kev{background:#13233f}.ic.cla{background:#3a2a12}.ic.gpt{background:#103528}.ic.maia{background:#241a45}.ic.bloc{background:#3a161a}
+.mini .tx{flex:1;min-width:0}.mini .tx b{font-weight:700;font-size:13.5px}
+.mini .tx small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px}
+.mini .go{color:var(--mut);font-size:16px;align-self:center}
+.empty{color:var(--mut);font-size:12.5px;padding:9px 2px}
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hg .h{border:1px solid var(--line);border-radius:11px;padding:10px;background:#0d1830;font-size:11.5px;color:var(--mut)}
+.hg .h b{display:block;font-size:12.5px;margin-bottom:2px}
+.ok{color:#6fe6ad}.ko{color:#ff9ba0}
+.note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.55}
+.view{display:none}.view.on{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;max-width:880px;margin:0 auto;display:flex;background:rgba(7,13,24,.93);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:50}
+.nav a{flex:1;text-align:center;padding:9px 1px 11px;font-size:9.5px;font-weight:700;color:var(--mut);text-decoration:none;position:relative}
+.nav a .ni{display:block;font-size:17px;margin-bottom:3px;opacity:.7}
+.nav a.on{color:#cfe0ff}.nav a.on .ni{opacity:1}
+.nav a.on:before{content:"";position:absolute;top:0;left:30%;right:30%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#5b8dff,transparent)}
+.nav a .nb{position:absolute;top:5px;right:22%;background:#ff5c63;color:#fff;font-size:8.5px;font-weight:800;border-radius:999px;padding:0 5px;line-height:14px}
+/* action panel modal */
+.scrim{position:fixed;inset:0;background:#05080fcc;backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;z-index:80}
+.scrim.on{display:flex}
+.sheet{width:100%;max-width:880px;background:linear-gradient(180deg,#101c33,#0a1322);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;padding:16px 16px 26px;max-height:88vh;overflow:auto;box-shadow:0 -20px 50px -20px #000;animation:up .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.sheet .grip{width:40px;height:4px;border-radius:3px;background:#2a3a5e;margin:0 auto 12px}
+.sheet h3{font-size:17px;margin-bottom:3px}
+.sheet .sp{font-size:11.5px;color:var(--mut);margin-bottom:12px}
+.sheet .blk{border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:10px;background:#0d1830;font-size:12.5px}
+.sheet .blk b{color:var(--mut);font-weight:700;font-size:11px;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.sheet .blk.warn{border-color:#7a5512;background:#251c0c}
+.sheet .blk.dng{border-color:#7a2730;background:#251114}
+.sheet .blk.reco{border-color:#1d6b48;background:#0d2a1e}
+.sheet .blk.reco b{color:#6fe6ad}
+.payload{background:#060c16;border:1px solid #1c2b47;border-radius:11px;padding:11px;font-size:11.5px;font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;color:#cdddf6;max-height:240px;overflow:auto}
+.sheet .ttag{display:inline-block;font-size:10px;font-weight:800;color:#ffd9ad;background:#3a2d0e;border:1px solid #7a5512;border-radius:7px;padding:3px 9px;margin-bottom:10px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1c2c4d;color:#fff;border:1px solid #36507f;padding:10px 16px;border-radius:11px;font-size:12.5px;opacity:0;transition:.2s;pointer-events:none;z-index:90}
+.toast.show{opacity:1}
+</style></head>
+<body>
+<div class="bar">
+  <div><span class="wm">MAÏA</span><span class="vchip">V3</span></div>
+  <div class="right"><div class="s1" id="sub">Centre de commandement</div></div>
+</div>
+<div class="fresh"><span class="fdot snap" id="fdot"></span><span id="fresh">Chargement…</span><span class="rf" id="refresh">↻ Actualiser</span></div>
+
+<!-- AUJOURD'HUI -->
+<section class="view on" id="v-today">
+  <div class="hero">
+    <div class="u" id="heroU"></div>
+    <div class="lab">▸ TA PROCHAINE DÉCISION</div>
+    <div class="act" id="heroAct"></div>
+    <div class="why" id="heroWhy"></div>
+    <div class="ha"><button class="btn pri" id="heroBtn">⚡ Action recommandée</button></div>
+  </div>
+  <div class="sh"><span>🔴 À décider / agir</span><span class="ln"></span><span class="n r" id="nKev">0</span></div>
+  <div id="lKev"></div>
+  <div class="sh"><span>🟠 À déléguer maintenant</span><span class="ln"></span><span class="n a" id="nDel">0</span></div>
+  <div id="lDel"></div>
+  <div class="sh"><span>🔒 Bloqué sans toi</span><span class="ln"></span><span class="n" id="nBloc">0</span></div>
+  <div id="lBloc"></div>
+  <div class="sh"><span>😌 Ignorable</span><span class="ln"></span></div>
+  <div id="lLater"></div>
+</section>
+
+<!-- ACTION CENTER -->
+<section class="view" id="v-action">
+  <div class="sh"><span>⚡ Action Center</span><span class="ln"></span><span class="n a" id="acN">0</span></div>
+  <div class="note" style="margin:0 4px 12px">Chaque action a un bouton. Clique → panneau d'arbitrage → texte prêt à transmettre. <b>Rien n'est exécuté automatiquement</b> : Maïa prépare, tu décides.</div>
+  <div class="ctrl" style="margin-bottom:12px"><div class="filters" id="acFilter">
+    <span class="ft on" data-l="all">Toutes</span>
+    <span class="ft" data-l="kevin">Pour toi</span>
+    <span class="ft" data-l="claude">Claude peut</span>
+    <span class="ft" data-l="chatgpt">Via ChatGPT</span>
+  </div></div>
+  <div id="acList"></div>
+</section>
+
+<!-- PROJETS -->
+<section class="view" id="v-proj">
+  <div class="ctrl">
+    <input class="search" id="q" placeholder="Rechercher un projet…">
+    <div class="filters" id="fStatut">
+      <span class="ft on" data-f="all">Tous</span>
+      <span class="ft" data-f="bloque">Bloqués</span>
+      <span class="ft" data-f="encours">En cours</span>
+      <span class="ft" data-f="attente">En attente</span>
+      <span class="ft" data-f="kevin">Kevin requis</span>
+    </div>
+  </div>
+  <div class="sh"><span>🎯 Pilotage projets</span><span class="ln"></span><span class="n" id="projN">0</span></div>
+  <div id="projList"></div>
+</section>
+
+<!-- ECHANGE -->
+<section class="view" id="v-ex">
+  <div class="sh"><span>🔁 Échange ChatGPT ↔ Claude</span><span class="ln"></span></div>
+  <div class="note" style="margin:0 4px 12px">Protocole <b>Variante E</b> : Claude pré-crée le Doc, ChatGPT édite, Claude relit. Tu ne transportes rien.</div>
+  <div id="exList"></div>
+  <div class="sh"><span>📡 Statut Hermès</span><span class="ln"></span></div>
+  <div class="card"><div class="hg" id="hStat"></div><div class="note" id="hNote"></div></div>
+</section>
+
+<div class="nav">
+  <a class="on" data-v="today"><span class="ni">📅</span>Aujourd'hui</a>
+  <a data-v="action"><span class="ni">⚡</span>Actions<span class="nb" id="navBadge"></span></a>
+  <a data-v="proj"><span class="ni">🎯</span>Projets</a>
+  <a data-v="ex"><span class="ni">🔁</span>Échange</a>
+</div>
+
+<div class="scrim" id="scrim"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var FALLBACK={
+  "meta": {
+    "version": "V3.0",
+    "snapshot_ts": "2026-06-24T18:15:00+02:00",
+    "freshness_hours_warn": 72,
+    "freshness_hours_stale": 240,
+    "source": "Registre central CERVEAU_IA + logs Hermès + mémoire projet (lecture seule)",
+    "mode": "snapshot"
+  },
+  "hero": {
+    "act": "Préparer la correction du standard téléphonique (anti-digression)",
+    "why": "Anomalie active : l'agent part en bavardage hors sujet. Action préparable par Claude sans toucher la prod.",
+    "urg": "haute",
+    "action_id": "A-STD-PROMPT"
+  },
+  "actions": [
+    {
+      "id":"A-STD-PROMPT","titre":"Corriger le prompt anti-digression de l'agent","projet":"Standard téléphonique IA","urg":"haute",
+      "lane":"claude","statut":"a_faire",
+      "primary":"prepare_mission_claude","secondary":["voir_risque","ouvrir_source","reporter","marquer_bloque"],
+      "pourquoi":"L'agent téléphonique part en digressions hors sujet (histoires absurdes, détails personnels type nez, bavardage). Nuit à l'image pro et à la qualification client.",
+      "risque":"Appels clients dégradés, image non professionnelle, qualification ratée.",
+      "claude":"Rédiger un prompt agent sobre + checklist sécurité, sur clone uniquement.",
+      "chatgpt":"Valider le périmètre du correctif (cadre renforcé déjà acté).",
+      "kevin":"Valider avant toute mise en prod ; roter la clé Retell.",
+      "interdits":"Ne pas toucher Retell/Twilio/Make prod. Pas de test sur le numéro public. Pas de modif agent live.",
+      "source":"https://drive.google.com/drive/folders/1lC-ApDaqTF07yODKZdCrhf8wTdbJfwIA",
+      "payload":"MISSION CLAUDE — Standard téléphonique IA : correction anti-digression\nOBJECTIF : produire un prompt agent SOBRE, professionnel, court, orienté qualification, SANS bavardage ni digression (pas d'histoires absurdes, pas de détails personnels type nez).\nCADRE : sur clone/staging UNIQUEMENT. Interdit : Retell/Twilio/Make prod, numéro public, agent live.\nLIVRABLES : 1) prompt corrigé ; 2) checklist sécurité avant tout test ; 3) plan de test hors client.\nRETOUR : rapport court (✅/⚠️/⛔ · fait · à valider · prochaine action)."
+    },
+    {
+      "id":"A-MIG-INV","titre":"Inventaire + mapping des modèles Claude (Make)","projet":"Migration modèles Claude","urg":"haute",
+      "lane":"claude","statut":"a_faire",
+      "primary":"prepare_mission_claude","secondary":["voir_risque","reporter","marquer_bloque"],
+      "pourquoi":"Sonnet 4 / Opus 4 retirés (échéance 15/06 dépassée). 2 scénarios Make restants à vérifier.",
+      "risque":"Scénarios Make qui échouent silencieusement quand l'ancien modèle est coupé.",
+      "claude":"Inventaire lecture seule des scénarios anthropic-claude + mapping de remplacement proposé.",
+      "chatgpt":"—",
+      "kevin":"Valider le mapping puis la mise en prod.",
+      "interdits":"Lecture seule Make. Aucune activation, aucun Run once, aucune écriture prod.",
+      "source":"",
+      "payload":"MISSION CLAUDE — Migration modèles Claude (Make)\nOBJECTIF : inventaire LECTURE SEULE des scénarios Make utilisant un modèle Anthropic, puis proposer un mapping de remplacement (modèle retiré -> modèle actuel).\nCADRE : lecture seule, aucune activation/désactivation, aucun Run once.\nLIVRABLES : tableau scénario_id | modèle actuel | modèle cible | risque.\nRETOUR : mapping prêt à valider par Kevin."
+    },
+    {
+      "id":"A-SECU-RETELL","titre":"Roter la clé Retell","projet":"Sécurité (zones rouges)","urg":"haute",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"voir_prochaine_etape","secondary":["voir_risque","marquer_traite"],
+      "pourquoi":"Clé Retell exposée (zone rouge sécurité).",
+      "risque":"Accès non autorisé possible tant que la clé n'est pas rotée.",
+      "claude":"Ne JAMAIS toucher la clé (zone rouge). Peut rappeler seulement.",
+      "chatgpt":"—",
+      "kevin":"Roter la clé manuellement dans la console Retell.",
+      "interdits":"Claude ne touche aucun secret. Action 100% manuelle Kevin.",
+      "source":"",
+      "payload":"ÉTAPE KEVIN (manuelle) :\n1. Ouvrir la console Retell.\n2. Révoquer/roter la clé API exposée.\n3. Mettre à jour la clé côté appelant si nécessaire (avec précaution prod).\nClaude ne peut PAS le faire : action sécurité réservée à Kevin."
+    },
+    {
+      "id":"A-JUR-AVOCAT","titre":"Répondre à l'avocat (contrats + holding)","projet":"Juridique","urg":"moyenne",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"deleguer_claude","secondary":["reporter","marquer_traite"],
+      "pourquoi":"Réponse avocat en attente (rappel R-35).",
+      "risque":"Retard juridique sur contrats et étude holding.",
+      "claude":"Préparer un brouillon de réponse (sans l'envoyer).",
+      "chatgpt":"—",
+      "kevin":"Relire, valider et envoyer toi-même (zone rouge e-mail).",
+      "interdits":"Claude ne touche pas Gmail, n'envoie aucun e-mail.",
+      "source":"",
+      "payload":"MISSION CLAUDE — Brouillon réponse avocat\nOBJECTIF : préparer un brouillon de réponse à l'avocat (contrats barmans/commerciaux + étude holding).\nCADRE : brouillon uniquement, AUCUN envoi (Gmail = zone rouge Kevin).\nLIVRABLE : texte de réponse prêt à relire par Kevin."
+    },
+    {
+      "id":"A-MAIL-GMAIL","titre":"Décider la connexion Gmail lecture seule","projet":"Assistant commercial / mails","urg":"moyenne",
+      "lane":"kevin","statut":"a_faire",
+      "primary":"voir_prochaine_etape","secondary":["voir_risque","reporter"],
+      "pourquoi":"Sans Gmail connecté, l'assistant commercial reste partiel. OAuth = décision sensible.",
+      "risque":"Mails commerciaux non traités automatiquement.",
+      "claude":"Préparer l'architecture de connexion (déjà documentée).",
+      "chatgpt":"—",
+      "kevin":"Donner le GO OAuth (action sensible, décision Kevin).",
+      "interdits":"Pas de connexion OAuth sans GO explicite Kevin.",
+      "source":"",
+      "payload":"DÉCISION KEVIN : autoriser ou non la connexion Gmail en LECTURE SEULE (OAuth).\nSi GO : Claude prépare l'architecture, Kevin réalise l'autorisation OAuth lui-même.\nSi non : l'assistant commercial reste partiel."
+    },
+    {
+      "id":"A-HERMES-USE","titre":"Faire arbitrer une décision par ChatGPT (Variante E)","projet":"Hermès","urg":"moyenne",
+      "lane":"chatgpt","statut":"a_faire",
+      "primary":"prepare_echange_chatgpt","secondary":["ouvrir_source","marquer_traite"],
+      "pourquoi":"Le transport Variante E est prouvé. Toute décision inter-IA peut passer par là sans transport de contenu par Kevin.",
+      "risque":"Sans l'utiliser, Kevin continue à porter les échanges manuellement.",
+      "claude":"Pré-crée le Doc décision dans le dossier 04, relit, logue, clôture.",
+      "chatgpt":"Édite les champs du Doc pré-créé.",
+      "kevin":"Une instruction courte (\"édite le Doc prévu\"), zéro copier-coller de contenu.",
+      "interdits":"Pas d'API ChatGPT (coût). Variante E fichier uniquement.",
+      "source":"https://drive.google.com/drive/folders/1nuPhjUTIaeAiCysoHppSj_iY-9dsBdK-",
+      "payload":"PROTOCOLE HERMÈS VARIANTE E :\n1. Claude pré-crée DECISION_ATTENDUE_<mission> dans le dossier 04 (champs à trous).\n2. Kevin dit à ChatGPT : \"édite le Doc de décision prévu\".\n3. ChatGPT remplit decision + date, passe statut -> DECISION_RECUE.\n4. Claude relit, apparie, logue, clôture.\nKevin ne transporte aucun contenu."
+    }
+  ],
+  "projects": [
+    {"id":"P-STD","name":"Standard téléphonique IA","statut":"bloque","etat":"a_arbitrer","resp":"claude","kevin":true,"urg":4,"action_id":"A-STD-PROMPT",
+     "next":"Préparer un prompt agent sobre anti-digression (sur clone, jamais en prod)",
+     "bloc":"ANOMALIE_AGENT_DIGRESSION_HORS_SUJET_V1 + clé Retell à roter","maj":"2026-06-24","relance":"2026-06-26","charge_kevin":"moyenne",
+     "avance":"Audit validé par ChatGPT (cadre renforcé). Numéro public actif, intact.","src":"Make 5683079/5683140 (prod — ne pas toucher)"},
+    {"id":"P-MIG","name":"Migration modèles Claude (Make)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":4,"action_id":"A-MIG-INV",
+     "next":"Valider le mapping des modèles (échéance 15/06 dépassée)","bloc":"Sonnet 4 / Opus 4 retirés ; 2 scénarios à vérifier","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"5990234 déjà migré en claude-haiku-4-5","src":"mail Make 03/06 (U-02)"},
+    {"id":"P-SECU","name":"Sécurité (zones rouges)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":5,"action_id":"A-SECU-RETELL",
+     "next":"Roter la clé Retell (action manuelle Kevin)","bloc":"Webhooks sans clé, secrets en clair, clé Retell exposée","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"Design sécurisation webhooks terminé, non exécuté","src":"GO A sécurisation webhooks"},
+    {"id":"P-MAIA","name":"Maïa / cockpit (cette app)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"",
+     "next":"Utiliser la V3 au quotidien comme centre de pilotage","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"V1.14.1 → V1.15 → V2 → V3 Action Center publiée 24/06","src":"GitHub maia-cockpit-assets"},
+    {"id":"P-HERMES","name":"Hermès (transport IA)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"A-HERMES-USE",
+     "next":"Appliquer Variante E sur la prochaine vraie décision","bloc":"Écriture Drive directe ChatGPT limitée — contournée par Variante E","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"D1, N1a, lecture Drive, Variante E tous PASS (24/06)","src":"Drive HERMES_SHARED_WORKSPACE_V1"},
+    {"id":"P-SUP","name":"Superviseur opérationnel (Make)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":2,"action_id":"",
+     "next":"Surveiller la conso Make (6 scénarios actifs)","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-28","charge_kevin":"nulle",
+     "avance":"P0 coût stabilisé : 6 scénarios actifs sur 10","src":"Make team 1531272"},
+    {"id":"P-JUR","name":"Juridique (contrats + holding)","statut":"encours","etat":"vivant","resp":"kevin","kevin":true,"urg":3,"action_id":"A-JUR-AVOCAT",
+     "next":"Répondre à l'avocat (Maïa peut préparer le brouillon)","bloc":"réponse avocat en attente (R-35)","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"moyenne",
+     "avance":"rappel actif","src":"Rappels MAIA"},
+    {"id":"P-MAIL","name":"Assistant commercial / mails","statut":"attente","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":2,"action_id":"A-MAIL-GMAIL",
+     "next":"Décider la connexion Gmail lecture seule (OAuth = GO séparé)","bloc":"Gmail non connecté ; OAuth en attente","maj":"2026-06-24","relance":"2026-06-30","charge_kevin":"faible",
+     "avance":"Architecture documentée ; bot Telegram commercial actif","src":"Make 5434085"},
+    {"id":"P-REC","name":"Recrutement barmans","statut":"attente","etat":"dormant","resp":"kevin","kevin":true,"urg":2,"action_id":"",
+     "next":"Finaliser la carte interactive des barmans + contrats","bloc":"rappels R-36 / R-37 en attente","maj":"2026-06-24","relance":"2026-07-01","charge_kevin":"moyenne",
+     "avance":"rappels actifs, pas de chantier en cours","src":"Rappels MAIA"},
+    {"id":"P-SITE","name":"Site Votre Barman / SEO","statut":"attente","etat":"dormant","resp":"maia","kevin":false,"urg":1,"action_id":"",
+     "next":"Cadrer le périmètre SEO réellement utile","bloc":"non démarré","maj":"2026-06-24","relance":"2026-07-05","charge_kevin":"nulle",
+     "avance":"évoqué, pas de chantier","src":"—"}
+  ],
+  "exchanges": [
+    {"mid":"HERMES_TEST_006 — Variante E","statut":"TERMINE","kevin":false,"dem":"Quelle forme d'écriture ChatGPT ne déclenche pas le blocage ?","att":"Variante validée","rep":"Variante E : ChatGPT édite un Doc pré-créé par Claude. Validée."},
+    {"mid":"HERMES_TEST_005B — écriture Drive","statut":"TERMINE","kevin":false,"dem":"ChatGPT peut-il écrire/ranger dans 04 ?","att":"oui/non + cause","rep":"Lecture OK, création OK, écriture+rangement bloqués par l'outil OpenAI."},
+    {"mid":"HERMES_TEST_002 — prochaine étape","statut":"TERMINE","kevin":false,"dem":"Prochaine étape Hermès après D1 ?","att":"A/B/C","rep":"B — passer en N1b (connecteur Drive)."}
+  ],
+  "hermes": [
+    {"k":"Boucle fichier D1","v":"PASS","c":"ok"},
+    {"k":"N1a copier-coller","v":"PASS","c":"ok"},
+    {"k":"Lecture Drive ChatGPT","v":"PASS","c":"ok"},
+    {"k":"Variante E (édition Doc)","v":"PASS","c":"ok"},
+    {"k":"Écriture/rangement direct ChatGPT","v":"bloqué (outil OpenAI)","c":"ko"},
+    {"k":"Commentaire Drive","v":"FAIL","c":"ko"}
+  ],
+  "hermesNote": "Mode officiel : Variante E — Claude pré-crée le Doc décision dans 04, ChatGPT édite, Claude relit. Kevin ne transporte aucun contenu. 0 €, aucun modèle externe."
+}
+;
+var SNAP_URL="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-snapshot-v3.json";
+var D=FALLBACK;
+var LSTAT={}; /* statuts locaux d'action (session) */
+
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2100);}
+function whoIc(r){return {kevin:["kev","👤"],claude:["cla","🧠"],chatgpt:["gpt","🟢"],maia:["maia","✨"],bloc:["bloc","🔒"]}[r]||["maia","✨"];}
+function whoName(r){return {kevin:"Kevin",claude:"Claude",chatgpt:"ChatGPT",maia:"Maïa"}[r]||"Maïa";}
+function actById(id){return (D.actions||[]).filter(function(a){return a.id===id;})[0];}
+function effStatut(a){return LSTAT[a.id]||a.statut;}
+
+/* labels des boutons */
+var BTN={
+ prepare_mission_claude:["🧠 Préparer mission Claude","pri"],
+ prepare_echange_chatgpt:["🟢 Préparer échange ChatGPT","pri"],
+ deleguer_claude:["🧠 Déléguer à Claude","pri"],
+ valider:["✅ Valider","ok"],
+ refuser:["✕ Refuser","dng"],
+ reporter:["⏳ Reporter","gh"],
+ marquer_bloque:["🔒 Marquer bloqué","gh"],
+ marquer_traite:["✓ Marquer traité","ok"],
+ voir_risque:["⚠ Voir risque","gh"],
+ voir_prochaine_etape:["→ Prochaine étape","pri"],
+ ouvrir_source:["🔗 Ouvrir source","gh"],
+ copier_instruction:["📋 Copier","gh"],
+ cloturer_local:["✓ Clôturer (local)","gh"]
+};
+function btnHtml(act,kind,small){var b=BTN[kind]||[kind,"gh"];return '<button class="btn '+b[1]+(small?" sm":"")+'" data-act="'+esc(act.id)+'" data-do="'+kind+'">'+b[0]+'</button>';}
+
+/* freshness */
+function freshness(){
+ var ts=new Date(D.meta.snapshot_ts),now=new Date(),h=(now-ts)/3.6e6;
+ var dot=document.getElementById("fdot");var cls="snap",txt="snapshot récent";
+ if(h>D.meta.freshness_hours_stale){cls="stale";txt="données obsolètes";}
+ else if(h>D.meta.freshness_hours_warn){cls="snap";txt="snapshot à rafraîchir";}
+ dot.className="fdot "+cls;
+ var dd=ts.toLocaleDateString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+ var age=h<1?"<1h":h<24?(Math.round(h)+"h"):(Math.round(h/24)+"j");
+ document.getElementById("fresh").innerHTML=txt+" · "+dd+" (il y a "+age+") · <span style='color:#86abff'>"+esc(D.meta.mode)+"</span>";
+}
+
+/* ===== ACTION PANEL ===== */
+function openAction(id){
+ var a=actById(id); if(!a)return;
+ var st=effStatut(a);
+ var sec=(a.secondary||[]).map(function(k){return btnHtml(a,k,true);}).join("");
+ var html='<div class="grip"></div>'
+ +'<div class="ttag">⚙ Action préparée — non exécutée automatiquement</div>'
+ +'<h3>'+esc(a.titre)+'</h3>'
+ +'<div class="sp">'+esc(a.projet)+' · urgence '+esc(a.urg)+' · statut local : <b>'+esc(st)+'</b></div>'
+ +'<div class="blk reco"><b>Action recommandée</b>'+esc(({prepare_mission_claude:"Préparer une mission pour Claude",prepare_echange_chatgpt:"Préparer un échange ChatGPT (Variante E)",deleguer_claude:"Déléguer à Claude",voir_prochaine_etape:"Voir la prochaine étape"})[a.primary]||a.primary)+'</div>'
+ +'<div class="blk"><b>Pourquoi c\'est demandé</b>'+esc(a.pourquoi)+'</div>'
+ +'<div class="blk dng"><b>⚠ Risque si rien n\'est fait</b>'+esc(a.risque)+'</div>'
+ +'<div class="blk"><b>🧠 Ce que Claude fera</b>'+esc(a.claude)+'</div>'
+ +'<div class="blk"><b>🟢 Ce que ChatGPT fera</b>'+esc(a.chatgpt||"—")+'</div>'
+ +'<div class="blk"><b>👤 Ce que Kevin fera</b>'+esc(a.kevin)+'</div>'
+ +'<div class="blk warn"><b>⛔ Interdits / zones rouges</b>'+esc(a.interdits)+'</div>'
+ +'<div class="blk"><b>Texte prêt à transmettre</b><div class="payload" id="pl">'+esc(a.payload)+'</div></div>'
+ +'<div class="btnrow">'
+ +'<button class="btn pri" data-act="'+esc(a.id)+'" data-do="copier_instruction">📋 Copier le texte</button>'
+ +(a.source?'<button class="btn gh" data-act="'+esc(a.id)+'" data-do="ouvrir_source">🔗 Ouvrir source</button>':'')
+ +btnHtml(a,a.lane==="kevin"?"marquer_traite":"deleguer_claude")
+ +sec
+ +'<button class="btn gh" id="closeSheet">Fermer</button>'
+ +'</div>';
+ var sheet=document.getElementById("sheet");sheet.innerHTML=html;
+ document.getElementById("scrim").classList.add("on");
+ bindActionButtons(sheet);
+ document.getElementById("closeSheet").onclick=closeSheet;
+}
+function closeSheet(){document.getElementById("scrim").classList.remove("on");}
+document.getElementById("scrim").onclick=function(e){if(e.target.id==="scrim")closeSheet();};
+
+function doAction(id,kind){
+ var a=actById(id);if(!a)return;
+ if(kind==="copier_instruction"){var t=a.payload;try{navigator.clipboard.writeText(t);toast("Texte copié — prêt à transmettre");}catch(e){toast("Sélectionne le texte pour copier");}return;}
+ if(kind==="ouvrir_source"){if(a.source){window.open(a.source,"_blank","noopener");toast("Source ouverte");}else toast("Pas de source liée");return;}
+ if(kind==="voir_risque"){toast("⚠ "+a.risque);return;}
+ if(kind==="voir_prochaine_etape"){openAction(id);return;}
+ if(kind==="prepare_mission_claude"||kind==="prepare_echange_chatgpt"){openAction(id);return;}
+ if(kind==="deleguer_claude"){LSTAT[id]="délégué à Claude (préparé)";toast("Délégué à Claude — instruction prête à transmettre");closeSheet();renderAll();return;}
+ if(kind==="valider"){LSTAT[id]="validé (local)";toast("Validé localement");closeSheet();renderAll();return;}
+ if(kind==="refuser"){LSTAT[id]="refusé (local)";toast("Refusé localement");closeSheet();renderAll();return;}
+ if(kind==="reporter"){LSTAT[id]="reporté";toast("Reporté");closeSheet();renderAll();return;}
+ if(kind==="marquer_bloque"){LSTAT[id]="bloqué (local)";toast("Marqué bloqué");closeSheet();renderAll();return;}
+ if(kind==="marquer_traite"||kind==="cloturer_local"){LSTAT[id]="traité (local)";toast("Marqué traité localement");closeSheet();renderAll();return;}
+}
+function bindActionButtons(scope){
+ (scope||document).querySelectorAll("[data-act][data-do]").forEach(function(b){
+   b.onclick=function(ev){ev.stopPropagation();doAction(b.getAttribute("data-act"),b.getAttribute("data-do"));};
+ });
+}
+
+/* ===== AUJOURD'HUI ===== */
+function rToday(){
+ var h=D.hero;document.getElementById("heroAct").textContent=h.act;document.getElementById("heroWhy").textContent=h.why;document.getElementById("heroU").textContent="urgence "+h.urg;
+ document.getElementById("heroBtn").onclick=function(){ if(h.action_id) openAction(h.action_id); };
+ var kev=[],del=[],bloc=[],later=[];
+ D.projects.forEach(function(p){
+   var it={t:p.name,n:p.next,r:p.resp,aid:p.action_id};
+   if(p.etat==="dormant"){later.push(it);return;}
+   if(p.statut==="bloque"&&p.resp==="kevin"){bloc.push(it);}
+   else if(p.kevin&&p.urg>=3){kev.push(it);}
+   else if(p.resp==="claude"||p.resp==="chatgpt"){del.push(it);}
+   else if(p.kevin){kev.push(it);}
+   else later.push(it);
+ });
+ function fill(id,arr){document.getElementById(id).innerHTML=arr.length?arr.map(function(x){var w=whoIc(x.r);return '<div class="mini" data-open="'+esc(x.aid||"")+'"><div class="ic '+w[0]+'">'+w[1]+'</div><div class="tx"><b>'+esc(x.t)+'</b><small>'+esc(x.n)+'</small></div><div class="go">'+(x.aid?'⚡':'›')+'</div></div>';}).join(""):'<div class="empty">Rien.</div>';}
+ fill("lKev",kev);fill("lDel",del);fill("lBloc",bloc);fill("lLater",later);
+ document.getElementById("nKev").textContent=kev.length;document.getElementById("nDel").textContent=del.length;document.getElementById("nBloc").textContent=bloc.length;
+ document.querySelectorAll("[data-open]").forEach(function(e){e.onclick=function(){var id=e.getAttribute("data-open");if(id)openAction(id);else toast("Aucune action liée");};});
+}
+
+/* ===== ACTION CENTER ===== */
+var acF="all";
+function rAction(){
+ var list=(D.actions||[]).filter(function(a){return acF==="all"||a.lane===acF;});
+ document.getElementById("acN").textContent=(D.actions||[]).length;
+ var open=(D.actions||[]).filter(function(a){return effStatut(a)==="a_faire";}).length;
+ var nb=document.getElementById("navBadge");nb.textContent=open?open:"";nb.style.display=open?"":"none";
+ var laneBdg={claude:["lane-claude","Claude peut"],kevin:["lane-kevin","Pour toi"],chatgpt:["lane-chatgpt","Via ChatGPT"]};
+ document.getElementById("acList").innerHTML=list.length?list.map(function(a){
+   var lb=laneBdg[a.lane]||["lane-maia","Maïa"],w=whoIc(a.lane),st=effStatut(a);
+   var prim=btnHtml(a,a.primary);
+   var sec=(a.secondary||[]).slice(0,3).map(function(k){return btnHtml(a,k,true);}).join("");
+   var stChip=st!=="a_faire"?'<span class="chip done">'+esc(st)+'</span>':'';
+   return '<div class="card"><div class="lane '+lb[0]+'"></div><div class="ct"><div style="flex:1"><div class="nm">'+esc(a.titre)+'</div><div class="proj">'+esc(a.projet)+' · '+lb[1]+'</div></div><span class="bdg u-'+esc(a.urg)+'">'+esc(a.urg)+'</span></div>'
+   +'<div class="why">'+esc(a.pourquoi)+'</div>'
+   +'<div class="risk">⚠ '+esc(a.risque)+'</div>'
+   +'<div class="chips"><span class="chip who '+("who-"+a.lane)+'">'+w[1]+' '+whoName(a.lane)+'</span>'+stChip+'</div>'
+   +'<div class="btnrow">'+prim+sec+'</div></div>';
+ }).join(""):'<div class="empty">Aucune action dans ce filtre.</div>';
+ bindActionButtons(document.getElementById("acList"));
+}
+
+/* ===== PROJETS ===== */
+var curF="all",curQ="";
+function rankP(p){return (p.statut==="bloque"?0:p.statut==="encours"?1:p.statut==="attente"?2:3)-(p.urg/10);}
+function rProj(){
+ var list=D.projects.slice().filter(function(p){
+   if(curF==="kevin"&&!p.kevin)return false;
+   if(curF!=="all"&&curF!=="kevin"&&p.statut!==curF)return false;
+   if(curQ&&(p.name+" "+p.next+" "+p.bloc).toLowerCase().indexOf(curQ)<0)return false;
+   return true;
+ }).sort(function(a,b){return rankP(a)-rankP(b);});
+ document.getElementById("projN").textContent=list.length;
+ var eb={vivant:["b-vivant","vivant"],bloque:["b-bloque","bloqué"],dormant:["b-dormant","dormant"],a_arbitrer:["b-arb","à arbitrer"]};
+ document.getElementById("projList").innerHTML=list.length?list.map(function(p){
+   var e=eb[p.etat]||eb.dormant,w=whoIc(p.resp);
+   var actBtn=p.action_id?'<button class="btn pri sm" data-open2="'+esc(p.action_id)+'">⚡ Agir</button>':'';
+   return '<div class="card" data-id="'+esc(p.id)+'"><div class="lane lane-'+esc(p.resp)+'"></div><div class="ct" data-tog="'+esc(p.id)+'"><div style="flex:1"><div class="nm">'+esc(p.name)+'</div></div><span class="bdg '+e[0]+'">'+e[1]+'</span></div>'
+   +'<div class="nx"><span class="ar">→</span><span>'+esc(p.next)+'</span></div>'
+   +'<div class="chips"><span class="chip who '+("who-"+p.resp)+'">'+w[1]+' '+whoName(p.resp)+'</span>'+(p.kevin?'<span class="chip kev">Kevin requis</span>':'')+(p.urg>=4?'<span class="chip urg">urgent</span>':'')+'<span class="chip">charge: '+esc(p.charge_kevin)+'</span></div>'
+   +'<div class="btnrow">'+actBtn+'<button class="btn gh sm" data-tog="'+esc(p.id)+'">▾ Détail</button></div>'
+   +'<div class="det"><div class="kv"><b>Blocage</b><span>'+esc(p.bloc)+'</span><b>Avancée</b><span>'+esc(p.avance)+'</span><b>Maj</b><span>'+esc(p.maj)+'</span><b>Relance</b><span>'+esc(p.relance)+'</span><b>Source</b><span>'+esc(p.src)+'</span></div></div></div>';
+ }).join(""):'<div class="empty">Aucun projet ne correspond.</div>';
+ document.querySelectorAll("#projList [data-tog]").forEach(function(e){e.onclick=function(ev){ev.stopPropagation();document.querySelector('#projList .card[data-id="'+e.getAttribute("data-tog")+'"]').classList.toggle("open");};});
+ document.querySelectorAll("#projList [data-open2]").forEach(function(e){e.onclick=function(ev){ev.stopPropagation();openAction(e.getAttribute("data-open2"));};});
+}
+
+/* ===== ECHANGE ===== */
+function rEx(){
+ document.getElementById("exList").innerHTML=D.exchanges.map(function(e){
+   var st=e.statut==="TERMINE"?'<span class="bdg b-vivant">terminé</span>':'<span class="bdg b-arb">en attente</span>';
+   return '<div class="card"><div class="ct"><div class="nm" style="flex:1">'+esc(e.mid)+'</div>'+st+'</div>'
+   +'<div class="why"><b style="color:var(--mut)">Claude :</b> '+esc(e.dem)+'</div>'
+   +'<div class="why"><b style="color:var(--mut)">Attendu :</b> '+esc(e.att)+'</div>'
+   +'<div class="why"><b style="color:var(--mut)">ChatGPT :</b> '+(e.rep?esc(e.rep):'<i>en attente</i>')+'</div></div>';
+ }).join("");
+ document.getElementById("hStat").innerHTML=D.hermes.map(function(h){return '<div class="h"><b class="'+(h.c==="ok"?"ok":"ko")+'">'+esc(h.v)+'</b>'+esc(h.k)+'</div>';}).join("");
+ document.getElementById("hNote").textContent=D.hermesNote;
+}
+
+function renderAll(){document.getElementById("sub").textContent=D.meta.source;freshness();rToday();rAction();rProj();rEx();}
+
+/* nav */
+function go(v){document.querySelectorAll(".view").forEach(function(s){s.classList.remove("on");});document.getElementById("v-"+v).classList.add("on");document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});window.scrollTo(0,0);}
+document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(){go(a.getAttribute("data-v"));};});
+document.getElementById("q").oninput=function(){curQ=this.value.toLowerCase().trim();rProj();};
+document.querySelectorAll("#fStatut .ft").forEach(function(f){f.onclick=function(){document.querySelectorAll("#fStatut .ft").forEach(function(x){x.classList.remove("on");});f.classList.add("on");curF=f.getAttribute("data-f");rProj();};});
+document.querySelectorAll("#acFilter .ft").forEach(function(f){f.onclick=function(){document.querySelectorAll("#acFilter .ft").forEach(function(x){x.classList.remove("on");});f.classList.add("on");acF=f.getAttribute("data-l");rAction();};});
+
+/* semi-live */
+function loadSnapshot(initial){
+ fetch(SNAP_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){if(j&&j.projects){D=j;renderAll();if(!initial)toast("Données actualisées");}}).catch(function(){if(!initial)toast("Actualisation impossible — snapshot local");});
+}
+document.getElementById("refresh").onclick=function(){loadSnapshot(false);};
+renderAll();loadSnapshot(true);
+</script>
+</body></html>
