@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1726">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Maïa">
+<title>Maïa V1.15 — Pilotage</title>
+<link rel="icon" type="image/png" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<link rel="apple-touch-icon" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<style>
+:root{--bg:#eef2f8;--card:#fff;--ink:#16223b;--muted:#5f6f8c;--line:#e4eaf3;--blue:#2f6bff;--teal:#1aa6b7;--green:#2faa5f;--orange:#e8912f;--red:#e5484d;--violet:#7c5cff;--shadow:0 6px 22px -12px #2b3a5e40;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:780px;margin:0 auto;padding:0 13px 96px;line-height:1.45}
+h1,h2,h3{margin:0}
+.top{display:flex;align-items:center;gap:12px;padding:14px 2px 8px}
+.logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#2f6bff,#7c5cff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;box-shadow:var(--shadow)}
+.top h1{font-size:20px;font-weight:800}
+.top .ver{font-size:11px;font-weight:700;color:var(--blue);background:#e9efff;border:1px solid #cfe0ff;border-radius:999px;padding:2px 8px;margin-left:6px}
+.top .d{color:var(--muted);font-size:12.5px;margin-top:2px}
+.sync{font-size:11px;color:var(--muted);margin:0 2px 12px;display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card h2{font-size:15px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.card .sub{color:var(--muted);font-size:12px;margin-bottom:10px}
+.hero{background:linear-gradient(135deg,#eaf1ff,#f3eeff);border:1px solid #d8e2ff}
+.hero .lab{font-size:11px;font-weight:800;color:var(--blue);letter-spacing:.5px}
+.hero .act{font-size:17px;font-weight:800;margin:3px 0 4px}
+.hero .m{font-size:13px;color:#39476a}
+.pill{display:inline-block;font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 9px;vertical-align:middle}
+.p-encours{background:#fff4e6;color:#b8730f;border:1px solid #f6d9ad}
+.p-bloque{background:#fdeaea;color:#c0392b;border:1px solid #f3c2c2}
+.p-attente{background:#eef1f7;color:#5f6f8c;border:1px solid #dfe5f0}
+.p-termine{background:#e7f6ee;color:#1f7d47;border:1px solid #bce3cc}
+.who{display:inline-block;font-size:10px;font-weight:800;border-radius:999px;padding:1px 8px}
+.w-kevin{background:#eaf1ff;color:#2f6bff;border:1px solid #cfe0ff}
+.w-claude{background:#fff3e7;color:#a8671a;border:1px solid #f3d9b3}
+.w-chatgpt{background:#e7f6ee;color:#1f7d47;border:1px solid #bce3cc}
+.w-maia{background:#f0ebfd;color:#6f43d6;border:1px solid #ddd0f7}
+.proj{border:1px solid var(--line);border-radius:13px;padding:11px 12px;margin-bottom:9px;background:#fff;cursor:pointer}
+.proj .ph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.proj .pn{font-weight:800;font-size:14px}
+.proj .nx{font-size:12.5px;color:#39476a;margin-top:5px}
+.proj .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;align-items:center}
+.tag{font-size:10.5px;color:var(--muted);background:#f3f6fb;border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.tag.urg{background:#fdeaea;color:#c0392b;border-color:#f3c2c2}
+.tag.kev{background:#eaf1ff;color:#2f6bff;border-color:#cfe0ff}
+.detail{display:none;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:12.5px;color:#39476a}
+.proj.open .detail{display:block}
+.dgrid{display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+.dgrid b{color:var(--muted);font-weight:700;font-size:11.5px}
+.todo{display:flex;gap:9px;padding:9px 2px;border-bottom:1px solid var(--line);align-items:flex-start}
+.todo:last-child{border-bottom:0}
+.todo .ic{flex:none;width:22px;text-align:center}
+.todo .tx{flex:1;font-size:13px}
+.todo .tx small{color:var(--muted);display:block;font-size:11px;margin-top:1px}
+.ex{border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px}
+.ex .exh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ex .ext{font-weight:800;font-size:13px}
+.ex .row{font-size:12.5px;margin-top:6px}
+.ex .row b{color:var(--muted);font-weight:700}
+.copybox{margin-top:8px;background:#0e1726;color:#d7e2f5;border-radius:9px;padding:9px;font-size:11.5px;font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin:6px 6px 0 0}
+.btn.acc{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn:active{transform:translateY(1px)}
+.hs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px}
+.hs .h{font-size:11.5px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#fafcff}
+.hs .h b{display:block;font-size:12px}
+.ok{color:var(--green)}.ko{color:var(--red)}.wip{color:var(--orange)}
+.nav{position:fixed;left:0;right:0;bottom:0;backdrop-filter:blur(10px);background:rgba(255,255,255,.94);border-top:1px solid var(--line);display:flex;max-width:780px;margin:0 auto;z-index:40}
+.nav a{flex:1;text-align:center;padding:9px 2px 11px;font-size:10.5px;font-weight:700;color:var(--muted);text-decoration:none}
+.nav a .ni{display:block;font-size:18px;margin-bottom:2px}
+.nav a.on{color:var(--blue)}
+.view{display:none}.view.on{display:block}
+.toast{position:fixed;left:50%;bottom:74px;transform:translateX(-50%);background:#16223b;color:#fff;padding:9px 15px;border-radius:10px;font-size:12.5px;opacity:0;transition:.2s;pointer-events:none;z-index:60}
+.toast.show{opacity:1}
+.legend{font-size:11px;color:var(--muted);margin-top:8px}
+.count{font-size:11px;font-weight:800;color:#fff;background:var(--blue);border-radius:999px;padding:1px 7px;margin-left:auto}
+.count.r{background:var(--red)}.count.o{background:var(--orange)}
+</style></head>
+<body>
+<div class="top">
+  <div class="logo">M</div>
+  <div style="flex:1;min-width:0">
+    <h1>Maïa<span class="ver">V1.15</span></h1>
+    <div class="d" id="dateline">Pilotage — données réelles figées</div>
+  </div>
+</div>
+<div class="sync"><span class="dot"></span><span id="syncline">Maïa pilote — données au 24/06/2026 · lecture seule</span></div>
+
+<!-- ===== AUJOURD'HUI ===== -->
+<section class="view on" id="view-today">
+  <div class="card hero">
+    <div class="lab">▶ PROCHAINE ACTION UNIQUE</div>
+    <div class="act" id="heroAct"></div>
+    <div class="m" id="heroM"></div>
+  </div>
+  <div class="card">
+    <h2>🔴 Tu dois agir <span class="count r" id="cKevin">0</span></h2>
+    <div class="sub">Ce qui requiert Kevin aujourd'hui.</div>
+    <div id="todoKevin"></div>
+  </div>
+  <div class="card">
+    <h2>🧠 Claude s'en occupe <span class="count" id="cClaude">0</span></h2>
+    <div class="sub">En cours côté Claude — rien à faire pour toi.</div>
+    <div id="todoClaude"></div>
+  </div>
+  <div class="card">
+    <h2>🟢 ChatGPT doit trancher <span class="count o" id="cGpt">0</span></h2>
+    <div class="sub">En attente d'arbitrage ChatGPT.</div>
+    <div id="todoGpt"></div>
+  </div>
+  <div class="card">
+    <h2>😌 Ignorable pour l'instant</h2>
+    <div id="todoLater"></div>
+  </div>
+</section>
+
+<!-- ===== PROJETS ===== -->
+<section class="view" id="view-proj">
+  <div class="card">
+    <h2>🎯 Pilotage projets <span class="count" id="projCnt">0</span></h2>
+    <div class="sub">Touche un projet pour le détail. Trié par urgence.</div>
+    <div id="projList"></div>
+    <div class="legend">Responsable : <span class="who w-kevin">Kevin</span> <span class="who w-claude">Claude</span> <span class="who w-chatgpt">ChatGPT</span> <span class="who w-maia">Maïa</span></div>
+  </div>
+</section>
+
+<!-- ===== ECHANGE CHATGPT/CLAUDE ===== -->
+<section class="view" id="view-ex">
+  <div class="card">
+    <h2>🔁 Échange ChatGPT ↔ Claude</h2>
+    <div class="sub">Ce que Claude demande, ce que ChatGPT répond — sans fouiller dans Drive.</div>
+    <div id="exList"></div>
+  </div>
+  <div class="card">
+    <h2>📡 Statut Hermès (transport)</h2>
+    <div class="sub">Le canal de communication entre les IA.</div>
+    <div class="hs" id="hermesStatus"></div>
+    <div class="legend" id="hermesNote"></div>
+  </div>
+</section>
+
+<div class="nav">
+  <a class="on" data-v="today"><span class="ni">📅</span>Aujourd'hui</a>
+  <a data-v="proj"><span class="ni">🎯</span>Projets</a>
+  <a data-v="ex"><span class="ni">🔁</span>Échange IA</a>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== DONNÉES RÉELLES FIGÉES (24/06/2026) ===== */
+var DATA={
+ dateline:"mercredi 24 juin 2026 — Maïa pilote",
+ sync:"Données réelles figées au 24/06/2026 · lecture seule · Maïa supervise",
+ hero:{act:"Adopter le protocole Hermès Variante E",m:"Le transport ChatGPT↔Claude marche : Claude pré-crée la décision, ChatGPT édite. Plus de copier-coller de contenu. Prochaine vraie action : t'en servir sur une vraie décision."},
+ projects:[
+  {id:"P-MAIA",name:"Maïa / cockpit (cette app)",statut:"encours",resp:"claude",kevin:false,urg:true,
+   next:"Publier V1.15 pilotage et l'utiliser au quotidien",
+   bloc:"aucun",avance:"V1.14.1 branchée données réelles publiée 24/06 ; V1.15 pilotage en cours",
+   src:"GitHub assistant-ia-vb/maia-cockpit-assets"},
+  {id:"P-HERMES",name:"Hermès (transport IA)",statut:"encours",resp:"claude",kevin:false,urg:false,
+   next:"Utiliser la Variante E sur une vraie mission",
+   bloc:"écriture directe ChatGPT limitée par son outil (contournée par Variante E)",
+   avance:"D1 PASS, N1a PASS, lecture Drive PASS, Variante E PASS (24/06)",
+   src:"Drive HERMES_SHARED_WORKSPACE_V1"},
+  {id:"P-STD",name:"Standard téléphonique IA",statut:"bloque",resp:"claude",kevin:true,urg:true,
+   next:"Préparer un prompt agent sobre anti-digression (sur clone, pas en prod)",
+   bloc:"ANOMALIE: l'agent part en digressions hors sujet (bavardage inutile). Clé Retell à roter.",
+   avance:"Audit validé par ChatGPT (cadre renforcé). Numéro public actif.",
+   src:"Make 5683079/5683140 (prod, ne pas toucher sans validation)"},
+  {id:"P-MAIL",name:"Assistant commercial / mails",statut:"attente",resp:"kevin",kevin:true,urg:false,
+   next:"Décider connexion Gmail lecture seule (OAuth = GO séparé)",
+   bloc:"Gmail non connecté ; OAuth en attente de décision",
+   avance:"Architecture documentée ; bot Telegram commercial actif",
+   src:"Make 5434085 (commercial bot)"},
+  {id:"P-SUP",name:"Superviseur opérationnel (Make)",statut:"encours",resp:"claude",kevin:false,urg:false,
+   next:"Surveiller la conso Make (6 scénarios actifs)",
+   bloc:"aucun",avance:"P0 coût stabilisé : 6 scénarios actifs (sur 10), fuite scheduler stoppée",
+   src:"Make team 1531272"},
+  {id:"P-MIG",name:"Migration modèles Claude (Make)",statut:"bloque",resp:"kevin",kevin:true,urg:true,
+   next:"Valider le mapping des modèles avant le 15/06",
+   bloc:"échéance dépassée — Sonnet4/Opus4 retirés ; vérifier les 2 scénarios restants",
+   avance:"5990234 déjà en claude-haiku-4-5",
+   src:"mail Make 03/06 (U-02)"},
+  {id:"P-REC",name:"Recrutement barmans",statut:"attente",resp:"kevin",kevin:true,urg:false,
+   next:"Finaliser la carte interactive des barmans + contrats",
+   bloc:"rappels R-36 / R-37 en attente",
+   avance:"rappels actifs",src:"Rappels MAIA"},
+  {id:"P-JUR",name:"Juridique (contrats + holding)",statut:"encours",resp:"kevin",kevin:true,urg:false,
+   next:"Répondre à l'avocat (brouillon préparable par Maïa)",
+   bloc:"réponse avocat en attente (R-35)",avance:"rappel actif",src:"Rappels MAIA"},
+  {id:"P-SITE",name:"Site Votre Barman / SEO",statut:"attente",resp:"maia",kevin:false,urg:false,
+   next:"Définir le périmètre SEO utile (à cadrer)",
+   bloc:"non démarré activement",avance:"évoqué, pas de chantier en cours",src:"—"},
+  {id:"P-SECU",name:"Sécurité (zones rouges)",statut:"bloque",resp:"kevin",kevin:true,urg:true,
+   next:"Roter la clé Retell (action manuelle Kevin)",
+   bloc:"webhooks gateway sans clé, secrets en clair, clé Retell exposée",
+   avance:"design sécurisation webhooks terminé, non exécuté",src:"suivi sécurité MAIA"}
+ ],
+ /* échanges ChatGPT/Claude récents (réels, log Hermès) */
+ exchanges:[
+  {mid:"HERMES_TEST_006 (Variante E)",dem:"Quelle forme d'écriture ChatGPT ne déclenche pas le blocage de sécurité ?",att:"Variante validée",rep:"Variante E validée : ChatGPT édite un Doc pré-créé par Claude.",statut:"TERMINE",kevin:false,
+    copier:""},
+  {mid:"HERMES_TEST_002 (prochaine étape)",dem:"Prochaine étape Hermès après D1 ?",att:"A / B / C",rep:"B — passer en N1b (connecteur Drive), testé en staging.",statut:"TERMINE",kevin:false,copier:""},
+  {mid:"Standard téléphonique (audit)",dem:"Valider le périmètre de la mission audit standard tél ?",att:"validation + cadre",rep:"Validé avec cadre renforcé : audit lecture seule d'abord, 1 amélioration sûre ensuite.",statut:"TERMINE",kevin:false,copier:""}
+ ],
+ hermes:[
+  {k:"Boucle fichier D1",v:"PASS",c:"ok"},
+  {k:"N1a copier-coller",v:"PASS",c:"ok"},
+  {k:"Lecture Drive ChatGPT",v:"PASS",c:"ok"},
+  {k:"Variante E (édition)",v:"PASS",c:"ok"},
+  {k:"Commentaire Drive",v:"FAIL",c:"ko"},
+  {k:"Création/rangement ChatGPT",v:"non fiable",c:"wip"}
+ ],
+ hermesNote:"Mode retenu : Variante E — Claude pré-crée le Doc décision dans 04, ChatGPT édite les champs, Claude relit et clôture. Coût 0 €, aucun modèle externe."
+};
+
+/* ===== RENDER ===== */
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function whoTag(r){var m={kevin:["w-kevin","Kevin"],claude:["w-claude","Claude"],chatgpt:["w-chatgpt","ChatGPT"],maia:["w-maia","Maïa"]}[r]||["w-maia","Maïa"];return '<span class="who '+m[0]+'">'+m[1]+'</span>';}
+function pill(s){var m={encours:["p-encours","en cours"],bloque:["p-bloque","bloqué"],attente:["p-attente","en attente"],termine:["p-termine","terminé"]}[s]||["p-attente",s];return '<span class="pill '+m[0]+'">'+m[1]+'</span>';}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},1900);}
+
+function urgRank(p){return (p.statut==="bloque"?0:p.statut==="encours"?1:p.statut==="attente"?2:3)+(p.urg?-0.5:0);}
+
+function renderToday(){
+ document.getElementById("heroAct").textContent=DATA.hero.act;
+ document.getElementById("heroM").textContent=DATA.hero.m;
+ var kev=[],cla=[],gpt=[],later=[];
+ DATA.projects.forEach(function(p){
+   var item={t:p.name,n:p.next,id:p.id};
+   if(p.kevin&&p.urg) kev.push(item);
+   else if(p.resp==="claude") cla.push(item);
+   else if(p.resp==="chatgpt") gpt.push(item);
+   else if(p.kevin) kev.push(item);
+   else later.push(item);
+ });
+ // échanges en attente ChatGPT -> colonne ChatGPT
+ DATA.exchanges.forEach(function(e){ if(e.statut!=="TERMINE") gpt.push({t:e.mid,n:e.att,id:""}); });
+ function fill(el,arr,ic){document.getElementById(el).innerHTML=arr.length?arr.map(function(x){return '<div class="todo"><div class="ic">'+ic+'</div><div class="tx">'+esc(x.t)+'<small>'+esc(x.n)+'</small></div></div>';}).join(""):'<div class="todo"><div class="tx" style="color:var(--muted)">Rien.</div></div>';}
+ fill("todoKevin",kev,"🔴");fill("todoClaude",cla,"🧠");fill("todoGpt",gpt,"🟢");fill("todoLater",later,"😌");
+ document.getElementById("cKevin").textContent=kev.length;
+ document.getElementById("cClaude").textContent=cla.length;
+ document.getElementById("cGpt").textContent=gpt.length;
+}
+function renderProj(){
+ var ps=DATA.projects.slice().sort(function(a,b){return urgRank(a)-urgRank(b);});
+ document.getElementById("projCnt").textContent=ps.length;
+ document.getElementById("projList").innerHTML=ps.map(function(p,i){
+   return '<div class="proj" data-i="'+i+'"><div class="ph"><span class="pn">'+esc(p.name)+'</span>'+pill(p.statut)+'</div>'
+   +'<div class="nx">→ '+esc(p.next)+'</div>'
+   +'<div class="meta">'+whoTag(p.resp)+(p.kevin?'<span class="tag kev">Kevin requis</span>':'<span class="tag">Kevin: non</span>')+(p.urg?'<span class="tag urg">urgent</span>':'')+'</div>'
+   +'<div class="detail"><div class="dgrid"><b>Blocage</b><span>'+esc(p.bloc)+'</span><b>Dernière avancée</b><span>'+esc(p.avance)+'</span><b>Source</b><span>'+esc(p.src)+'</span></div></div></div>';
+ }).join("");
+ document.querySelectorAll("#projList .proj").forEach(function(e){e.onclick=function(){e.classList.toggle("open");};});
+}
+function renderEx(){
+ document.getElementById("exList").innerHTML=DATA.exchanges.map(function(e){
+   var st=e.statut==="TERMINE"?'<span class="pill p-termine">terminé</span>':'<span class="pill p-encours">en cours</span>';
+   var h='<div class="ex"><div class="exh"><span class="ext">'+esc(e.mid)+'</span>'+st+'</div>'
+   +'<div class="row"><b>Claude demande :</b> '+esc(e.dem)+'</div>'
+   +'<div class="row"><b>Décision attendue :</b> '+esc(e.att)+'</div>'
+   +'<div class="row"><b>ChatGPT répond :</b> '+(e.rep?esc(e.rep):'<i>en attente</i>')+'</div>'
+   +'<div class="row"><b>Action Kevin :</b> '+(e.kevin?'<span class="ko">oui</span>':'<span class="ok">non</span>')+'</div>';
+   if(e.copier){h+='<div class="copybox" id="cp-'+esc(e.mid)+'">'+esc(e.copier)+'</div><button class="btn acc" data-cp="'+esc(e.copier)+'">📋 Copier l\'instruction</button>';}
+   h+='</div>';return h;
+ }).join("");
+ document.querySelectorAll("[data-cp]").forEach(function(b){b.onclick=function(){var t=b.getAttribute("data-cp");try{navigator.clipboard.writeText(t);toast("Copié");}catch(e){toast("Sélectionne puis copie");}};});
+ document.getElementById("hermesStatus").innerHTML=DATA.hermes.map(function(h){return '<div class="h"><b class="'+h.c+'">'+esc(h.v)+'</b>'+esc(h.k)+'</div>';}).join("");
+ document.getElementById("hermesNote").textContent=DATA.hermesNote;
+}
+function go(v){
+ document.querySelectorAll(".view").forEach(function(s){s.classList.remove("on");});
+ document.getElementById("view-"+v).classList.add("on");
+ document.querySelectorAll(".nav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});
+ window.scrollTo(0,0);
+}
+document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(){go(a.getAttribute("data-v"));};});
+document.getElementById("dateline").textContent=DATA.dateline;
+document.getElementById("syncline").textContent=DATA.sync;
+renderToday();renderProj();renderEx();
+</script>
+</body></html>
