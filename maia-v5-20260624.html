@@ -86,6 +86,7 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .btn.quiet{background:transparent;color:var(--ink2);border-color:var(--line2)}
 .btn.quiet:hover{color:var(--ink);border-color:var(--line3)}
 .btn.block{width:100%}
+.btn.ok{background:var(--green-soft);border-color:var(--green-line);color:#86e7bb;font-weight:650}.btn.ok:hover{background:rgba(52,201,138,.2);border-color:var(--green-line)}
 
 /* explain */
 .explain{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg1);overflow:hidden}
@@ -194,6 +195,32 @@ details.tech[open] summary{color:var(--ink2);margin-bottom:9px}
   .main{max-width:640px;padding:14px 30px 70px}
   .tgrid{gap:11px}
 }
+/* ===== suite (post-validation honnête) ===== */
+.suite{margin-top:14px;border:1px solid var(--green-line);background:var(--green-soft);border-radius:14px;padding:16px}
+.suite.amber{border-color:var(--amber-line);background:var(--amber-soft)}
+.suite.mut{border-color:var(--line2);background:var(--surf2)}
+.suite .sline{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink);line-height:1.45}
+.suite .sline .svgi{width:21px;height:21px;flex:none;margin-top:1px;color:#86e7bb}
+.suite.amber .sline .svgi{color:#f0c074}.suite.mut .sline .svgi{color:var(--ink3)}
+.suite .sline b{font-weight:700}
+.statebanner{display:inline-flex;align-items:center;gap:8px;margin-top:13px;font-size:12.5px;font-weight:600;color:#f0c074;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:999px;padding:6px 13px}
+.statebanner .sb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}.statebanner b{font-weight:800}
+.clarity{margin-top:13px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg1)}
+.clarity .cl{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:11px 13px;border-top:1px solid var(--line);font-size:13px}
+.clarity .cl:first-child{border-top:0}
+.clarity .cl span{color:var(--ink3)}
+.clarity .cl b{font-weight:650;text-align:right}
+.clarity .cl b.no{color:#ff97a0}.clarity .cl b.yes{color:#86e7bb}.clarity .cl b.soon{color:#f0c074}
+.snote{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:13px;color:var(--ink2);line-height:1.5}
+.snote .svgi{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ink3)}
+.snote.strong{color:var(--ink);font-weight:600;background:var(--red-soft);border:1px solid var(--red-line);border-radius:11px;padding:11px 13px}
+.snote.strong .svgi{color:#ff97a0}
+.snext{display:flex;gap:9px;align-items:flex-start;margin-top:10px;font-size:13.5px;color:var(--ink2);line-height:1.5}
+.snext .svgi{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ink3)}
+.missionbox{margin-top:13px;border:1px solid var(--line2);border-radius:11px;background:#070a10;overflow:hidden}
+.missionbox .mbh{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);padding:11px 13px 0}
+.missionbox pre{margin:6px 0 0;padding:9px 13px 13px;white-space:pre-wrap;word-break:break-word;color:#cdd9ee;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55}
+.statline.ok{color:#86e7bb}.statline.amber{color:#f0c074}.statline.mut{color:var(--ink3)}.statline.ok .dot{background:var(--green)}
 </style></head>
 <body>
 <div class="app">
@@ -262,8 +289,6 @@ var FALLBACK={
       "titre": "Ton accueil téléphonique part dans tous les sens",
       "reco": "Laisse-moi préparer une version sérieuse de ton agent, et je te la fais valider avant toute mise en ligne.",
       "why": "En ce moment, l'agent qui répond au téléphone digresse et donne une mauvaise image à tes clients.",
-      "valider_msg": "D'accord. Je m'en occupe : je prépare un agent sobre et carré, sur une copie de test.",
-      "valider_suite": "Je ne touche pas à ta ligne réelle. Je te redemande ton feu vert avant toute mise en ligne.",
       "explain": {
         "pourquoi": "L'agent raconte des choses hors sujet pendant les appels (anecdotes, détails personnels). Ça fait fuir les clients et rate des prises de contact.",
         "sinon": "Chaque appel entrant continue de donner une image peu professionnelle.",
@@ -286,8 +311,6 @@ var FALLBACK={
       "titre": "Deux de tes automatisations risquent de tomber en panne",
       "reco": "Laisse-moi vérifier lesquelles et préparer la correction.",
       "why": "Elles utilisent une technologie qui vient d'être arrêtée ; sans correction, elles s'arrêteront sans prévenir.",
-      "valider_msg": "D'accord. Je vérifie tes automatisations et je prépare la correction.",
-      "valider_suite": "Je regarde seulement, je ne modifie rien tant que tu n'as pas validé.",
       "explain": {
         "pourquoi": "Deux automatisations pointent vers un moteur qui a été retiré. Le jour où il est coupé, elles échouent en silence.",
         "sinon": "Une tâche que tu crois automatique peut s'arrêter sans alerte.",
@@ -310,8 +333,6 @@ var FALLBACK={
       "titre": "Une clé d'accès doit être changée (sécurité)",
       "reco": "C'est une action sensible : à faire toi-même. Je te montre où, en 3 étapes simples.",
       "why": "Une clé d'accès à ton agent téléphonique est exposée. La changer referme la porte.",
-      "valider_msg": "C'est une action que tu dois faire toi-même — je ne touche jamais à tes accès. Voici les 3 étapes.",
-      "valider_suite": "Quand c'est fait, dis-le moi et je l'enlève de ta liste.",
       "etapes": [
         "Ouvre la console Retell (ton outil de téléphonie).",
         "Révoque l'ancienne clé et génère-en une nouvelle.",
@@ -339,8 +360,6 @@ var FALLBACK={
       "titre": "Ton avocat attend une réponse",
       "reco": "Laisse-moi préparer un brouillon ; tu n'auras qu'à le relire et l'envoyer.",
       "why": "Une réponse est en attente sur tes contrats et l'étude de holding.",
-      "valider_msg": "D'accord. Je te prépare un brouillon de réponse complet.",
-      "valider_suite": "Je n'envoie jamais d'e-mail à ta place : tu relis et tu envoies toi-même.",
       "explain": {
         "pourquoi": "Une réponse à ton avocat est en attente (contrats barmans/commerciaux et étude de holding).",
         "sinon": "Le dossier juridique et les contrats n'avancent pas.",
@@ -363,8 +382,6 @@ var FALLBACK={
       "titre": "Veux-tu que je suive tes mails commerciaux ?",
       "reco": "Rien d'urgent. Dis-moi oui quand tu veux, et je m'occupe du suivi de tes prospects.",
       "why": "Sans accès à ta boîte mail, je ne peux pas suivre tes prospects automatiquement.",
-      "valider_msg": "Super. On le fera ensemble en 2 minutes : la dernière étape d'autorisation, c'est toi qui la donnes.",
-      "valider_suite": "Tant que tu n'as pas autorisé, je ne vois aucun mail.",
       "explain": {
         "pourquoi": "Pour suivre tes prospects et préparer des réponses, j'ai besoin de lire (en lecture seule) tes mails commerciaux.",
         "sinon": "Le suivi commercial reste partiel — ce n'est pas grave à court terme.",
@@ -381,22 +398,59 @@ var FALLBACK={
     }
   ],
   "managed": [
-    { "titre": "Je surveille tes automatisations", "detail": "Tout est stable en ce moment (6 automatisations actives, sous contrôle)." },
-    { "titre": "Je fais avancer des échanges en coulisses", "detail": "Je coordonne mes outils entre eux pour t'éviter des allers-retours." },
-    { "titre": "Je tiens ce tableau de bord à jour", "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher." }
+    {
+      "titre": "Je surveille tes automatisations",
+      "detail": "Tout est stable en ce moment (6 automatisations actives, sous contrôle)."
+    },
+    {
+      "titre": "Je fais avancer des échanges en coulisses",
+      "detail": "Je coordonne mes outils entre eux pour t'éviter des allers-retours."
+    },
+    {
+      "titre": "Je tiens ce tableau de bord à jour",
+      "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher."
+    }
   ],
   "tech": {
     "note": "Cet espace est réservé à l'assistant technique. Tu n'as pas besoin d'y venir : tout ce qui compte pour toi est sur l'écran d'accueil.",
     "hermes": [
-      { "k": "Transport de fichiers entre outils", "v": "OK", "ok": true },
-      { "k": "Lecture des documents partagés", "v": "OK", "ok": true },
-      { "k": "Échange de décisions (mode validé)", "v": "OK", "ok": true },
-      { "k": "Écriture directe par l'outil externe", "v": "Bloqué (limite outil)", "ok": false }
+      {
+        "k": "Transport de fichiers entre outils",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Lecture des documents partagés",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Échange de décisions (mode validé)",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Écriture directe par l'outil externe",
+        "v": "Bloqué (limite outil)",
+        "ok": false
+      }
     ],
     "exchanges": [
-      { "sujet": "Forme d'écriture qui passe la sécurité", "etat": "Réglé", "detail": "Mode validé : l'outil édite un document pré-créé." },
-      { "sujet": "Écriture/rangement direct", "etat": "Réglé", "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe." },
-      { "sujet": "Prochaine étape de transport", "etat": "Réglé", "detail": "Passage au connecteur de fichiers." }
+      {
+        "sujet": "Forme d'écriture qui passe la sécurité",
+        "etat": "Réglé",
+        "detail": "Mode validé : l'outil édite un document pré-créé."
+      },
+      {
+        "sujet": "Écriture/rangement direct",
+        "etat": "Réglé",
+        "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe."
+      },
+      {
+        "sujet": "Prochaine étape de transport",
+        "etat": "Réglé",
+        "detail": "Passage au connecteur de fichiers."
+      }
     ],
     "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).",
     "note_donnees": "Données au dernier état réel connu (04–24 juin). Mise à jour : republier le fichier de données."
@@ -411,6 +465,9 @@ function lsGet(){try{return JSON.parse(localStorage.getItem(LS))||{};}catch(e){r
 function lsSet(o){try{localStorage.setItem(LS,JSON.stringify(o));}catch(e){}}
 var STATE=lsGet(); /* {id:{status:'accepted'|'later'|'done', ts}} */
 var EXPL={}; /* in-memory: explanation open */
+var MISSION_OPEN={};
+function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast("Mission copiée — colle-la à Claude","copy");},function(){fbCopy(t);});}else fbCopy(t);}
+function fbCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("Mission copiée — colle-la à Claude","copy");}catch(e){toast("Sélectionne le texte de la mission pour la copier","alert");}}
 function st(id){return (STATE[id]&&STATE[id].status)||"pending";}
 function setSt(id,s){STATE[id]=STATE[id]||{};STATE[id].status=s;STATE[id].ts=new Date().toISOString();lsSet(STATE);}
 function clearSt(id){delete STATE[id];lsSet(STATE);}
@@ -435,6 +492,8 @@ var I={
  spinner:'<path d="M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5"/>',
  doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
  leaf:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.18 2 8a7 7 0 0 1-7 7"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+ copy:'<rect x="9" y="9" width="11.5" height="11.5" rx="2.2"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/>',
+ send:'<path d="M21.5 2.5 11 13"/><path d="M21.5 2.5 15 21l-3.8-8.2L3 9z"/>',
  x:'<path d="M18 6 6 18M6 6l12 12"/>'
 };
 function svg(n,c){return '<svg class="svgi'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(I[n]||'')+'</svg>';}
@@ -446,7 +505,7 @@ function urgPill(u){return '<span class="urg urg-'+u+'"><span class="dot"></span
 function decById(id){return (D.decisions||[]).filter(function(d){return d.id===id;})[0];}
 
 /* primary button label by kind */
-function primaryLabel(d){return d.kind==="guide"?"Me montrer comment":d.kind==="decide"?"Oui, vas-y":"Valider";}
+function primaryLabel(d){return d.kind==="guide"?"Me montrer comment":"Valider";}
 
 /* render one decision (hero or card) */
 function decisionHtml(d,hero){
@@ -486,54 +545,73 @@ function explainHtml(d){
     +'</div>';
 }
 function confirmHtml(d,s){
-  var amber=d.sensible&&(d.kind==="guide");
-  var msg, suite, statlabel;
   if(s==="later"){
-    return '<div class="confirm amber"><div class="ch">'+svg("clock")+'<div><div class="cmsg">Noté — je te le represente plus tard.</div>'
-      +'<div class="csuite">Rien ne presse de ton côté pour l\'instant.</div></div></div>'
-      +'<div class="cfoot"><span class="statline" style="color:var(--ink3)"><span class="dot" style="background:var(--ink4)"></span>Reporté</span>'
+    return '<div class="suite mut"><div class="sline">'+svg("clock")+'<div><b>Reporté.</b> Je te le represente plus tard.</div></div>'
+      +'<div class="cfoot"><span class="statline mut"><span class="dot" style="background:var(--ink4)"></span>Pas maintenant</span>'
       +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
   if(s==="done"){
-    return '<div class="confirm"><div class="ch">'+svg("checkc")+'<div><div class="cmsg">Parfait, c\'est réglé.</div>'
-      +'<div class="csuite">Je l\'ai retiré de tes décisions.</div></div></div>'
-      +'<div class="cfoot"><span class="statline">'+'<span class="dot"></span>Fait</span>'
+    return '<div class="suite ok"><div class="sline">'+svg("checkc")+'<div><b>C\'est réglé.</b> Je l\'ai retiré de tes décisions.</div></div>'
+      +'<div class="cfoot"><span class="statline ok"><span class="dot"></span>Fait</span>'
       +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
-  /* accepted */
-  msg=d.valider_msg; suite=d.valider_suite;
-  statlabel = d.kind==="guide" ? "À faire de ton côté" : d.kind==="decide" ? "Noté" : "Je m'en occupe";
-  var h='<div class="confirm'+(amber?' amber':'')+'"><div class="ch">'+svg(amber?"shield":"checkc")+'<div>'
-    +'<div class="cmsg">'+esc(msg)+'</div>'
-    +'<div class="csuite">'+esc(suite)+'</div></div></div>';
-  if(d.kind==="guide"&&d.etapes&&d.etapes.length){
-    h+='<ol class="steps">'+d.etapes.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol>';
+  if(s==="transmis"){
+    return '<div class="suite ok"><div class="sline">'+svg("send")+'<div><b>Mission transmise à Claude.</b> Il a la main.</div></div>'
+      +'<div class="snext">'+svg("clock")+'<span>En attente de son retour. Tu peux fermer — plus rien à faire de ton côté pour celle-ci.</span></div>'
+      +'<div class="cfoot"><span class="statline amber"><span class="dot" style="background:var(--amber)"></span>En attente retour Claude</span>'
+      +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
-  h+='<div class="cfoot"><span class="statline"><span class="dot"'+(amber?' style="background:var(--amber)"':'')+'></span>'+esc(statlabel)+'</span>';
   if(d.kind==="guide"){
-    h+='<button class="btn quiet" data-act="done" data-id="'+d.id+'" style="padding:8px 13px;font-size:13px">'+svg("check")+'C\'est fait</button>';
+    var hg='<div class="suite amber"><div class="sline">'+svg("shield")+'<div><b>C\'est à toi de le faire</b> — c\'est une action de sécurité.</div></div>'
+      +'<div class="clarity">'
+      +'<div class="cl"><span>Je m\'en charge&nbsp;?</span><b class="no">Non — je n\'y touche pas</b></div>'
+      +'<div class="cl"><span>À toi de jouer&nbsp;?</span><b class="yes">Oui — les 3 étapes ci-dessous</b></div></div>';
+    if(d.etapes&&d.etapes.length) hg+='<ol class="steps">'+d.etapes.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol>';
+    hg+='<div class="snote">'+svg("hand")+'<span>Je ne touche jamais à tes accès ni à tes mots de passe. Je te guide, c\'est tout.</span></div>'
+      +'<div class="cfoot"><button class="btn ok" data-act="done" data-id="'+d.id+'">'+svg("check")+'C\'est fait</button>'
+      +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+    return hg;
   }
-  h+='<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div>';
-  /* technical detail collapsed */
-  if(d.tech){
-    h+='<details class="tech"><summary>'+svg("doc")+'Voir le détail technique (pour l\'assistant)</summary>'
-      +'<div class="techbody"><div class="kv"><b>Qui s\'en charge :</b> '+esc(d.tech.responsable||"")+'</div>'
-      +(d.tech.interdits?'<div class="kv"><b>Jamais touché :</b> '+esc(d.tech.interdits)+'</div>':'')
-      +'<pre>'+esc(d.tech.instruction||"")+'</pre></div></details>';
+  if(d.kind==="decide"){
+    return '<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté.</b> On le fera ensemble quand tu voudras.</div></div>'
+      +'<div class="clarity">'
+      +'<div class="cl"><span>Branché maintenant&nbsp;?</span><b class="no">Non — rien n\'est connecté</b></div>'
+      +'<div class="cl"><span>À toi de jouer&nbsp;?</span><b class="soon">Rien pour l\'instant</b></div>'
+      +'<div class="cl"><span>Ensuite</span><b>Tu donnes l\'autorisation, quand tu veux</b></div></div>'
+      +'<div class="snote">'+svg("eye")+'<span>Tant que tu n\'as pas autorisé, je ne vois aucun mail.</span></div>'
+      +'<div class="cfoot"><span class="statline"><span class="dot"></span>Noté</span>'
+      +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
-  h+='</div>';
-  return h;
+  var hp='<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté. J\'ai préparé la mission pour Claude.</b></div></div>'
+    +'<div class="statebanner"><span class="sb-dot"></span>Préparé — <b>pas encore lancé</b></div>'
+    +'<div class="clarity">'
+    +'<div class="cl"><span>Exécuté maintenant&nbsp;?</span><b class="no">Non</b></div>'
+    +'<div class="cl"><span>Mission préparée&nbsp;?</span><b class="yes">Oui</b></div>'
+    +'<div class="cl"><span>Claude prévenu&nbsp;?</span><b class="soon">Pas encore</b></div>'
+    +'<div class="cl"><span>À toi de jouer&nbsp;?</span><b class="yes">Transmettre la mission à Claude</b></div>'
+    +'<div class="cl"><span>Ensuite</span><b>Claude s\'en occupe et te montre le résultat</b></div></div>'
+    +'<div class="snote strong">'+svg("alert")+'<span>Rien n\'est lancé tant que tu n\'as pas transmis la mission à Claude.</span></div>';
+  if(MISSION_OPEN[d.id]) hp+='<div class="missionbox"><div class="mbh">Mission pour Claude</div><pre>'+esc(d.tech?d.tech.instruction:"")+'</pre></div>';
+  hp+='<div class="acts" style="margin-top:14px">'
+    +'<button class="btn primary" data-act="copier" data-id="'+d.id+'">'+svg("copy")+'Copier la mission pour Claude</button>'
+    +'<button class="btn quiet" data-act="mission" data-id="'+d.id+'">'+svg("eye")+(MISSION_OPEN[d.id]?"Masquer":"Voir la mission")+'</button></div>'
+    +'<div class="cfoot" style="margin-top:12px"><button class="btn ok" data-act="transmis" data-id="'+d.id+'">'+svg("send")+'J\'ai transmis à Claude</button>'
+    +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+  return hp;
 }
 
 /* actions */
 function doAct(id,act){
   var d=decById(id); if(!d){toast("Action introuvable","alert");return;}
   if(act==="explain"){EXPL[id]=!EXPL[id];renderAll();return;}
+  if(act==="mission"){MISSION_OPEN[id]=!MISSION_OPEN[id];renderAll();scrollToCard(id);return;}
   if(act==="nextHero"){var mp=(D.decisions||[]).filter(function(x){return st(x.id)==="pending";}).sort(decOrder);HEROID=mp.length?mp[0].id:null;renderAll();window.scrollTo(0,0);return;}
-  if(act==="valider"){setSt(id,"accepted");EXPL[id]=false;toast(d.kind==="guide"?"Je te montre les étapes":"C'est noté, je m'en occupe");renderAll();scrollToCard(id);return;}
+  if(act==="valider"){setSt(id,"accepted");EXPL[id]=false;toast(d.kind==="guide"?"Voici les étapes":d.kind==="decide"?"C'est noté":"Mission préparée pour Claude");renderAll();scrollToCard(id);return;}
+  if(act==="copier"){copyText(d.tech?d.tech.instruction:"");MISSION_OPEN[id]=true;renderAll();scrollToCard(id);return;}
+  if(act==="transmis"){setSt(id,"transmis");MISSION_OPEN[id]=false;toast("Marqué comme transmis à Claude","send");renderAll();return;}
   if(act==="later"){setSt(id,"later");EXPL[id]=false;toast("Reporté — je te le represente plus tard","clock");renderAll();return;}
   if(act==="done"){setSt(id,"done");toast("Bravo, c'est réglé");renderAll();return;}
-  if(act==="undo"){clearSt(id);toast("Revenu en arrière");renderAll();return;}
+  if(act==="undo"){clearSt(id);MISSION_OPEN[id]=false;toast("Revenu en arrière");renderAll();return;}
 }
 function scrollToCard(id){setTimeout(function(){var el=document.querySelector('[data-card="'+id+'"]');if(el&&el.scrollIntoView)el.scrollIntoView({block:"nearest",behavior:"smooth"});},60);}
 
@@ -574,7 +652,8 @@ function renderHome(){
       +'<div class="rt">'+urgPill(d.urg)+svg("chev","chev")+'</div></button>';
   }).join("");
   /* ce que je gère sans toi */
-  document.getElementById("manageList").innerHTML=(D.managed||[]).map(function(m){
+  var _trans=(D.decisions||[]).filter(function(d){return st(d.id)==="transmis";}).map(function(d){return '<div class="row calm"><div class="ic wait">'+svg("send")+'</div><div class="tx"><b>Claude s\'en occupe : '+esc(d.titre)+'</b><small>En attente de son retour.</small></div></div>';}).join("");
+  document.getElementById("manageList").innerHTML=_trans+(D.managed||[]).map(function(m){
     return '<div class="row calm"><div class="ic maia">'+svg("spark")+'</div><div class="tx"><b>'+esc(m.titre)+'</b><small>'+esc(m.detail)+'</small></div></div>';
   }).join("");
   /* bloqué (resolved 'later' items shown as gentle reminder, or none) */

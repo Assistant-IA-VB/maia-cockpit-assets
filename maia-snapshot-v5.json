@@ -15,8 +15,6 @@
       "titre": "Ton accueil téléphonique part dans tous les sens",
       "reco": "Laisse-moi préparer une version sérieuse de ton agent, et je te la fais valider avant toute mise en ligne.",
       "why": "En ce moment, l'agent qui répond au téléphone digresse et donne une mauvaise image à tes clients.",
-      "valider_msg": "D'accord. Je m'en occupe : je prépare un agent sobre et carré, sur une copie de test.",
-      "valider_suite": "Je ne touche pas à ta ligne réelle. Je te redemande ton feu vert avant toute mise en ligne.",
       "explain": {
         "pourquoi": "L'agent raconte des choses hors sujet pendant les appels (anecdotes, détails personnels). Ça fait fuir les clients et rate des prises de contact.",
         "sinon": "Chaque appel entrant continue de donner une image peu professionnelle.",
@@ -39,8 +37,6 @@
       "titre": "Deux de tes automatisations risquent de tomber en panne",
       "reco": "Laisse-moi vérifier lesquelles et préparer la correction.",
       "why": "Elles utilisent une technologie qui vient d'être arrêtée ; sans correction, elles s'arrêteront sans prévenir.",
-      "valider_msg": "D'accord. Je vérifie tes automatisations et je prépare la correction.",
-      "valider_suite": "Je regarde seulement, je ne modifie rien tant que tu n'as pas validé.",
       "explain": {
         "pourquoi": "Deux automatisations pointent vers un moteur qui a été retiré. Le jour où il est coupé, elles échouent en silence.",
         "sinon": "Une tâche que tu crois automatique peut s'arrêter sans alerte.",
@@ -63,8 +59,6 @@
       "titre": "Une clé d'accès doit être changée (sécurité)",
       "reco": "C'est une action sensible : à faire toi-même. Je te montre où, en 3 étapes simples.",
       "why": "Une clé d'accès à ton agent téléphonique est exposée. La changer referme la porte.",
-      "valider_msg": "C'est une action que tu dois faire toi-même — je ne touche jamais à tes accès. Voici les 3 étapes.",
-      "valider_suite": "Quand c'est fait, dis-le moi et je l'enlève de ta liste.",
       "etapes": [
         "Ouvre la console Retell (ton outil de téléphonie).",
         "Révoque l'ancienne clé et génère-en une nouvelle.",
@@ -92,8 +86,6 @@
       "titre": "Ton avocat attend une réponse",
       "reco": "Laisse-moi préparer un brouillon ; tu n'auras qu'à le relire et l'envoyer.",
       "why": "Une réponse est en attente sur tes contrats et l'étude de holding.",
-      "valider_msg": "D'accord. Je te prépare un brouillon de réponse complet.",
-      "valider_suite": "Je n'envoie jamais d'e-mail à ta place : tu relis et tu envoies toi-même.",
       "explain": {
         "pourquoi": "Une réponse à ton avocat est en attente (contrats barmans/commerciaux et étude de holding).",
         "sinon": "Le dossier juridique et les contrats n'avancent pas.",
@@ -116,8 +108,6 @@
       "titre": "Veux-tu que je suive tes mails commerciaux ?",
       "reco": "Rien d'urgent. Dis-moi oui quand tu veux, et je m'occupe du suivi de tes prospects.",
       "why": "Sans accès à ta boîte mail, je ne peux pas suivre tes prospects automatiquement.",
-      "valider_msg": "Super. On le fera ensemble en 2 minutes : la dernière étape d'autorisation, c'est toi qui la donnes.",
-      "valider_suite": "Tant que tu n'as pas autorisé, je ne vois aucun mail.",
       "explain": {
         "pourquoi": "Pour suivre tes prospects et préparer des réponses, j'ai besoin de lire (en lecture seule) tes mails commerciaux.",
         "sinon": "Le suivi commercial reste partiel — ce n'est pas grave à court terme.",
@@ -134,22 +124,59 @@
     }
   ],
   "managed": [
-    { "titre": "Je surveille tes automatisations", "detail": "Tout est stable en ce moment (6 automatisations actives, sous contrôle)." },
-    { "titre": "Je fais avancer des échanges en coulisses", "detail": "Je coordonne mes outils entre eux pour t'éviter des allers-retours." },
-    { "titre": "Je tiens ce tableau de bord à jour", "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher." }
+    {
+      "titre": "Je surveille tes automatisations",
+      "detail": "Tout est stable en ce moment (6 automatisations actives, sous contrôle)."
+    },
+    {
+      "titre": "Je fais avancer des échanges en coulisses",
+      "detail": "Je coordonne mes outils entre eux pour t'éviter des allers-retours."
+    },
+    {
+      "titre": "Je tiens ce tableau de bord à jour",
+      "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher."
+    }
   ],
   "tech": {
     "note": "Cet espace est réservé à l'assistant technique. Tu n'as pas besoin d'y venir : tout ce qui compte pour toi est sur l'écran d'accueil.",
     "hermes": [
-      { "k": "Transport de fichiers entre outils", "v": "OK", "ok": true },
-      { "k": "Lecture des documents partagés", "v": "OK", "ok": true },
-      { "k": "Échange de décisions (mode validé)", "v": "OK", "ok": true },
-      { "k": "Écriture directe par l'outil externe", "v": "Bloqué (limite outil)", "ok": false }
+      {
+        "k": "Transport de fichiers entre outils",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Lecture des documents partagés",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Échange de décisions (mode validé)",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Écriture directe par l'outil externe",
+        "v": "Bloqué (limite outil)",
+        "ok": false
+      }
     ],
     "exchanges": [
-      { "sujet": "Forme d'écriture qui passe la sécurité", "etat": "Réglé", "detail": "Mode validé : l'outil édite un document pré-créé." },
-      { "sujet": "Écriture/rangement direct", "etat": "Réglé", "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe." },
-      { "sujet": "Prochaine étape de transport", "etat": "Réglé", "detail": "Passage au connecteur de fichiers." }
+      {
+        "sujet": "Forme d'écriture qui passe la sécurité",
+        "etat": "Réglé",
+        "detail": "Mode validé : l'outil édite un document pré-créé."
+      },
+      {
+        "sujet": "Écriture/rangement direct",
+        "etat": "Réglé",
+        "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe."
+      },
+      {
+        "sujet": "Prochaine étape de transport",
+        "etat": "Réglé",
+        "detail": "Passage au connecteur de fichiers."
+      }
     ],
     "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).",
     "note_donnees": "Données au dernier état réel connu (04–24 juin). Mise à jour : republier le fichier de données."
