@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAÏA">
+<title>MAÏA — Centre de commandement</title>
+<link rel="icon" type="image/png" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<link rel="apple-touch-icon" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* neutral ramp — refined near-black slate */
+  --bg:#0a0b0e; --bg-1:#0c0e12; --surface:#121419; --surface-2:#161922; --surface-3:#1c2029;
+  --line:#23262f; --line-2:#2d313c; --line-3:#383d49;
+  --ink:#f3f5f9; --ink-2:#aeb6c4; --ink-3:#7c8696; --ink-4:#565e6e;
+  /* single accent + desaturated semantics */
+  --accent:#5b7cfa; --accent-2:#8aa0ff; --accent-soft:rgba(91,124,250,.14); --accent-line:rgba(91,124,250,.42);
+  --green:#34c98a; --green-soft:rgba(52,201,138,.13); --green-line:rgba(52,201,138,.4);
+  --amber:#e0a13a; --amber-soft:rgba(224,161,58,.13); --amber-line:rgba(224,161,58,.42);
+  --red:#ef5d6b; --red-soft:rgba(239,93,107,.13); --red-line:rgba(239,93,107,.42);
+  --violet:#a98bff; --violet-soft:rgba(169,139,255,.13);
+  /* responsibles (subtle) */
+  --r-kevin:#5b7cfa; --r-claude:#e0a13a; --r-chatgpt:#34c98a; --r-maia:#a98bff;
+  --rad:12px; --rad-sm:9px; --rad-lg:16px;
+  --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 10px 30px -18px rgba(0,0,0,.8);
+  --rail:248px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 480px at 88% -10%, #11151f 0, transparent 60%),
+    radial-gradient(760px 420px at -6% 4%, #0e131c 0, transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  min-height:100vh; font-feature-settings:"cv05","ss01";
+}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em}
+a{color:inherit}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#20242e;border-radius:8px}
+.tnum{font-variant-numeric:tabular-nums}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* ============ APP SHELL ============ */
+.app{display:grid;grid-template-columns:1fr;min-height:100vh}
+.rail{display:none}
+.main{min-width:0;width:100%;max-width:880px;margin:0 auto;padding:0 16px 120px}
+
+/* mobile topbar */
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 2px 4px;position:sticky;top:0;z-index:30;
+  background:linear-gradient(180deg,var(--bg) 62%,transparent);backdrop-filter:blur(4px)}
+.wm{display:flex;align-items:center;gap:9px}
+.wm .mk{width:22px;height:22px;flex:none}
+.wm .nm{font-size:18px;font-weight:800;letter-spacing:.16em;color:var(--ink)}
+.wm .v{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--accent-2);border:1px solid var(--accent-line);border-radius:5px;padding:1px 5px;margin-left:1px;background:var(--accent-soft)}
+.topbar .sp{margin-left:auto}
+
+/* freshness chip */
+.fresh{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-3);
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 11px 6px 9px;cursor:pointer;transition:border-color .15s,background .15s}
+.fresh:hover{border-color:var(--line-2);background:var(--surface-2)}
+.fresh .fdot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.fresh.warn .fdot{background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.fresh.stale .fdot{background:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+.fresh b{color:var(--ink-2);font-weight:600}
+.fresh .svgi{width:13px;height:13px;color:var(--ink-3)}
+/* freshness detail popover */
+.pop{display:none;position:absolute;right:0;top:calc(100% + 8px);width:300px;max-width:88vw;background:var(--surface-2);
+  border:1px solid var(--line-2);border-radius:var(--rad);box-shadow:var(--sh-2);padding:14px;z-index:60;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.pop.on{display:block;animation:pin .16s ease}
+@keyframes pin{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+.pop .pr{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}
+.pop .pr:last-of-type{border-bottom:0}
+.pop .pr span:first-child{color:var(--ink-3)}
+.pop .pacts{display:flex;gap:8px;margin-top:11px}
+.freshwrap{position:relative}
+
+/* ============ TYPOGRAPHY HELPERS ============ */
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.sectionhead{display:flex;align-items:center;gap:10px;margin:22px 2px 12px}
+.sectionhead .t{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.sectionhead .ln{flex:1;height:1px;background:var(--line)}
+.sectionhead .cn{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:1px 9px;min-width:20px;text-align:center}
+.svgi{display:inline-block;vertical-align:middle;width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line-2);background:var(--surface-2);
+  color:var(--ink);border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:transform .07s ease,border-color .14s,background .14s,box-shadow .14s;white-space:nowrap}
+.btn:hover{border-color:var(--line-3);background:var(--surface-3)}
+.btn:active{transform:translateY(1px)}
+.btn .svgi{width:15px;height:15px;flex:none}
+.btn.pri{background:linear-gradient(180deg,#6884fb,#4f6ef2);border-color:#6c87ff;color:#fff;box-shadow:0 8px 22px -12px rgba(91,124,250,.9),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn.pri:hover{background:linear-gradient(180deg,#7790ff,#5878f6);border-color:#86a0ff}
+.btn.ok{background:var(--green-soft);border-color:var(--green-line);color:#86e7bb}
+.btn.ok:hover{background:rgba(52,201,138,.2)}
+.btn.dng{background:var(--red-soft);border-color:var(--red-line);color:#ff9ba2}
+.btn.ghost{background:transparent;border-color:var(--line-2);color:var(--ink-2)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--line-3)}
+.btn.sm{padding:7px 10px;font-size:12px;border-radius:8px}
+.btn.block{width:100%}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ============ CARD / SURFACE ============ */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);box-shadow:var(--sh-1)}
+.pad{padding:15px}
+
+/* ============ HERO (priority decision) ============ */
+.hero{position:relative;overflow:hidden;border:1px solid var(--line-2);border-radius:var(--rad-lg);
+  background:linear-gradient(150deg,#161b2b 0,#12141c 64%);box-shadow:var(--sh-2);padding:18px}
+.hero:before{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(91,124,250,.22),transparent);pointer-events:none}
+.hero .hl{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.hero .hl .eyebrow{color:var(--accent-2)}
+.hero .hl .svgi{width:14px;height:14px;color:var(--accent-2)}
+.hero .ttl{font-size:21px;font-weight:800;line-height:1.22;letter-spacing:-.02em;margin-bottom:8px}
+.hero .why{font-size:13.5px;color:var(--ink-2);line-height:1.6;max-width:62ch}
+.hero .reco{display:inline-flex;align-items:center;gap:7px;margin-top:13px;font-size:12.5px;font-weight:600;color:#cdd7ff;
+  background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:999px;padding:6px 12px}
+.hero .reco .svgi{width:14px;height:14px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:7px 16px;margin-top:13px;font-size:12px;color:var(--ink-3)}
+.hero .meta .m{display:inline-flex;align-items:center;gap:6px}
+.hero .meta .m .svgi{width:13px;height:13px;color:var(--ink-4)}
+.hero .meta .m b{color:var(--ink-2);font-weight:600}
+.hero .ha{margin-top:16px;display:flex;gap:9px;flex-wrap:wrap}
+.hero .urgflag{position:absolute;right:16px;top:16px;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:#ffc99a;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:999px;padding:3px 9px}
+
+/* ============ KPI TILES ============ */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:13px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:12px 12px 11px;cursor:pointer;
+  transition:border-color .14s,background .14s,transform .07s;position:relative;overflow:hidden}
+.kpi:hover{border-color:var(--line-2);background:var(--surface-2)}
+.kpi:active{transform:translateY(1px)}
+.kpi .n{font-size:25px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.kpi .l{font-size:10.5px;font-weight:600;color:var(--ink-3);margin-top:7px;letter-spacing:.01em;display:flex;align-items:center;gap:5px}
+.kpi .l .svgi{width:13px;height:13px}
+.kpi.k-dec .n{color:var(--accent-2)} .kpi.k-del .n{color:var(--amber)} .kpi.k-wait .n{color:var(--ink-2)} .kpi.k-sec .n{color:var(--red)}
+.kpi.k-sec .l{color:#e79aa1}
+.kpi.zero{opacity:.5}.kpi.zero .n{color:var(--ink-4)}
+
+/* ============ MINI ROW (today lanes / sans toi / history) ============ */
+.minis{display:flex;flex-direction:column}
+.mini{display:flex;align-items:center;gap:12px;padding:11px 4px;border-top:1px solid var(--line);cursor:pointer;transition:background .12s}
+.mini:first-child{border-top:0}
+.mini:hover{background:var(--surface-2)}
+.mini .av{width:30px;height:30px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--line-2)}
+.mini .av .svgi{width:15px;height:15px}
+.av.kevin{background:var(--accent-soft);color:var(--accent-2)} .av.claude{background:var(--amber-soft);color:var(--amber)}
+.av.chatgpt{background:var(--green-soft);color:var(--green)} .av.maia{background:var(--violet-soft);color:var(--violet)} .av.bloc{background:var(--red-soft);color:var(--red)}
+.mini .tx{flex:1;min-width:0}
+.mini .tx b{display:block;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .tx small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .rt{flex:none;display:flex;align-items:center;gap:8px}
+.mini .go{color:var(--ink-4);width:16px;height:16px}
+.empty{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;color:var(--ink-3);font-size:12.5px;padding:26px 16px}
+.empty .svgi{width:26px;height:26px;color:var(--line-3)}
+
+/* ============ STATUS PILL ============ */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.02em;border-radius:999px;padding:3px 9px;white-space:nowrap;border:1px solid}
+.pill .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.ps-a_faire{color:var(--ink-3);background:var(--surface-3);border-color:var(--line-2)}
+.ps-prepare{color:#cdd7ff;background:var(--accent-soft);border-color:var(--accent-line)}
+.ps-transmis{color:#f0c074;background:var(--amber-soft);border-color:var(--amber-line)}
+.ps-attente{color:#f0c074;background:var(--amber-soft);border-color:var(--amber-line)}
+.ps-bloque{color:#ff9ba2;background:var(--red-soft);border-color:var(--red-line)}
+.ps-traite{color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)}
+.ps-reporte{color:var(--ink-3);background:var(--surface-2);border-color:var(--line)}
+.pill-ts{font-size:10px;color:var(--ink-4);margin-left:6px;white-space:nowrap}
+
+/* risk + meta chips */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--ink-3);border:1px solid var(--line);border-radius:7px;padding:3px 8px;background:var(--bg-1)}
+.tag .svgi{width:12px;height:12px}
+.tag.risk-élevé{color:#ff9ba2;border-color:var(--red-line);background:var(--red-soft)}
+.tag.risk-moyen{color:#f0c074;border-color:var(--amber-line);background:var(--amber-soft)}
+.tag.risk-faible{color:#86e7bb;border-color:var(--green-line);background:var(--green-soft)}
+
+/* ============ ACTION ROW (Action Center) ============ */
+.arow{position:relative;display:flex;gap:13px;padding:14px 15px 14px 16px;border:1px solid var(--line);border-radius:var(--rad);
+  background:var(--surface);margin-bottom:10px;cursor:pointer;transition:border-color .14s,background .14s,box-shadow .14s}
+.arow:hover{border-color:var(--line-2);background:var(--surface-2);box-shadow:var(--sh-1)}
+.arow .rail-c{position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0}
+.rc-kevin{background:var(--r-kevin)} .rc-claude{background:var(--r-claude)} .rc-chatgpt{background:var(--r-chatgpt)} .rc-maia{background:var(--r-maia)}
+.arow .prio{flex:none;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;
+  color:var(--ink-2);background:var(--surface-3);border:1px solid var(--line-2);font-variant-numeric:tabular-nums}
+.arow .body{flex:1;min-width:0}
+.arow .top{display:flex;align-items:flex-start;gap:10px}
+.arow .nm{flex:1;min-width:0;font-size:14.5px;font-weight:650;line-height:1.32;letter-spacing:-.01em}
+.arow .sub{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3);margin-top:3px}
+.arow .who{display:inline-flex;align-items:center;gap:5px;font-weight:600}
+.who-kevin{color:#9db4ff} .who-claude{color:#e6bd74} .who-chatgpt{color:#74dca9} .who-maia{color:#c2acff}
+.arow .who .svgi{width:12px;height:12px}
+.arow .impact{font-size:12.5px;color:var(--ink-2);margin-top:9px;line-height:1.5}
+.arow .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.arow .act{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px;flex:none}
+.arow .cta{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:#cdd7ff;background:var(--accent-soft);
+  border:1px solid var(--accent-line);border-radius:9px;padding:8px 11px;white-space:nowrap;transition:background .14s}
+.arow .cta:hover{background:rgba(91,124,250,.22)}
+.arow .cta .svgi{width:14px;height:14px}
+
+/* ============ DECISION (Maïa recommends) card ============ */
+.dcard{border:1px solid var(--line-2);border-radius:var(--rad);background:linear-gradient(180deg,var(--surface-2),var(--surface));margin-bottom:12px;overflow:hidden}
+.dcard .dh{display:flex;align-items:flex-start;gap:11px;padding:15px 15px 0}
+.dcard .dh .av{width:32px;height:32px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--violet-soft);color:var(--violet);border:1px solid rgba(169,139,255,.3)}
+.dcard .dh .av .svgi{width:16px;height:16px}
+.dcard .reco-t{font-size:12px;color:var(--ink-3);font-weight:600}
+.dcard .reco-v{font-size:15.5px;font-weight:700;letter-spacing:-.01em;margin-top:2px;line-height:1.3}
+.dcard .proj{font-size:11.5px;color:var(--ink-3);margin-top:4px}
+.dcard .drows{padding:13px 15px 0}
+.dcard .drow{display:flex;gap:9px;padding:8px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5}
+.dcard .drow:first-child{border-top:0}
+.dcard .drow .ic{flex:none;width:16px;height:16px;margin-top:2px}
+.dcard .drow .k{color:var(--ink-3);font-weight:600;display:block;font-size:11px;letter-spacing:.02em;text-transform:uppercase;margin-bottom:1px}
+.dcard .drow.warn .ic{color:var(--amber)} .dcard .drow.dng .ic{color:var(--red)} .dcard .drow.chg .ic{color:var(--green)} .dcard .drow.why .ic{color:var(--ink-3)}
+.dcard .df{display:flex;gap:8px;flex-wrap:wrap;padding:13px 15px 15px}
+
+/* ============ PROJECT ROW ============ */
+.prow{position:relative;border:1px solid var(--line);border-radius:var(--rad);background:var(--surface);margin-bottom:10px;transition:border-color .14s}
+.prow:hover{border-color:var(--line-2)}
+.prow .rail-c{position:absolute;left:0;top:13px;bottom:13px;width:3px;border-radius:0 3px 3px 0}
+.prow .ph{display:flex;align-items:flex-start;gap:10px;padding:14px 15px 0 16px}
+.prow .nm{flex:1;min-width:0;font-size:14.5px;font-weight:650;letter-spacing:-.01em}
+.prow .nx{display:flex;gap:8px;padding:9px 15px 0 16px;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.prow .nx .svgi{width:14px;height:14px;color:var(--accent);flex:none;margin-top:2px}
+.prow .pchips{display:flex;flex-wrap:wrap;gap:6px;padding:11px 15px 0 16px}
+.prow .pf{display:flex;gap:8px;padding:12px 15px 14px 16px;flex-wrap:wrap;align-items:center}
+.prow .det{display:none;padding:0 15px 14px 16px}
+.prow.open .det{display:block;animation:fade .2s ease}
+.prow .kv{display:grid;grid-template-columns:84px 1fr;gap:6px 12px;font-size:12px;border-top:1px dashed var(--line);padding-top:11px;margin-top:2px}
+.prow .kv b{color:var(--ink-3);font-weight:600}
+.badge{font-size:10px;font-weight:700;letter-spacing:.02em;border-radius:7px;padding:3px 8px;border:1px solid;white-space:nowrap}
+.bg-vivant{color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)}
+.bg-bloque{color:#ff9ba2;background:var(--red-soft);border-color:var(--red-line)}
+.bg-dormant{color:var(--ink-3);background:var(--surface-2);border-color:var(--line)}
+.bg-a_arbitrer{color:#f0c074;background:var(--amber-soft);border-color:var(--amber-line)}
+
+/* ============ SEGMENTED + SEARCH + FILTERS ============ */
+.toolbar{position:sticky;top:54px;z-index:20;background:linear-gradient(180deg,var(--bg) 78%,transparent);padding:6px 0 4px;margin:0 -2px}
+.seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.seg::-webkit-scrollbar{display:none}
+.seg .s{flex:none;font-size:12px;font-weight:600;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;transition:.14s;display:inline-flex;align-items:center;gap:6px}
+.seg .s:hover{border-color:var(--line-2);color:var(--ink-2)}
+.seg .s.on{color:#fff;background:linear-gradient(180deg,#2b3a63,#22335a);border-color:#3a5089}
+.seg .s .c{font-size:10.5px;font-weight:700;background:rgba(255,255,255,.1);border-radius:999px;padding:0 6px;min-width:16px;text-align:center}
+.search{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:0 12px;margin:10px 0}
+.search .svgi{width:16px;height:16px;color:var(--ink-3);flex:none}
+.search input{flex:1;background:transparent;border:0;outline:0;color:var(--ink);font:inherit;font-size:13.5px;padding:11px 0}
+.search input::placeholder{color:var(--ink-4)}
+.note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:2px 2px 14px}
+.note b{color:var(--ink-2);font-weight:600}
+.note.honest{display:flex;gap:9px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:11px 13px}
+.note.honest .svgi{width:15px;height:15px;color:var(--accent-2);flex:none;margin-top:2px}
+
+/* ============ HERMES grid + exchanges ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hcell{border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--bg-1)}
+.hcell .v{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}
+.hcell .v .svgi{width:14px;height:14px}
+.hcell.ok .v{color:#86e7bb} .hcell.ko .v{color:#ff9ba2}
+.hcell .k{font-size:11.5px;color:var(--ink-3);margin-top:4px}
+.exrow{border:1px solid var(--line);border-radius:var(--rad);background:var(--surface);padding:14px;margin-bottom:10px}
+.exrow .et{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.exrow .et .nm{flex:1;font-size:13.5px;font-weight:650}
+.exrow .ln2{display:flex;gap:8px;font-size:12px;color:var(--ink-2);padding:4px 0;line-height:1.5}
+.exrow .ln2 b{display:inline-flex;align-items:center;gap:5px;color:var(--ink-3);font-weight:600;flex:none;min-width:64px}
+.exrow .ln2 b .svgi{width:13px;height:13px;color:var(--ink-4)}
+
+/* ============ VIEWS / NAV ============ */
+.view{display:none}.view.on{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.viewhead{padding:14px 2px 2px}
+.viewhead h2{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.viewhead p{font-size:12.5px;color:var(--ink-3);margin:4px 0 0}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:rgba(10,11,14,.9);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 1px 10px;font-size:9.5px;font-weight:600;color:var(--ink-4);text-decoration:none;position:relative;cursor:pointer}
+.tabbar a .svgi{width:21px;height:21px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:2px;border-radius:2px;background:var(--accent)}
+.tabbar a .nb{position:absolute;top:5px;left:calc(50% + 9px);background:var(--red);color:#fff;font-size:8.5px;font-weight:800;border-radius:999px;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+
+/* ============ DECISION PANEL (sheet/dialog) ============ */
+.scrim{position:fixed;inset:0;background:rgba(5,6,9,.74);backdrop-filter:blur(4px);display:none;z-index:80;align-items:flex-end;justify-content:center}
+.scrim.on{display:flex;animation:fade .18s ease}
+.sheet{width:100%;max-width:600px;background:var(--surface);border:1px solid var(--line-2);border-bottom:0;border-radius:18px 18px 0 0;
+  max-height:92vh;overflow:auto;box-shadow:0 -24px 60px -24px #000;animation:up .28s cubic-bezier(.2,.85,.25,1)}
+@keyframes up{from{transform:translateY(46px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.sheet .grip{width:38px;height:4px;border-radius:3px;background:var(--line-3);margin:10px auto 0}
+.sheet .sc{padding:6px 17px 26px}
+.sheet .htag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:#f0c074;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:7px;padding:4px 9px;margin:8px 0 12px}
+.sheet .htag .svgi{width:12px;height:12px}
+.sheet h3{font-size:18px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.sheet .smeta{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.recoblk{display:flex;gap:11px;align-items:flex-start;background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:var(--rad);padding:13px;margin-bottom:13px}
+.recoblk .av{width:30px;height:30px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(91,124,250,.2);color:var(--accent-2)}
+.recoblk .av .svgi{width:16px;height:16px}
+.recoblk .rt{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-2)}
+.recoblk .rv{font-size:15px;font-weight:700;margin-top:2px;line-height:1.3;color:#e7ecff}
+.blk{border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px;background:var(--bg-1)}
+.blk .bk{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.blk .bk .svgi{width:13px;height:13px}
+.blk .bv{font-size:13px;color:var(--ink);line-height:1.55}
+.blk.dng{background:var(--red-soft);border-color:var(--red-line)} .blk.dng .bk{color:#ff9ba2}
+.blk.warn{background:var(--amber-soft);border-color:var(--amber-line)} .blk.warn .bk{color:#f0c074}
+.blk.chg{background:var(--green-soft);border-color:var(--green-line)} .blk.chg .bk{color:#86e7bb}
+.whogrid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:9px}
+.whoblk{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:11px;background:var(--bg-1)}
+.whoblk .av{width:28px;height:28px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center}
+.whoblk .av .svgi{width:15px;height:15px}
+.whoblk .wt{font-size:11px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em}
+.whoblk .wv{font-size:12.5px;color:var(--ink);line-height:1.5;margin-top:2px}
+.paywrap{margin:6px 0 12px}
+.payhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.payhead .bk{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.payhead .bk .svgi{width:13px;height:13px}
+.payload{background:#070a10;border:1px solid var(--line-2);border-radius:11px;padding:12px;font-size:12px;line-height:1.6;
+  white-space:pre-wrap;word-break:break-word;color:#cdd9ee;max-height:230px;overflow:auto}
+.nextblk{display:flex;gap:11px;align-items:flex-start;background:var(--green-soft);border:1px solid var(--green-line);border-radius:var(--rad);padding:13px;margin:4px 0 12px}
+.nextblk .svgi{width:18px;height:18px;color:#86e7bb;flex:none;margin-top:1px}
+.nextblk .nt{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#86e7bb}
+.nextblk .nv{font-size:13px;color:var(--ink);margin-top:3px;line-height:1.4}
+.confirm{display:flex;align-items:center;gap:9px;font-size:13px;color:#86e7bb;background:var(--green-soft);border:1px solid var(--green-line);border-radius:11px;padding:11px 13px;margin-bottom:11px}
+.confirm .svgi{width:17px;height:17px;flex:none}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.subhead{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4);margin:0 0 9px}
+.noteinput{width:100%;background:var(--bg-1);border:1px solid var(--line-2);border-radius:10px;color:var(--ink);font:inherit;font-size:13px;padding:10px 12px;margin-bottom:9px;resize:vertical;min-height:42px}
+.noteinput::placeholder{color:var(--ink-4)}
+
+/* ============ TOAST ============ */
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(8px);background:var(--surface-3);color:var(--ink);
+  border:1px solid var(--line-3);padding:11px 16px;border-radius:11px;font-size:12.5px;font-weight:500;box-shadow:var(--sh-2);
+  opacity:0;transition:.22s;pointer-events:none;z-index:95;display:flex;align-items:center;gap:8px;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .svgi{width:15px;height:15px;color:var(--green);flex:none}
+
+/* ============ DESKTOP ============ */
+@media (min-width:880px){
+  .app{grid-template-columns:var(--rail) 1fr}
+  .rail{display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:22px 16px;border-right:1px solid var(--line);background:linear-gradient(180deg,var(--bg-1),var(--bg))}
+  .rail .wm{padding:4px 8px 0}
+  .rail .wm .nm{font-size:19px}
+  .rail nav{display:flex;flex-direction:column;gap:3px;margin-top:26px}
+  .rail nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--ink-3);cursor:pointer;text-decoration:none;transition:.14s;position:relative}
+  .rail nav a .svgi{width:18px;height:18px;flex:none}
+  .rail nav a:hover{background:var(--surface);color:var(--ink-2)}
+  .rail nav a.on{background:var(--surface-2);color:var(--ink)}
+  .rail nav a.on:before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--accent)}
+  .rail nav a .nb{margin-left:auto;background:var(--red);color:#fff;font-size:9.5px;font-weight:800;border-radius:999px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+  .rail .rfoot{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+  .rail .rfoot .fresh{width:100%;justify-content:flex-start}
+  .topbar,.tabbar{display:none}
+  .main{max-width:760px;padding:8px 28px 60px}
+  .toolbar{top:0;padding-top:14px}
+  .kpis{gap:11px}
+  .whogrid{grid-template-columns:1fr 1fr}
+  .scrim{align-items:center}
+  .sheet{border-radius:16px;border-bottom:1px solid var(--line-2);max-height:88vh}
+  .sheet .grip{display:none}
+  .sheet .sc{padding:20px 22px 24px}
+  .toast{bottom:28px}
+  .hero .ttl{font-size:23px}
+}
+@media (min-width:1180px){ .main{max-width:840px} }
+</style></head>
+<body>
+<div class="app">
+
+  <!-- DESKTOP SIDEBAR -->
+  <aside class="rail">
+    <div class="wm">
+      <svg class="mk" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 28 9v14L16 29.5 4 23V9z" stroke="#5b7cfa" stroke-width="1.4" opacity=".55"/><path d="M16 9.5 22 13v6l-6 3.5-6-3.5v-6z" fill="#5b7cfa" fill-opacity=".16" stroke="#8aa0ff" stroke-width="1.3"/><circle cx="16" cy="16" r="1.7" fill="#cdd7ff"/></svg>
+      <span class="nm">MAÏA</span><span class="v">V4</span>
+    </div>
+    <nav id="railNav"></nav>
+    <div class="rfoot">
+      <div class="freshwrap"><div class="fresh" id="freshD"><span class="fdot"></span><span id="freshTxtD">…</span></div>
+        <div class="pop" id="popD"></div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- MOBILE TOPBAR -->
+    <div class="topbar">
+      <div class="wm">
+        <svg class="mk" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 28 9v14L16 29.5 4 23V9z" stroke="#5b7cfa" stroke-width="1.4" opacity=".55"/><path d="M16 9.5 22 13v6l-6 3.5-6-3.5v-6z" fill="#5b7cfa" fill-opacity=".16" stroke="#8aa0ff" stroke-width="1.3"/><circle cx="16" cy="16" r="1.7" fill="#cdd7ff"/></svg>
+        <span class="nm">MAÏA</span><span class="v">V4</span>
+      </div>
+      <div class="sp"></div>
+      <div class="freshwrap"><div class="fresh" id="freshM"><span class="fdot"></span><span id="freshTxtM">…</span></div>
+        <div class="pop" id="popM"></div></div>
+    </div>
+
+    <!-- ===== AUJOURD'HUI ===== -->
+    <section class="view on" id="v-today">
+      <div class="viewhead"><span class="eyebrow" id="todayDate" style="display:block;margin-bottom:8px;color:var(--accent-2)"></span><h2 id="pulseH">Aujourd'hui</h2><p id="pulseSub"></p></div>
+
+      <div class="hero" id="hero">
+        <div class="urgflag" id="heroUrg"></div>
+        <div class="hl"><svg class="svgi" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg><span class="eyebrow">Décision prioritaire</span></div>
+        <div class="ttl" id="heroTtl"></div>
+        <div class="why" id="heroWhy"></div>
+        <div class="reco" id="heroReco"></div>
+        <div class="meta" id="heroMeta"></div>
+        <div class="ha">
+          <button class="btn pri" id="heroBtn"><svg class="svgi" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>Ouvrir la décision</button>
+        </div>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="sectionhead"><span class="t">Ça avance sans toi</span><span class="ln"></span></div>
+      <div class="card"><div class="minis" id="sansToi"></div></div>
+
+      <div class="sectionhead"><span class="t">Dernières actions</span><span class="ln"></span></div>
+      <div class="card"><div class="minis" id="histList"></div></div>
+    </section>
+
+    <!-- ===== ACTIONS ===== -->
+    <section class="view" id="v-action">
+      <div class="viewhead"><h2>Actions</h2><p>La file d'exécution. Tu arbitres, Maïa prépare.</p></div>
+      <div class="note honest"><svg class="svgi" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+        <span><b>Rien n'est exécuté automatiquement.</b> Chaque bouton ne change qu'un statut local sur cet appareil — Maïa prépare le texte, tu décides de l'envoyer.</span></div>
+      <div class="toolbar">
+        <div class="seg" id="acSeg"></div>
+      </div>
+      <div class="search"><svg class="svgi" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="acQ" placeholder="Rechercher une action…" autocomplete="off"></div>
+      <div id="acList"></div>
+    </section>
+
+    <!-- ===== DÉCISIONS ===== -->
+    <section class="view" id="v-dec">
+      <div class="viewhead"><h2>Décisions</h2><p>Ce que Maïa recommande — et pourquoi.</p></div>
+      <div class="note">Maïa porte la décision à ta place. Pour chaque point ouvert : la reco, ce que ça change, ce que tu risques, et ce qu'elle ne fera <b>jamais</b> sans ton accord.</div>
+      <div id="decList"></div>
+    </section>
+
+    <!-- ===== PROJETS ===== -->
+    <section class="view" id="v-proj">
+      <div class="viewhead"><h2>Projets</h2><p>Où en est chaque chantier, trié par urgence.</p></div>
+      <div class="search"><svg class="svgi" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="pQ" placeholder="Rechercher un projet…" autocomplete="off"></div>
+      <div class="toolbar" style="top:auto;position:static;padding-top:0"><div class="seg" id="pSeg">
+        <span class="s on" data-f="all">Tous</span>
+        <span class="s" data-f="bloque">Bloqués</span>
+        <span class="s" data-f="encours">En cours</span>
+        <span class="s" data-f="attente">En attente</span>
+        <span class="s" data-f="kevin">Toi requis</span>
+      </div></div>
+      <div id="projList" style="margin-top:12px"></div>
+    </section>
+
+    <!-- ===== ÉCHANGES IA ===== -->
+    <section class="view" id="v-ex">
+      <div class="viewhead"><h2>Échanges IA</h2><p>Ce que Claude et ChatGPT traitent entre eux.</p></div>
+      <div class="note honest"><svg class="svgi" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+        <span>Protocole <b>Variante E</b> : Claude pré-crée le Doc, ChatGPT l'édite, Claude relit. Tu ne transportes rien.</span></div>
+      <div class="sectionhead"><span class="t">Allers-retours</span><span class="ln"></span></div>
+      <div id="exList"></div>
+      <div class="sectionhead"><span class="t">État du transport Hermès</span><span class="ln"></span></div>
+      <div class="card pad"><div class="hgrid" id="hGrid"></div><div class="note" id="hNote" style="margin:12px 2px 0"></div></div>
+    </section>
+  </main>
+</div>
+
+<!-- MOBILE TABBAR -->
+<div class="tabbar" id="tabbar"></div>
+
+<div class="scrim" id="scrim"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* =================== EMBEDDED FALLBACK (V4 snapshot) =================== */
+var FALLBACK={
+  "meta": {
+    "version": "V4.0",
+    "snapshot_ts": "2026-06-24T18:40:00+02:00",
+    "freshness_hours_warn": 72,
+    "freshness_hours_stale": 240,
+    "source": "Registre central CERVEAU_IA + logs Hermès + mémoire projet",
+    "source_detail": "Export figé lecture seule. Données au dernier état réel (04–24/06). Mise à jour : republier ce fichier.",
+    "mode": "snapshot"
+  },
+  "pulse": {
+    "headline": "Une anomalie client active, deux échéances dépassées, une clé à sécuriser.",
+    "sub": "Tout est préparable sans toucher la prod. Tu arbitres, Maïa exécute la préparation."
+  },
+  "hero": {
+    "act": "Préparer la correction du standard téléphonique",
+    "why": "L'agent part en digressions hors sujet pendant les appels clients. Claude peut préparer le correctif sans toucher la prod ; toi tu valideras avant mise en ligne.",
+    "reco": "Déléguer la préparation à Claude",
+    "urg": "haute",
+    "impact": "Restaure une image pro au téléphone et une meilleure qualification client.",
+    "temps": "~20 min Claude · 10 min ta validation",
+    "action_id": "A-STD-PROMPT"
+  },
+  "actions": [
+    {
+      "id": "A-STD-PROMPT",
+      "titre": "Corriger le prompt anti-digression de l'agent",
+      "projet": "Standard téléphonique IA",
+      "prio": 1,
+      "urg": "haute",
+      "lane": "claude",
+      "statut": "a_faire",
+      "impact": "Restaure une image professionnelle au téléphone et une qualification client fiable.",
+      "temps": "~20 min Claude · 10 min ta validation",
+      "niveau_risque": "élevé",
+      "reco": "Déléguer la préparation à Claude",
+      "reco_btn": "prepare_mission_claude",
+      "primary": "prepare_mission_claude",
+      "secondary": ["transmis_claude", "attente_retour", "reporter", "marquer_bloque"],
+      "probleme": "L'agent téléphonique digresse : histoires absurdes, détails personnels (type « nez »), bavardage hors sujet pendant l'appel.",
+      "pourquoi": "Ces digressions dégradent l'image de l'entreprise et font rater la qualification du client au téléphone.",
+      "change": "Un agent sobre, court, centré sur la qualification — sans bavardage ni récit absurde.",
+      "risque": "Appels clients dégradés, image non professionnelle, prospects mal qualifiés.",
+      "risque_refus": "L'anomalie reste en ligne : chaque appel entrant continue de subir les digressions.",
+      "claude": "Rédiger un prompt agent sobre + checklist sécurité, sur clone/staging uniquement.",
+      "chatgpt": "A déjà validé le périmètre du correctif (cadre renforcé acté).",
+      "kevin": "Valider le prompt avant toute mise en prod. Roter la clé Retell en parallèle.",
+      "sortie": "1) prompt corrigé · 2) checklist sécurité · 3) plan de test sur clone (hors client).",
+      "pas_sans_validation": "Aucune mise en prod, aucun test sur le numéro public, aucune modification de l'agent live sans ton GO.",
+      "interdits": "Ne pas toucher Retell / Twilio / Make prod. Pas de test sur le numéro public. Pas de modification de l'agent en ligne.",
+      "source": "https://drive.google.com/drive/folders/1lC-ApDaqTF07yODKZdCrhf8wTdbJfwIA",
+      "payload": "MISSION CLAUDE — Standard téléphonique IA : correction anti-digression\nOBJECTIF : produire un prompt agent SOBRE, professionnel, court, orienté qualification, SANS bavardage ni digression (pas d'histoires absurdes, pas de détails personnels type nez).\nCADRE : sur clone/staging UNIQUEMENT. Interdit : Retell/Twilio/Make prod, numéro public, agent live.\nLIVRABLES : 1) prompt corrigé ; 2) checklist sécurité avant tout test ; 3) plan de test hors client.\nRETOUR : rapport court (fait · à valider · prochaine action)."
+    },
+    {
+      "id": "A-MIG-INV",
+      "titre": "Inventaire + mapping des modèles Claude (Make)",
+      "projet": "Migration modèles Claude",
+      "prio": 2,
+      "urg": "haute",
+      "lane": "claude",
+      "statut": "a_faire",
+      "impact": "Évite des scénarios Make qui tomberaient en panne silencieuse.",
+      "temps": "~15 min Claude · 10 min ta validation",
+      "niveau_risque": "moyen",
+      "reco": "Déléguer l'inventaire à Claude (lecture seule)",
+      "reco_btn": "prepare_mission_claude",
+      "primary": "prepare_mission_claude",
+      "secondary": ["transmis_claude", "attente_retour", "reporter", "marquer_bloque"],
+      "probleme": "Sonnet 4 / Opus 4 retirés (échéance 15/06 dépassée). 2 scénarios Make restent à vérifier.",
+      "pourquoi": "Un scénario qui pointe encore l'ancien modèle échouera silencieusement une fois le modèle coupé.",
+      "change": "Une liste claire des scénarios à migrer, avec le modèle de remplacement proposé.",
+      "risque": "Scénarios Make qui échouent sans alerte quand l'ancien modèle disparaît.",
+      "risque_refus": "Le risque de panne silencieuse reste ouvert sur 2 scénarios.",
+      "claude": "Inventaire LECTURE SEULE des scénarios anthropic-claude + mapping de remplacement proposé.",
+      "chatgpt": "—",
+      "kevin": "Valider le mapping, puis décider la mise en prod toi-même.",
+      "sortie": "Tableau : scénario_id | modèle actuel | modèle cible | risque.",
+      "pas_sans_validation": "Aucune activation, aucune désactivation, aucun Run once, aucune écriture en prod.",
+      "interdits": "Lecture seule Make. Aucune activation, aucun Run once, aucune écriture prod.",
+      "source": "",
+      "payload": "MISSION CLAUDE — Migration modèles Claude (Make)\nOBJECTIF : inventaire LECTURE SEULE des scénarios Make utilisant un modèle Anthropic, puis proposer un mapping de remplacement (modèle retiré -> modèle actuel).\nCADRE : lecture seule, aucune activation/désactivation, aucun Run once.\nLIVRABLES : tableau scénario_id | modèle actuel | modèle cible | risque.\nRETOUR : mapping prêt à valider par Kevin."
+    },
+    {
+      "id": "A-SECU-RETELL",
+      "titre": "Roter la clé Retell",
+      "projet": "Sécurité (zones rouges)",
+      "prio": 1,
+      "urg": "haute",
+      "lane": "kevin",
+      "statut": "a_faire",
+      "impact": "Ferme un accès potentiellement exposé sur ton agent téléphonique.",
+      "temps": "~10 min, toi seul",
+      "niveau_risque": "élevé",
+      "reco": "À faire toi-même maintenant — Maïa ne touche pas aux secrets",
+      "reco_btn": "voir_etapes",
+      "primary": "voir_etapes",
+      "secondary": ["reporter", "marquer_traite"],
+      "probleme": "Clé Retell exposée (zone rouge sécurité).",
+      "pourquoi": "Tant que la clé n'est pas rotée, un accès non autorisé reste théoriquement possible.",
+      "change": "L'accès exposé est révoqué ; l'agent repart sur une clé saine.",
+      "risque": "Accès non autorisé possible à l'agent téléphonique tant que la clé est en l'état.",
+      "risque_refus": "La fenêtre d'exposition reste ouverte indéfiniment.",
+      "claude": "Ne JAMAIS toucher la clé (zone rouge). Peut seulement te le rappeler.",
+      "chatgpt": "—",
+      "kevin": "Roter la clé manuellement dans la console Retell.",
+      "sortie": "Clé rotée + mise à jour côté appelant si nécessaire.",
+      "pas_sans_validation": "Maïa ne touche aucun secret. Cette action est 100 % manuelle, réservée à toi.",
+      "interdits": "Claude ne touche aucun secret. Action 100 % manuelle Kevin.",
+      "source": "",
+      "payload": "ÉTAPE KEVIN (manuelle) :\n1. Ouvrir la console Retell.\n2. Révoquer / roter la clé API exposée.\n3. Mettre à jour la clé côté appelant si nécessaire (avec précaution prod).\nMaïa ne peut PAS le faire : action sécurité réservée à Kevin."
+    },
+    {
+      "id": "A-JUR-AVOCAT",
+      "titre": "Répondre à l'avocat (contrats + holding)",
+      "projet": "Juridique",
+      "prio": 3,
+      "urg": "moyenne",
+      "lane": "claude",
+      "statut": "a_faire",
+      "impact": "Débloque l'avancée sur les contrats barmans/commerciaux et l'étude holding.",
+      "temps": "~15 min Claude · 10 min ta relecture",
+      "niveau_risque": "moyen",
+      "reco": "Laisser Claude préparer le brouillon, tu envoies toi-même",
+      "reco_btn": "deleguer_claude",
+      "primary": "deleguer_claude",
+      "secondary": ["transmis_claude", "reporter", "marquer_traite"],
+      "probleme": "Réponse à l'avocat en attente (rappel R-35).",
+      "pourquoi": "Le retard bloque l'avancée sur les contrats et l'étude de holding.",
+      "change": "Un brouillon prêt à relire ; tu n'as plus qu'à valider et envoyer.",
+      "risque": "Retard juridique sur les contrats et l'étude holding.",
+      "risque_refus": "Le dossier juridique reste en attente, les contrats ne progressent pas.",
+      "claude": "Préparer un brouillon de réponse complet (sans l'envoyer).",
+      "chatgpt": "—",
+      "kevin": "Relire, valider et envoyer toi-même (l'e-mail est une zone rouge).",
+      "sortie": "Brouillon de réponse prêt à relire.",
+      "pas_sans_validation": "Maïa ne touche pas Gmail et n'envoie aucun e-mail.",
+      "interdits": "Claude ne touche pas Gmail, n'envoie aucun e-mail.",
+      "source": "",
+      "payload": "MISSION CLAUDE — Brouillon réponse avocat\nOBJECTIF : préparer un brouillon de réponse à l'avocat (contrats barmans/commerciaux + étude holding).\nCADRE : brouillon uniquement, AUCUN envoi (Gmail = zone rouge Kevin).\nLIVRABLE : texte de réponse prêt à relire par Kevin."
+    },
+    {
+      "id": "A-MAIL-GMAIL",
+      "titre": "Décider la connexion Gmail lecture seule",
+      "projet": "Assistant commercial / mails",
+      "prio": 4,
+      "urg": "moyenne",
+      "lane": "kevin",
+      "statut": "a_faire",
+      "impact": "Conditionne le passage de l'assistant commercial en mode complet.",
+      "temps": "~5 min, ta décision",
+      "niveau_risque": "faible",
+      "reco": "Trancher la décision — puis Claude prépare l'architecture",
+      "reco_btn": "voir_etapes",
+      "primary": "voir_etapes",
+      "secondary": ["reporter", "marquer_traite"],
+      "probleme": "Sans Gmail connecté, l'assistant commercial reste partiel. Le branchement OAuth est une décision sensible.",
+      "pourquoi": "C'est une autorisation d'accès : la décision t'appartient, Maïa ne la prend pas seule.",
+      "change": "Un assistant commercial qui voit les mails (lecture seule) et peut préparer les réponses.",
+      "risque": "Mails commerciaux non traités, suivi commercial partiel.",
+      "risque_refus": "L'assistant commercial reste incomplet — pas grave à court terme.",
+      "claude": "Préparer l'architecture de connexion (déjà documentée), sans rien brancher.",
+      "chatgpt": "—",
+      "kevin": "Donner — ou non — le GO OAuth, et réaliser l'autorisation toi-même.",
+      "sortie": "Décision GO / NO-GO. Si GO : architecture prête, autorisation par Kevin.",
+      "pas_sans_validation": "Aucune connexion OAuth ne sera tentée sans ton GO explicite.",
+      "interdits": "Pas de connexion OAuth sans GO explicite Kevin.",
+      "source": "",
+      "payload": "DÉCISION KEVIN : autoriser ou non la connexion Gmail en LECTURE SEULE (OAuth).\nSi GO : Claude prépare l'architecture, Kevin réalise l'autorisation OAuth lui-même.\nSi non : l'assistant commercial reste partiel."
+    },
+    {
+      "id": "A-HERMES-USE",
+      "titre": "Faire arbitrer une décision par ChatGPT (Variante E)",
+      "projet": "Hermès",
+      "prio": 5,
+      "urg": "moyenne",
+      "lane": "chatgpt",
+      "statut": "a_faire",
+      "impact": "Tu arrêtes de porter à la main les allers-retours entre Claude et ChatGPT.",
+      "temps": "~2 min, une instruction courte",
+      "niveau_risque": "faible",
+      "reco": "Lancer une décision via ChatGPT (Variante E)",
+      "reco_btn": "prepare_echange_chatgpt",
+      "primary": "prepare_echange_chatgpt",
+      "secondary": ["transmis_chatgpt", "attente_retour", "marquer_traite"],
+      "probleme": "Le transport Variante E est prouvé mais pas encore utilisé sur une vraie décision.",
+      "pourquoi": "Sans l'utiliser, tu continues à transporter manuellement le contenu entre les deux IA.",
+      "change": "Les décisions inter-IA passent par un Doc ; tu ne transportes plus aucun contenu.",
+      "risque": "Tu restes le facteur entre Claude et ChatGPT.",
+      "risque_refus": "Statu quo : transport manuel, plus de charge pour toi.",
+      "claude": "Pré-crée le Doc décision dans le dossier 04, relit, logue, clôture.",
+      "chatgpt": "Édite les champs du Doc pré-créé.",
+      "kevin": "Une instruction courte à ChatGPT (« édite le Doc prévu ») — zéro copier-coller.",
+      "sortie": "Décision tranchée par ChatGPT, appariée et loguée par Claude.",
+      "pas_sans_validation": "Pas d'API ChatGPT (coût). Variante E par fichier uniquement.",
+      "interdits": "Pas d'API ChatGPT (coût). Variante E fichier uniquement.",
+      "source": "https://drive.google.com/drive/folders/1nuPhjUTIaeAiCysoHppSj_iY-9dsBdK-",
+      "payload": "PROTOCOLE HERMÈS VARIANTE E :\n1. Claude pré-crée DECISION_ATTENDUE_<mission> dans le dossier 04 (champs à trous).\n2. Kevin dit à ChatGPT : « édite le Doc de décision prévu ».\n3. ChatGPT remplit decision + date, passe statut -> DECISION_RECUE.\n4. Claude relit, apparie, logue, clôture.\nKevin ne transporte aucun contenu."
+    }
+  ],
+  "projects": [
+    {"id":"P-STD","name":"Standard téléphonique IA","statut":"bloque","etat":"a_arbitrer","resp":"claude","kevin":true,"urg":4,"action_id":"A-STD-PROMPT",
+     "next":"Préparer un prompt agent sobre anti-digression (sur clone, jamais en prod)",
+     "bloc":"ANOMALIE_AGENT_DIGRESSION_HORS_SUJET_V1 + clé Retell à roter","maj":"2026-06-24","relance":"2026-06-26","charge_kevin":"moyenne",
+     "avance":"Audit validé par ChatGPT (cadre renforcé). Numéro public actif, intact.","src":"Make 5683079/5683140 (prod — ne pas toucher)"},
+    {"id":"P-MIG","name":"Migration modèles Claude (Make)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":4,"action_id":"A-MIG-INV",
+     "next":"Valider le mapping des modèles (échéance 15/06 dépassée)","bloc":"Sonnet 4 / Opus 4 retirés ; 2 scénarios à vérifier","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"5990234 déjà migré en claude-haiku-4-5","src":"mail Make 03/06 (U-02)"},
+    {"id":"P-SECU","name":"Sécurité (zones rouges)","statut":"bloque","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":5,"action_id":"A-SECU-RETELL",
+     "next":"Roter la clé Retell (action manuelle Kevin)","bloc":"Webhooks sans clé, secrets en clair, clé Retell exposée","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"faible",
+     "avance":"Design sécurisation webhooks terminé, non exécuté","src":"GO A sécurisation webhooks"},
+    {"id":"P-MAIA","name":"Maïa / cockpit (cette app)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"",
+     "next":"Utiliser la V4 au quotidien comme centre de commandement","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"V1.14.1 → V1.15 → V2 → V3 → V4 (cette version)","src":"GitHub maia-cockpit-assets"},
+    {"id":"P-HERMES","name":"Hermès (transport IA)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":3,"action_id":"A-HERMES-USE",
+     "next":"Appliquer Variante E sur la prochaine vraie décision","bloc":"Écriture Drive directe ChatGPT limitée — contournée par Variante E","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"nulle",
+     "avance":"D1, N1a, lecture Drive, Variante E tous PASS (24/06)","src":"Drive HERMES_SHARED_WORKSPACE_V1"},
+    {"id":"P-SUP","name":"Superviseur opérationnel (Make)","statut":"encours","etat":"vivant","resp":"claude","kevin":false,"urg":2,"action_id":"",
+     "next":"Surveiller la conso Make (6 scénarios actifs)","bloc":"aucun","maj":"2026-06-24","relance":"2026-06-28","charge_kevin":"nulle",
+     "avance":"P0 coût stabilisé : 6 scénarios actifs sur 10","src":"Make team 1531272"},
+    {"id":"P-JUR","name":"Juridique (contrats + holding)","statut":"encours","etat":"vivant","resp":"kevin","kevin":true,"urg":3,"action_id":"A-JUR-AVOCAT",
+     "next":"Répondre à l'avocat (Maïa peut préparer le brouillon)","bloc":"réponse avocat en attente (R-35)","maj":"2026-06-24","relance":"2026-06-25","charge_kevin":"moyenne",
+     "avance":"rappel actif","src":"Rappels MAIA"},
+    {"id":"P-MAIL","name":"Assistant commercial / mails","statut":"attente","etat":"a_arbitrer","resp":"kevin","kevin":true,"urg":2,"action_id":"A-MAIL-GMAIL",
+     "next":"Décider la connexion Gmail lecture seule (OAuth = GO séparé)","bloc":"Gmail non connecté ; OAuth en attente","maj":"2026-06-24","relance":"2026-06-30","charge_kevin":"faible",
+     "avance":"Architecture documentée ; bot Telegram commercial actif","src":"Make 5434085"},
+    {"id":"P-REC","name":"Recrutement barmans","statut":"attente","etat":"dormant","resp":"kevin","kevin":true,"urg":2,"action_id":"",
+     "next":"Finaliser la carte interactive des barmans + contrats","bloc":"rappels R-36 / R-37 en attente","maj":"2026-06-24","relance":"2026-07-01","charge_kevin":"moyenne",
+     "avance":"rappels actifs, pas de chantier en cours","src":"Rappels MAIA"},
+    {"id":"P-SITE","name":"Site Votre Barman / SEO","statut":"attente","etat":"dormant","resp":"maia","kevin":false,"urg":1,"action_id":"",
+     "next":"Cadrer le périmètre SEO réellement utile","bloc":"non démarré","maj":"2026-06-24","relance":"2026-07-05","charge_kevin":"nulle",
+     "avance":"évoqué, pas de chantier","src":"—"}
+  ],
+  "exchanges": [
+    {"mid":"HERMES_TEST_006 — Variante E","statut":"TERMINE","kevin":false,"dem":"Quelle forme d'écriture ChatGPT ne déclenche pas le blocage ?","att":"Variante validée","rep":"Variante E : ChatGPT édite un Doc pré-créé par Claude. Validée."},
+    {"mid":"HERMES_TEST_005B — écriture Drive","statut":"TERMINE","kevin":false,"dem":"ChatGPT peut-il écrire/ranger dans 04 ?","att":"oui/non + cause","rep":"Lecture OK, création OK, écriture+rangement bloqués par l'outil OpenAI."},
+    {"mid":"HERMES_TEST_002 — prochaine étape","statut":"TERMINE","kevin":false,"dem":"Prochaine étape Hermès après D1 ?","att":"A/B/C","rep":"B — passer en N1b (connecteur Drive)."}
+  ],
+  "hermes": [
+    {"k":"Boucle fichier D1","v":"PASS","c":"ok"},
+    {"k":"N1a copier-coller","v":"PASS","c":"ok"},
+    {"k":"Lecture Drive ChatGPT","v":"PASS","c":"ok"},
+    {"k":"Variante E (édition Doc)","v":"PASS","c":"ok"},
+    {"k":"Écriture/rangement direct ChatGPT","v":"bloqué (outil OpenAI)","c":"ko"},
+    {"k":"Commentaire Drive","v":"FAIL","c":"ko"}
+  ],
+  "hermesNote": "Mode officiel : Variante E — Claude pré-crée le Doc décision dans 04, ChatGPT édite, Claude relit. Kevin ne transporte aucun contenu. 0 €, aucun modèle externe."
+};
+var SNAP_URL="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-snapshot-v4.json";
+var D=FALLBACK;
+
+/* =================== LOCAL STATE (persisted) =================== */
+var LS_STATUS="maia.v4.status", LS_STATUSTS="maia.v4.statusts", LS_NOTES="maia.v4.notes", LS_HIST="maia.v4.history", LS_VIEW="maia.v4.view", LS_AC="maia.v4.acview";
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var STATUS=lsGet(LS_STATUS,{}), STATUS_TS=lsGet(LS_STATUSTS,{}), NOTES=lsGet(LS_NOTES,{}), HIST=lsGet(LS_HIST,[]);
+function effStatut(a){return STATUS[a.id]||a.statut;}
+function setStatut(id,s){STATUS[id]=s;STATUS_TS[id]=new Date().toISOString();lsSet(LS_STATUS,STATUS);lsSet(LS_STATUSTS,STATUS_TS);}
+
+/* =================== ICON SET =================== */
+var I={
+ today:'<rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>',
+ compass:'<circle cx="12" cy="12" r="9.5"/><path d="m15.6 8.4-2 5.2-5.2 2 2-5.2 5.2-2z"/>',
+ target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+ exchange:'<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+ refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5"/>',
+ arrow:'<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+ chevron:'<path d="m9 6 6 6-6 6"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ checkc:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/>',
+ alert:'<path d="M10.3 3.8 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17h.01"/>',
+ shield:'<path d="M12 22s8-4 8-10V5.5l-8-3-8 3V12c0 6 8 10 8 10z"/>',
+ lock:'<rect x="4.5" y="11" width="15" height="9.5" rx="2.2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>',
+ copy:'<rect x="9" y="9" width="11.5" height="11.5" rx="2.2"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/>',
+ ext:'<path d="M15 3.5h5.5V9"/><path d="M20 4 11 13"/><path d="M18.5 13.5V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2h5.5"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-.7a6 6 0 0 1 6-6h3a6 6 0 0 1 6 6v.7"/>',
+ cpu:'<rect x="6.5" y="6.5" width="11" height="11" rx="2.2"/><path d="M9.5 2.5v3M14.5 2.5v3M9.5 18.5v3M14.5 18.5v3M2.5 9.5h3M2.5 14.5h3M18.5 9.5h3M18.5 14.5h3"/>',
+ msg:'<path d="M21 14.5a2 2 0 0 1-2 2H8l-4 3.5V5.5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/>',
+ spark:'<path d="M12 3.5 13.7 9 19 10.7 13.7 12.4 12 18 10.3 12.4 5 10.7 10.3 9z"/>',
+ send:'<path d="M21.5 2.5 11 13"/><path d="M21.5 2.5 15 21l-3.8-8.2L3 9z"/>',
+ hourglass:'<path d="M6 3h12M6 21h12M7 3v3.6a2 2 0 0 0 .7 1.5L12 12l-4.3 3.9a2 2 0 0 0-.7 1.5V21M17 3v3.6a2 2 0 0 1-.7 1.5L12 12l4.3 3.9a2 2 0 0 1 .7 1.5V21"/>',
+ flag:'<path d="M5 21V4M5 4s1.2-1 4-1 4.8 2 7.5 2c1.4 0 2.5-.5 2.5-.5v9s-1.1.6-2.6.6c-2.7 0-4.7-2-7.4-2-2.8 0-4 1-4 1"/>',
+ inbox:'<path d="M22 12h-5l-2 3H9l-2-3H2"/><path d="M5.5 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.5A2 2 0 0 0 16.7 4H7.3a2 2 0 0 0-1.8 1.5z"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ list:'<path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/>',
+ gavel:'<path d="m14 13-7.5 7.5a2.1 2.1 0 0 1-3-3L11 10"/><path d="m16 10-3-3 4.5-4.5 3 3z"/><path d="M14.5 11.5 12.5 9.5"/><path d="M4 21h9"/>',
+ dot:'<circle cx="12" cy="12" r="4"/>',
+ ban:'<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+ eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+ doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+ rotate:'<path d="M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5"/>'
+};
+function svg(n,cls){return '<svg class="svgi'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(I[n]||'')+'</svg>';}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+/* =================== HELPERS =================== */
+var WHO={kevin:{ic:"user",nm:"Kevin"},claude:{ic:"cpu",nm:"Claude"},chatgpt:{ic:"msg",nm:"ChatGPT"},maia:{ic:"spark",nm:"Maïa"}};
+function whoNm(r){return (WHO[r]||WHO.maia).nm;}
+function whoIc(r){return (WHO[r]||WHO.maia).ic;}
+function actById(id){return (D.actions||[]).filter(function(a){return a.id===id;})[0];}
+function isSecu(a){return /Sécurité/.test(a.projet||"")||/SECU/.test(a.id||"");}
+
+/* status display */
+var STLABEL={a_faire:"À traiter",prepare:"Préparée",transmis:"Transmise",attente:"En attente retour",bloque:"Bloquée",traite:"Terminée",reporte:"Reportée"};
+function stPill(s,ts){var l=STLABEL[s]||s;return '<span class="pill ps-'+s+'"><span class="dot"></span>'+esc(l)+'</span>'+((ts&&s!=="a_faire")?'<span class="pill-ts">'+esc(ago(ts))+'</span>':'');}
+
+/* time-ago */
+function ago(iso){var t=new Date(iso),now=new Date(),h=(now-t)/3.6e6;if(h<1)return "à l'instant";if(h<24)return "il y a "+Math.round(h)+" h";return "il y a "+Math.round(h/24)+" j";}
+
+/* history */
+function logHist(actionId,titre,event,note){
+  HIST.unshift({ts:new Date().toISOString(),id:actionId,titre:titre,event:event,note:note||""});
+  HIST=HIST.slice(0,40);lsSet(LS_HIST,HIST);
+}
+
+/* =================== TOAST =================== */
+var toastT;
+function toast(m,icon){var t=document.getElementById("toast");t.innerHTML=svg(icon||"check")+'<span>'+esc(m)+'</span>';t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2300);}
+
+/* =================== FRESHNESS =================== */
+function freshness(){
+  var ts=new Date(D.meta.snapshot_ts),now=new Date(),h=(now-ts)/3.6e6;
+  var cls="",txt="À jour";
+  if(h>D.meta.freshness_hours_stale){cls="stale";txt="À rafraîchir";}
+  else if(h>D.meta.freshness_hours_warn){cls="warn";txt="Vérifie la fraîcheur";}
+  var dd=ts.toLocaleDateString("fr-FR",{day:"numeric",month:"short"})+" "+ts.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  var label='<span class="fdot"></span><b>'+esc(txt)+'</b> · '+esc(dd);
+  ["M","D"].forEach(function(sfx){
+    var el=document.getElementById("fresh"+sfx);if(!el)return;
+    el.className="fresh "+cls;el.innerHTML=label;el.onclick=function(ev){ev.stopPropagation();togglePop(sfx);};
+    var pop=document.getElementById("pop"+sfx);
+    pop.innerHTML='<div class="pr"><span>État</span><span>'+esc(txt)+'</span></div>'
+      +'<div class="pr"><span>Données figées</span><span>'+esc(dd)+' ('+ago(D.meta.snapshot_ts)+')</span></div>'
+      +'<div class="pr"><span>Source</span><span style="text-align:right;max-width:170px">'+esc(D.meta.source)+'</span></div>'
+      +'<div style="color:var(--ink-3);margin-top:9px;font-size:11.5px">'+esc(D.meta.source_detail||"")+'</div>'
+      +'<div class="pacts"><button class="btn sm pri" data-pop="refresh">'+svg("refresh")+'Actualiser</button>'
+      +'<button class="btn sm ghost" data-pop="reset">Réinit. local</button></div>';
+    pop.querySelectorAll("[data-pop]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var k=b.getAttribute("data-pop");if(k==="refresh"){loadSnapshot(false);}else{resetLocal();}closePops();};});
+  });
+}
+function togglePop(sfx){var p=document.getElementById("pop"+sfx);var was=p.classList.contains("on");closePops();if(!was)p.classList.add("on");}
+function closePops(){document.querySelectorAll(".pop").forEach(function(p){p.classList.remove("on");});}
+document.addEventListener("click",closePops);
+function resetLocal(){if(confirm("Réinitialiser tous les statuts locaux et l'historique de cet appareil ?")){STATUS={};STATUS_TS={};NOTES={};HIST=[];lsSet(LS_STATUS,STATUS);lsSet(LS_STATUSTS,STATUS_TS);lsSet(LS_NOTES,NOTES);lsSet(LS_HIST,HIST);renderAll();toast("État local réinitialisé","rotate");}}
+
+/* =================== KPI / COUNTS =================== */
+function counts(){
+  var c={decider:0,deleguer:0,attente:0,secu:0,termine:0,reporte:0};
+  (D.actions||[]).forEach(function(a){
+    var s=effStatut(a);
+    if(s==="transmis"||s==="attente")c.attente++;
+    if(s==="traite")c.termine++;
+    if(s==="reporte")c.reporte++;
+    if(s==="bloque"){c.secu++;return;}
+    if(s==="a_faire"||s==="prepare"){
+      if(isSecu(a)){c.secu++;}
+      else if(a.lane==="kevin"){c.decider++;}
+      else if(a.lane==="claude"||a.lane==="chatgpt"){c.deleguer++;}
+    }
+  });
+  return c;
+}
+
+/* =================== AUJOURD'HUI =================== */
+function rToday(){
+  var dt=new Date();document.getElementById("todayDate").textContent="Aujourd'hui · "+dt.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("pulseH").textContent=(D.pulse&&D.pulse.headline)?D.pulse.headline:"Aujourd'hui";
+  document.getElementById("pulseSub").textContent=(D.pulse&&D.pulse.sub)||"";
+  var h=D.hero||{};
+  document.getElementById("heroTtl").textContent=h.act||"";
+  document.getElementById("heroWhy").textContent=h.why||"";
+  document.getElementById("heroUrg").textContent=h.urg?("urgence "+h.urg):"";
+  document.getElementById("heroReco").innerHTML=h.reco?(svg("spark")+'<span>Maïa recommande : <b>'+esc(h.reco)+'</b></span>'):"";
+  var meta="";if(h.impact)meta+='<span class="m">'+svg("bolt")+'<b>Impact</b> '+esc(h.impact)+'</span>';if(h.temps)meta+='<span class="m">'+svg("clock")+esc(h.temps)+'</span>';
+  document.getElementById("heroMeta").innerHTML=meta;
+  document.getElementById("heroBtn").onclick=function(){if(h.action_id)openAction(h.action_id);};
+
+  var c=counts();
+  var K=[["k-dec","decider","À décider","compass"],["k-del","deleguer","À déléguer","cpu"],["k-wait","attente","En attente","hourglass"],["k-sec","secu","Sécurité","shield"]];
+  var map={decider:"decider",deleguer:"deleguer",attente:"attente",secu:"bloque"};
+  document.getElementById("kpis").innerHTML=K.map(function(k){
+    return '<div class="kpi '+k[0]+(c[k[1]]===0?" zero":"")+'" data-kpi="'+k[1]+'"><div class="n tnum">'+c[k[1]]+'</div><div class="l">'+svg(k[3])+esc(k[2])+'</div></div>';
+  }).join("");
+  document.querySelectorAll("[data-kpi]").forEach(function(e){e.onclick=function(){var v={decider:"decider",deleguer:"deleguer",attente:"attente",secu:"bloque"}[e.getAttribute("data-kpi")];go("action");acView=v;lsSet(LS_AC,v);rAction();};});
+
+  /* sans toi : projets vivants non-Kevin + actions transmises/en attente */
+  var st=[];
+  (D.projects||[]).forEach(function(p){if(p.kevin===false&&p.etat!=="dormant"){st.push({t:p.name,n:p.next,r:p.resp,aid:p.action_id});}});
+  (D.actions||[]).forEach(function(a){var s=effStatut(a);if(s==="transmis"||s==="attente"){st.push({t:a.titre,n:(s==="transmis"?"Transmise à ":"En attente de ")+whoNm(a.lane),r:a.lane,aid:a.id});}});
+  var seen={};st=st.filter(function(x){if(seen[x.t])return false;seen[x.t]=1;return true;});
+  document.getElementById("sansToi").innerHTML=st.length?st.map(function(x){
+    return '<div class="mini" data-open="'+esc(x.aid||"")+'"><div class="av '+x.r+'">'+svg(whoIc(x.r))+'</div><div class="tx"><b>'+esc(x.t)+'</b><small>'+esc(x.n)+'</small></div><div class="rt">'+svg("chevron","go")+'</div></div>';
+  }).join(""):'<div class="empty">'+svg("inbox")+'<span>Rien en cours côté IA pour le moment.</span></div>';
+
+  /* historique */
+  document.getElementById("histList").innerHTML=HIST.length?HIST.slice(0,6).map(function(e){
+    return '<div class="mini" data-open="'+esc(e.id||"")+'"><div class="av maia">'+svg("checkc")+'</div><div class="tx"><b>'+esc(e.event)+'</b><small>'+esc(e.titre)+' · '+esc(ago(e.ts))+(e.note?' · « '+esc(e.note)+' »':'')+'</small></div></div>';
+  }).join(""):'<div class="empty">'+svg("list")+'<span>Tes actions de la session apparaîtront ici.</span></div>';
+
+  bindOpens();
+}
+
+/* =================== ACTIONS =================== */
+var AC_VIEWS=[["toutes","Toutes","list"],["decider","À décider","compass"],["deleguer","À déléguer","cpu"],["attente","En attente","hourglass"],["bloque","Sécurité / bloqué","shield"],["traite","Terminé","checkc"],["reporte","Ignorable","clock"]];
+var acView=lsGet(LS_AC,"toutes"), acQ="";
+function acMatch(a,v){
+  var s=effStatut(a);
+  if(v==="toutes")return true;
+  if(v==="attente")return s==="transmis"||s==="attente";
+  if(v==="traite")return s==="traite";
+  if(v==="reporte")return s==="reporte";
+  if(v==="bloque")return s==="bloque"||(isSecu(a)&&(s==="a_faire"||s==="prepare"));
+  if(v==="decider")return (s==="a_faire"||s==="prepare")&&a.lane==="kevin"&&!isSecu(a);
+  if(v==="deleguer")return (s==="a_faire"||s==="prepare")&&(a.lane==="claude"||a.lane==="chatgpt");
+  return false;
+}
+function acCount(v){return (D.actions||[]).filter(function(a){return acMatch(a,v);}).length;}
+function rAcSeg(){
+  document.getElementById("acSeg").innerHTML=AC_VIEWS.map(function(v){
+    var n=acCount(v[0]);
+    return '<span class="s'+(acView===v[0]?" on":"")+'" data-v="'+v[0]+'">'+svg(v[2])+esc(v[1])+(n?'<span class="c tnum">'+n+'</span>':'')+'</span>';
+  }).join("");
+  document.querySelectorAll("#acSeg .s").forEach(function(s){s.onclick=function(){acView=s.getAttribute("data-v");lsSet(LS_AC,acView);rAction();};});
+}
+function rAction(){
+  rAcSeg();
+  var list=(D.actions||[]).filter(function(a){return acMatch(a,acView)&&(!acQ||(a.titre+" "+a.projet+" "+a.impact+" "+a.pourquoi).toLowerCase().indexOf(acQ)>=0);});
+  list.sort(function(a,b){return (a.prio||9)-(b.prio||9);});
+  /* nav badge = à décider + à déléguer + sécurité ouverts */
+  var c=counts();var openN=c.decider+c.deleguer+c.secu;
+  document.querySelectorAll("[data-badge]").forEach(function(b){b.textContent=openN||"";b.style.display=openN?"":"none";});
+  var html=list.map(function(a){
+    var s=effStatut(a),lane=a.lane;
+    var recoLabel=BTN[a.reco_btn]?BTN[a.reco_btn][0]:"Ouvrir";
+    return '<div class="arow" data-open="'+esc(a.id)+'"><div class="rail-c rc-'+lane+'"></div>'
+      +'<div class="prio tnum">'+(a.prio||"·")+'</div>'
+      +'<div class="body"><div class="top"><div class="nm">'+esc(a.titre)+'</div>'+stPill(s,STATUS_TS[a.id])+'</div>'
+      +'<div class="sub"><span class="who who-'+lane+'">'+svg(whoIc(lane))+esc(whoNm(lane))+'</span><span>·</span><span>'+esc(a.projet)+'</span></div>'
+      +'<div class="impact">'+esc(a.impact||a.pourquoi)+'</div>'
+      +'<div class="chips"><span class="tag risk-'+esc(a.niveau_risque)+'">'+svg("alert")+'Risque '+esc(a.niveau_risque)+'</span>'
+      +(a.temps?'<span class="tag">'+svg("clock")+esc(a.temps)+'</span>':'')
+      +(isSecu(a)?'<span class="tag risk-élevé">'+svg("shield")+'Zone rouge</span>':'')+'</div>'
+      +'<div class="chips" style="margin-top:11px"><span class="cta" data-open="'+esc(a.id)+'">'+svg(a.reco_btn==="voir_etapes"?"arrow":"send")+esc(recoLabel)+'</span></div>'
+      +'</div></div>';
+  }).join("");
+  document.getElementById("acList").innerHTML=list.length?html:'<div class="empty">'+svg("checkc")+'<span>Rien dans « '+esc((AC_VIEWS.filter(function(v){return v[0]===acView;})[0]||[])[1]||"")+' ». Tout est traité ici.</span></div>';
+  bindOpens();
+}
+
+/* =================== DÉCISIONS =================== */
+function rDec(){
+  var list=(D.actions||[]).filter(function(a){var s=effStatut(a);return s==="a_faire"||s==="prepare";});
+  list.sort(function(a,b){return (a.prio||9)-(b.prio||9);});
+  document.getElementById("decList").innerHTML=list.length?list.map(function(a){
+    var recoLabel=BTN[a.reco_btn]?BTN[a.reco_btn][0]:"Ouvrir";
+    return '<div class="dcard"><div class="dh"><div class="av">'+svg("spark")+'</div><div style="flex:1;min-width:0">'
+      +'<div class="reco-t">Maïa recommande</div><div class="reco-v">'+esc(a.reco)+'</div>'
+      +'<div class="proj">'+esc(a.titre)+' · '+esc(a.projet)+'</div></div></div>'
+      +'<div class="drows">'
+      +'<div class="drow why">'+svg("eye","ic")+'<div><span class="k">Pourquoi</span>'+esc(a.pourquoi)+'</div></div>'
+      +'<div class="drow chg">'+svg("arrow","ic")+'<div><span class="k">Ce que ça change</span>'+esc(a.change||a.impact)+'</div></div>'
+      +'<div class="drow dng">'+svg("alert","ic")+'<div><span class="k">Si tu ne fais rien</span>'+esc(a.risque_refus||a.risque)+'</div></div>'
+      +'<div class="drow warn">'+svg("ban","ic")+'<div><span class="k">Ce que Maïa ne fera pas sans toi</span>'+esc(a.pas_sans_validation)+'</div></div>'
+      +'</div><div class="df"><button class="btn pri" data-open="'+esc(a.id)+'">'+svg(a.reco_btn==="voir_etapes"?"arrow":"send")+esc(recoLabel)+'</button>'
+      +'<button class="btn ghost" data-open="'+esc(a.id)+'">'+svg("eye")+'Détail</button></div></div>';
+  }).join(""):'<div class="empty">'+svg("checkc")+'<span>Aucune décision en attente. Tout est arbitré.</span></div>';
+  bindOpens();
+}
+
+/* =================== PROJETS =================== */
+var pF="all",pQ="";
+function rankP(p){return (p.statut==="bloque"?0:p.statut==="encours"?1:p.statut==="attente"?2:3)-(p.urg/10);}
+function rProj(){
+  var list=(D.projects||[]).slice().filter(function(p){
+    if(pF==="kevin"&&!p.kevin)return false;
+    if(pF!=="all"&&pF!=="kevin"&&p.statut!==pF)return false;
+    if(pQ&&((p.name+" "+p.next+" "+p.bloc).toLowerCase().indexOf(pQ)<0))return false;
+    return true;
+  }).sort(function(a,b){return rankP(a)-rankP(b);});
+  var EB={vivant:["bg-vivant","vivant"],bloque:["bg-bloque","bloqué"],dormant:["bg-dormant","dormant"],a_arbitrer:["bg-a_arbitrer","à arbitrer"]};
+  document.getElementById("projList").innerHTML=list.length?list.map(function(p){
+    var e=EB[p.etat]||EB.dormant;
+    var actBtn=p.action_id?'<button class="btn pri sm" data-open="'+esc(p.action_id)+'">'+svg("bolt")+'Agir</button>':'';
+    return '<div class="prow" data-id="'+esc(p.id)+'"><div class="rail-c rc-'+esc(p.resp)+'"></div>'
+      +'<div class="ph"><div class="nm">'+esc(p.name)+'</div><span class="badge '+e[0]+'">'+e[1]+'</span></div>'
+      +'<div class="nx">'+svg("arrow")+'<span>'+esc(p.next)+'</span></div>'
+      +'<div class="pchips"><span class="tag who-'+esc(p.resp)+'" style="color:inherit">'+svg(whoIc(p.resp))+esc(whoNm(p.resp))+'</span>'
+      +(p.kevin?'<span class="tag" style="color:#9db4ff;border-color:var(--accent-line);background:var(--accent-soft)">'+svg("user")+'Toi requis</span>':'')
+      +(p.urg>=4?'<span class="tag risk-élevé">'+svg("alert")+'urgent</span>':'')
+      +'<span class="tag">charge : '+esc(p.charge_kevin)+'</span></div>'
+      +'<div class="pf">'+actBtn+'<button class="btn ghost sm" data-tog="'+esc(p.id)+'">'+svg("chevron")+'Détail</button></div>'
+      +'<div class="det"><div class="kv"><b>Blocage</b><span>'+esc(p.bloc)+'</span><b>Avancée</b><span>'+esc(p.avance)+'</span><b>Mise à jour</b><span>'+esc(p.maj)+'</span><b>Relance</b><span>'+esc(p.relance)+'</span><b>Source</b><span>'+esc(p.src)+'</span></div></div></div>';
+  }).join(""):'<div class="empty">'+svg("search")+'<span>Aucun projet ne correspond.</span></div>';
+  document.querySelectorAll("#projList [data-tog]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();document.querySelector('#projList .prow[data-id="'+b.getAttribute("data-tog")+'"]').classList.toggle("open");};});
+  bindOpens(document.getElementById("projList"));
+}
+
+/* =================== ÉCHANGES =================== */
+function rEx(){
+  document.getElementById("exList").innerHTML=(D.exchanges||[]).map(function(e){
+    var st=e.statut==="TERMINE"?'<span class="badge bg-vivant">terminé</span>':'<span class="badge bg-a_arbitrer">en attente</span>';
+    return '<div class="exrow"><div class="et"><div class="nm">'+esc(e.mid)+'</div>'+st+'</div>'
+      +'<div class="ln2"><b>'+svg("cpu")+'Claude</b><span>'+esc(e.dem)+'</span></div>'
+      +'<div class="ln2"><b>'+svg("target")+'Attendu</b><span>'+esc(e.att)+'</span></div>'
+      +'<div class="ln2"><b>'+svg("msg")+'ChatGPT</b><span>'+(e.rep?esc(e.rep):'<i>en attente</i>')+'</span></div></div>';
+  }).join("");
+  document.getElementById("hGrid").innerHTML=(D.hermes||[]).map(function(h){
+    return '<div class="hcell '+(h.c==="ok"?"ok":"ko")+'"><div class="v">'+svg(h.c==="ok"?"checkc":"x")+esc(h.v)+'</div><div class="k">'+esc(h.k)+'</div></div>';
+  }).join("");
+  document.getElementById("hNote").textContent=D.hermesNote||"";
+}
+
+/* =================== BUTTON DEFS (state machine) =================== */
+var BTN={
+  prepare_mission_claude:["Préparer mission Claude","pri","send"],
+  prepare_echange_chatgpt:["Préparer échange ChatGPT","pri","send"],
+  deleguer_claude:["Déléguer à Claude","pri","send"],
+  voir_etapes:["Voir les étapes","pri","arrow"],
+  copier:["Copier le texte","ghost","copy"],
+  transmis_claude:["J'ai transmis à Claude","ok","checkc"],
+  transmis_chatgpt:["J'ai transmis à ChatGPT","ok","checkc"],
+  attente_retour:["Attendre le retour","ghost","hourglass"],
+  reporter:["Relancer plus tard","ghost","clock"],
+  marquer_bloque:["Marquer bloqué","dng","lock"],
+  marquer_traite:["Marquer traité","ok","check"],
+  decision_locale:["Créer décision locale","ghost","gavel"],
+  ouvrir_source:["Ouvrir la source","ghost","ext"]
+};
+
+/* =================== DECISION PANEL =================== */
+var curAction=null;
+function openAction(id){
+  var a=actById(id);if(!a){toast("Action introuvable","alert");return;}
+  curAction=id;closePops();
+  var s=effStatut(a);
+  var meta='<span class="tag">'+svg("flag")+'Priorité '+(a.prio||"—")+'</span>'
+    +'<span class="tag risk-'+esc(a.niveau_risque)+'">'+svg("alert")+'Risque '+esc(a.niveau_risque)+'</span>'
+    +(a.temps?'<span class="tag">'+svg("clock")+esc(a.temps)+'</span>':'')
+    +stPill(s,STATUS_TS[a.id]);
+  var who="";
+  if(a.claude&&a.claude!=="—")who+='<div class="whoblk"><div class="av claude">'+svg("cpu")+'</div><div><div class="wt">Claude</div><div class="wv">'+esc(a.claude)+'</div></div></div>';
+  if(a.chatgpt&&a.chatgpt!=="—")who+='<div class="whoblk"><div class="av chatgpt">'+svg("msg")+'</div><div><div class="wt">ChatGPT</div><div class="wv">'+esc(a.chatgpt)+'</div></div></div>';
+  if(a.kevin&&a.kevin!=="—")who+='<div class="whoblk"><div class="av kevin">'+svg("user")+'</div><div><div class="wt">Toi</div><div class="wv">'+esc(a.kevin)+'</div></div></div>';
+
+  var html='<div class="grip"></div><div class="sc">'
+    +'<div class="htag">'+svg("alert")+'Préparé — non exécuté</div>'
+    +'<h3>'+esc(a.titre)+'</h3>'
+    +'<div class="smeta">'+meta+'</div>'
+    +'<div class="recoblk"><div class="av">'+svg("spark")+'</div><div><div class="rt">Maïa recommande</div><div class="rv">'+esc(a.reco)+'</div></div></div>'
+    +(a.probleme?'<div class="blk dng"><div class="bk">'+svg("alert")+'Problème constaté</div><div class="bv">'+esc(a.probleme)+'</div></div>':'')
+    +'<div class="blk"><div class="bk">'+svg("eye")+'Pourquoi c\'est demandé</div><div class="bv">'+esc(a.pourquoi)+'</div></div>'
+    +'<div class="blk chg"><div class="bk">'+svg("arrow")+'Ce que ça change</div><div class="bv">'+esc(a.change||a.impact)+'</div></div>'
+    +'<div class="blk dng"><div class="bk">'+svg("alert")+'Si rien n\'est fait</div><div class="bv">'+esc(a.risque)+'</div></div>'
+    +'<div class="divider"></div><div class="subhead">Qui porte quoi</div><div class="whogrid">'+who+'</div>'
+    +'<div class="blk warn"><div class="bk">'+svg("ban")+'Ce que Maïa ne fera pas sans ta validation</div><div class="bv">'+esc(a.pas_sans_validation||a.interdits)+'</div></div>'
+    +(a.sortie?'<div class="blk"><div class="bk">'+svg("checkc")+'Sortie attendue</div><div class="bv">'+esc(a.sortie)+'</div></div>':'')
+    +'<div class="paywrap"><div class="payhead"><span class="bk">'+svg("doc")+'Texte prêt à transmettre</span>'
+    +'<button class="btn sm pri" data-do="copier">'+svg("copy")+'Copier</button></div>'
+    +'<div class="payload" id="pl">'+esc(a.payload)+'</div></div>'
+    +'<div id="panelAct"></div>'
+    +'</div>';
+  var sheet=document.getElementById("sheet");sheet.innerHTML=html;
+  renderPanelActions(a);
+  document.getElementById("scrim").classList.add("on");
+  document.body.style.overflow="hidden";
+  var sh=document.getElementById("sheet");sh.setAttribute("tabindex","-1");sh.scrollTop=0;try{sh.focus({preventScroll:true});}catch(e){}
+}
+function renderPanelActions(a,justDid){
+  var box=document.getElementById("panelAct");if(!box)return;
+  var s=effStatut(a);
+  var confirm="";
+  if(justDid){
+    confirm='<div class="confirm">'+svg("checkc")+'<span>'+esc(justDid)+'</span></div>';
+    /* next action */
+    var next=(D.actions||[]).filter(function(x){var xs=effStatut(x);return (xs==="a_faire"||xs==="prepare")&&x.id!==a.id;}).sort(function(x,y){return (x.prio||9)-(y.prio||9);})[0];
+    if(next){confirm+='<div class="nextblk">'+svg("arrow")+'<div><div class="nt">Prochaine action</div><div class="nv">'+esc(next.titre)+'</div></div></div>'
+      +'<button class="btn pri block" data-next="'+esc(next.id)+'" style="margin-bottom:12px">'+svg("arrow")+'Ouvrir : '+esc(next.titre)+'</button>';}
+    else{confirm+='<div class="nextblk">'+svg("checkc")+'<div><div class="nt">Tout est traité</div><div class="nv">Plus aucune action ouverte. Beau travail.</div></div></div>';}
+  }
+  /* build buttons by lane */
+  var rows=[];
+  rows.push(a.primary);
+  (a.secondary||[]).forEach(function(k){rows.push(k);});
+  rows.push("decision_locale");
+  if(a.source)rows.push("ouvrir_source");
+  var seen={};var btns=rows.filter(function(k){if(seen[k])return false;seen[k]=1;return true;}).map(function(k){
+    var b=BTN[k]||[k,"ghost","dot"];var kind=b[1];
+    /* recommended highlight already pri for reco_btn */
+    return '<button class="btn '+kind+'" data-do="'+k+'">'+svg(b[2])+esc(b[0])+'</button>';
+  }).join("");
+  box.innerHTML=confirm
+    +'<div class="subhead">Faire avancer (statut local)</div>'
+    +'<div class="btnrow">'+btns+'</div>'
+    +'<textarea class="noteinput" id="noteIn" placeholder="Note de décision (optionnel, gardée sur cet appareil)…">'+esc(NOTES[a.id]||"")+'</textarea>'
+    +'<button class="btn ghost block" data-do="close">'+svg("x")+'Fermer</button>';
+  bindPanel(a);
+}
+function bindPanel(a){
+  var sheet=document.getElementById("sheet");
+  sheet.querySelectorAll("[data-do]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();panelDo(a,b.getAttribute("data-do"));};});
+  sheet.querySelectorAll("[data-next]").forEach(function(b){b.onclick=function(ev){ev.stopPropagation();openAction(b.getAttribute("data-next"));};});
+}
+function saveNote(a){var n=document.getElementById("noteIn");if(n){NOTES[a.id]=n.value.trim();lsSet(LS_NOTES,NOTES);}}
+function panelDo(a,kind){
+  if(kind==="close"){closeSheet();return;}
+  if(kind==="copier"){copyText(a.payload);if(effStatut(a)==="a_faire"){setStatut(a.id,"prepare");}logHist(a.id,a.titre,"Texte copié");renderPanelActions(a,"Texte copié — prêt à coller à "+whoNm(a.lane)+".");softRefresh();return;}
+  if(kind==="ouvrir_source"){if(a.source){window.open(a.source,"_blank","noopener");toast("Source ouverte","ext");}else toast("Pas de source liée","alert");return;}
+  if(kind==="prepare_mission_claude"||kind==="prepare_echange_chatgpt"||kind==="deleguer_claude"){saveNote(a);setStatut(a.id,"prepare");copyText(a.payload);logHist(a.id,a.titre,kind==="prepare_echange_chatgpt"?"Échange ChatGPT préparé":"Délégué à Claude (préparé)",NOTES[a.id]);renderPanelActions(a,"Préparé. Le texte est copié — colle-le à "+whoNm(a.lane)+".");softRefresh();return;}
+  if(kind==="voir_etapes"){saveNote(a);setStatut(a.id,"prepare");logHist(a.id,a.titre,"Étapes consultées",NOTES[a.id]);renderPanelActions(a,"À toi de jouer — les étapes sont dans le texte ci-dessus.");softRefresh();return;}
+  if(kind==="transmis_claude"||kind==="transmis_chatgpt"){saveNote(a);setStatut(a.id,"transmis");logHist(a.id,a.titre,"Transmise à "+whoNm(a.lane),NOTES[a.id]);renderPanelActions(a,"Marquée comme transmise à "+whoNm(a.lane)+".");softRefresh();return;}
+  if(kind==="attente_retour"){saveNote(a);setStatut(a.id,"attente");logHist(a.id,a.titre,"En attente de retour",NOTES[a.id]);renderPanelActions(a,"En attente du retour de "+whoNm(a.lane)+".");softRefresh();return;}
+  if(kind==="reporter"){saveNote(a);setStatut(a.id,"reporte");logHist(a.id,a.titre,"Reportée",NOTES[a.id]);renderPanelActions(a,"Reportée — tu la relanceras plus tard.");softRefresh();return;}
+  if(kind==="marquer_bloque"){saveNote(a);setStatut(a.id,"bloque");logHist(a.id,a.titre,"Marquée bloquée",NOTES[a.id]);renderPanelActions(a,"Marquée bloquée.");softRefresh();return;}
+  if(kind==="marquer_traite"){saveNote(a);setStatut(a.id,"traite");logHist(a.id,a.titre,"Marquée traitée",NOTES[a.id]);renderPanelActions(a,"Marquée traitée localement.");softRefresh();return;}
+  if(kind==="decision_locale"){saveNote(a);var n=NOTES[a.id]||"";if(!n){toast("Écris d'abord ta note de décision","alert");var ni=document.getElementById("noteIn");if(ni)ni.focus();return;}logHist(a.id,a.titre,"Décision locale",n);renderPanelActions(a,"Décision enregistrée : « "+n+" »");softRefresh();return;}
+}
+function copyText(t){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast("Texte copié","copy");},function(){fallbackCopy(t);});}
+  else fallbackCopy(t);
+}
+function fallbackCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("Texte copié","copy");}catch(e){toast("Copie impossible — sélectionne le texte","alert");}}
+function softRefresh(){/* refresh background lists without closing panel */rToday();rAcSeg();rDec();}
+function closeSheet(){document.getElementById("scrim").classList.remove("on");document.body.style.overflow="";curAction=null;renderAll();}
+document.getElementById("scrim").onclick=function(e){if(e.target.id==="scrim")closeSheet();};
+
+/* =================== OPEN BINDINGS =================== */
+function bindOpens(scope){(scope||document).querySelectorAll("[data-open]").forEach(function(e){e.onclick=function(ev){ev.stopPropagation();var id=e.getAttribute("data-open");if(id)openAction(id);};});}
+
+/* =================== NAV =================== */
+var NAV=[["today","Aujourd'hui","today"],["action","Actions","bolt"],["dec","Décisions","compass"],["proj","Projets","target"],["ex","Échanges","exchange"]];
+function buildNav(){
+  document.getElementById("tabbar").innerHTML=NAV.map(function(n){
+    return '<a data-v="'+n[0]+'">'+svg(n[2])+esc(n[1])+(n[0]==="action"?'<span class="nb" data-badge style="display:none"></span>':'')+'</a>';
+  }).join("");
+  document.getElementById("railNav").innerHTML=NAV.map(function(n){
+    return '<a data-v="'+n[0]+'">'+svg(n[2])+'<span>'+esc(n[1])+'</span>'+(n[0]==="action"?'<span class="nb" data-badge style="display:none"></span>':'')+'</a>';
+  }).join("");
+  document.querySelectorAll("[data-v]").forEach(function(a){a.onclick=function(){go(a.getAttribute("data-v"));};});
+}
+function go(v){
+  document.querySelectorAll(".view").forEach(function(s){s.classList.remove("on");});
+  var el=document.getElementById("v-"+v);if(el)el.classList.add("on");
+  document.querySelectorAll("[data-v]").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v);});
+  lsSet(LS_VIEW,v);window.scrollTo(0,0);
+}
+
+/* =================== SEARCH / FILTERS =================== */
+document.getElementById("acQ").oninput=function(){acQ=this.value.toLowerCase().trim();rAction();};
+document.getElementById("pQ").oninput=function(){pQ=this.value.toLowerCase().trim();rProj();};
+document.querySelectorAll("#pSeg .s").forEach(function(f){f.onclick=function(){document.querySelectorAll("#pSeg .s").forEach(function(x){x.classList.remove("on");});f.classList.add("on");pF=f.getAttribute("data-f");rProj();};});
+
+/* keyboard */
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){if(document.getElementById("scrim").classList.contains("on"))closeSheet();else closePops();}
+  if(document.getElementById("scrim").classList.contains("on"))return;
+  if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  var i=parseInt(e.key,10);if(i>=1&&i<=NAV.length){go(NAV[i-1][0]);}
+});
+
+/* =================== RENDER ALL =================== */
+function renderAll(){freshness();rToday();rAction();rDec();rProj();rEx();}
+
+/* =================== SEMI-LIVE =================== */
+function loadSnapshot(initial){
+  fetch(SNAP_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    if(j&&j.actions&&j.projects){D=j;renderAll();if(!initial)toast("Donn\u00e9es actualis\u00e9es","refresh");}
+  }).catch(function(){if(!initial)toast("Actualisation impossible \u2014 donn\u00e9es fig\u00e9es","alert");});
+}
+
+/* =================== BOOT =================== */
+buildNav();
+go(lsGet(LS_VIEW,"today"));
+renderAll();
+loadSnapshot(true);
+</script>
+</body></html>
