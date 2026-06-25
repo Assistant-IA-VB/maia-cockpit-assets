@@ -109,6 +109,32 @@ td{padding:9px 6px;border-bottom:1px solid rgba(120,160,230,.07)}tr:last-child t
 </style>
 </head>
 <body>
+<!-- ===== BARRE DE NAVIGATION MAÏA (relie les apps) ===== -->
+<style>
+.maia-nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(8,14,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(120,160,230,.16);font-family:"Segoe UI",system-ui,sans-serif}
+.maia-nav .brand{display:flex;align-items:center;gap:9px;margin-right:12px;text-decoration:none}
+.maia-nav .brand svg{width:26px;height:26px;display:block}
+.maia-nav .brand b{color:#eef3ff;font-weight:600;letter-spacing:.14em;font-size:13px}
+.maia-nav a.lnk{display:flex;align-items:center;gap:7px;text-decoration:none;color:#9fb2da;font-size:13px;padding:7px 13px;border-radius:999px;border:1px solid transparent;transition:.15s}
+.maia-nav a.lnk .d{width:8px;height:8px;border-radius:50%}
+.maia-nav a.lnk:hover{color:#eef3ff;background:rgba(255,255,255,.05)}
+.maia-nav a.lnk[aria-current=true]{color:#eef3ff;background:rgba(255,255,255,.06);border-color:currentColor}
+.maia-nav .sp{margin-left:auto}
+.maia-nav .ret{color:#6a7da9;font-size:12px;text-decoration:none;padding:7px 10px}
+.maia-nav .ret:hover{color:#9fb2da}
+@media(max-width:620px){.maia-nav a.lnk .t{display:none}.maia-nav .brand b{display:none}}
+</style>
+<nav class="maia-nav">
+  <a class="brand" href="https://votrebarman.com/hub" title="MAÏA Hub">
+    <svg viewBox="0 0 32 32"><polygon points="16,4 27,10.5 27,21.5 16,28 5,21.5 5,10.5" fill="none" stroke="#19c2c9" stroke-width="1.3"/><path d="M9 22 L9 12 L16 16 L23 12 L23 22" fill="none" stroke="#eef3ff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="22" x2="16" y2="11.5" stroke="#19c2c9" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="11" r="2" fill="#f4f8ff" stroke="#19c2c9" stroke-width="1"/></svg><b>MAÏA</b></a>
+  <a class="lnk" style="color:#e9c46a" href="https://votrebarman.com/hub"><span class="d" style="background:#e9c46a"></span><span class="t">Hub</span></a>
+  <a class="lnk" style="color:#8b87f2" aria-current="true" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-seo.html"><span class="d" style="background:#8b87f2"></span><span class="t">SEO</span></a>
+  <a class="lnk" style="color:#2ecf8f" href="https://votrebarman.com/maia"><span class="d" style="background:#2ecf8f"></span><span class="t">Finance</span></a>
+  <span class="sp"></span>
+  <a class="ret" href="https://votrebarman.com/hub">↩ Hub</a>
+</nav>
+<!-- ===== FIN BARRE ===== -->
+
 <div class="aurora"></div>
 
 <!-- ===== OPENING SPLASH ===== -->
