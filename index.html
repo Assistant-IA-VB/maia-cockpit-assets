@@ -270,6 +270,9 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
     <div class="sec live"><span class="livedot"></span><span class="t">Fil Maïa</span><span class="ln"></span></div>
     <div class="fil" id="filList"></div>
 
+    <div class="sec"><span class="t">Si tu t'absentes</span><span class="ln"></span></div>
+    <div id="absenceWrap"></div>
+
     <div class="reassure" id="reassure"></div>
   </main>
 
@@ -618,6 +621,18 @@ function qExport(){
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},100);
   toast("File exportée (MAIA_ACTION_QUEUE.json)","doc");
 }
+/* ---------- pont vers la file réelle (écriture permanente, armé côté Make) ---------- */
+var BRIDGE_URL="https://hook.eu1.make.com/g1skwky1jfh0rut2mp73bwidb5gf2bxq";
+var BRIDGE_TK="maia6pont";
+function postBridge(d){
+  try{
+    var i=qFind(d.id), q=i>=0?QUEUE[i]:{};
+    var p=new URLSearchParams({tk:BRIDGE_TK,action_id:d.id,projet:d.projet||d.titre||"",decision:d.court||d.titre||"",
+      statut:q.statut||"",responsable:q.responsable||"",prochaine_etape:q.prochaine_etape||"",
+      kevin_requis:String(!!q.kevin_requis),etat:q.etat||"",safe:"false",ts:new Date().toISOString(),resultat:""}).toString();
+    fetch(BRIDGE_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p}).catch(function(){});
+  }catch(e){}
+}
 
 /* ---------- icons ---------- */
 var I={
@@ -777,6 +792,7 @@ function doAct(id,act){
     if(d.kind==="guide"){qUpsert(d,"bloquee");toast("Voici les étapes — c'est à toi");}
     else if(d.kind==="decide"){qUpsert(d,"en_attente");toast("C'est noté");}
     else{qUpsert(d,"prete");toast("Mission prête — en attente d'exécution","clock");}
+    postBridge(d);
     renderSimple();scrollToCard(id);return;
   }
   if(act==="later"){setSt(id,"later");EXPL[id]=false;OPEN[id]=true;qUpsert(d,"en_attente");var qi=qFind(id);if(qi>=0){QUEUE[qi].statut="Mis de côté";saveQueue();}toast("Mis de côté — je te le represente plus tard","clock");renderSimple();return;}
@@ -844,6 +860,7 @@ function renderSimple(){
   document.getElementById("laterList").innerHTML=reserved.map(decRow).join("");
   /* fil */
   renderFil();
+  renderAbsence();
   /* reassure */
   document.getElementById("reassure").innerHTML = p.length ? "" : (svg("leaf")+" Tu peux fermer, je veille.");
   bindActs(document.getElementById("simple"));
@@ -862,6 +879,18 @@ function dynamicFil(){
     if(s==="done"){out.push({txt:"Tu as réglé : "+(d.court||d.titre)+".",statut:"transmis",quand:"À l'instant"});}
   });
   return out;
+}
+function renderAbsence(){
+  var H=[
+    ["Une semaine","Je veille en continu. J'ex\u00e9cute toute seule les t\u00e2ches s\u00fbres \u2014 brouillons, v\u00e9rifications en lecture seule. Tout ce qui touche tes cl\u00e9s, tes mails, ton t\u00e9l\u00e9phone ou ton argent t'attend : je n'y touche pas. Tu retrouves une liste propre."],
+    ["Un mois","Pareil, sur la dur\u00e9e. Ta liste de d\u00e9cisions s'allonge, mais rien de risqu\u00e9 ne se d\u00e9clenche sans toi. Je te pr\u00e9pare un r\u00e9capitulatif clair pour ton retour."],
+    ["Six mois","M\u00eame longtemps, je ne touche jamais \u00e0 tes acc\u00e8s ni \u00e0 ta production sans toi. Je garde tout en ordre, je signale l'urgent, et rien d'irr\u00e9versible ne se fait en ton absence."]
+  ];
+  document.getElementById("absenceWrap").innerHTML=
+    '<div class="card">'
+    +'<div style="display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--ink2);line-height:1.55;margin-bottom:4px">'+svg("shield")+'<span>Tu peux partir tranquille. Voici exactement ce que je fais \u2014 et ce que je ne fais pas \u2014 pendant ton absence.</span></div>'
+    +H.map(function(h){return '<div class="kv" style="display:block;border-top:1px solid var(--line)"><b style="color:var(--maia);font-size:11px;letter-spacing:.05em;text-transform:uppercase">'+esc(h[0])+'</b><div style="color:var(--ink2);font-size:13.5px;line-height:1.55;margin-top:5px">'+esc(h[1])+'</div></div>';}).join("")
+    +'</div>';
 }
 function renderFil(){
   var items=dynamicFil().concat(D.fil||[]);
