@@ -139,19 +139,21 @@ td{padding:9px 6px;border-bottom:1px solid rgba(120,160,230,.07)}tr:last-child t
 
 <!-- ===== OPENING SPLASH ===== -->
 <div id="splash">
-  <svg class="sp-logo maia" viewBox="0 0 460 150" xmlns="http://www.w3.org/2000/svg" aria-label="MAÏA">
-    <defs>
-      <linearGradient id="inkgrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#9fc0ff"/></linearGradient>
-      <linearGradient id="beamgrad" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5b8def" stop-opacity="0"/><stop offset=".5" stop-color="#e9c46a"/><stop offset="1" stop-color="#37d6c6" stop-opacity="0"/></linearGradient>
-    </defs>
-    <text class="mtext mdraw" x="230" y="98" text-anchor="middle" font-size="86">MAÏA</text>
-    <text class="mtext fillin" x="230" y="98" text-anchor="middle" font-size="86">MAÏA</text>
-    <g class="fillin">
-      <line class="beam" x1="58" y1="74" x2="402" y2="74"/>
-      <circle class="spark sweep" cx="230" cy="74" r="3.5"/>
-      <circle class="node pulse" cx="230" cy="74" r="5.5"/>
-    </g>
-  </svg>
+  <style>@keyframes maiaspin{to{transform:rotate(360deg)}}@keyframes maiapulse{0%,100%{opacity:.45}50%{opacity:.95}}</style>
+<svg class="sp-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-label="MAÏA">
+<defs>
+<radialGradient id="sphalo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#19c2c9" stop-opacity=".5"/><stop offset="100%" stop-color="#19c2c9" stop-opacity="0"/></radialGradient>
+<linearGradient id="spmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#e7eefc"/><stop offset="1" stop-color="#c2d0ee"/></linearGradient>
+</defs>
+<g style="transform-box:fill-box;transform-origin:120px 120px;animation:maiaspin 24s linear infinite"><circle cx="206" cy="120" r="5" fill="#8b87f2"/></g>
+<circle cx="120" cy="103" r="24" fill="url(#sphalo)" style="transform-box:fill-box;transform-origin:center;animation:maiapulse 4.6s ease-in-out infinite"/>
+<polygon points="120,72 162,96 162,144 120,168 78,144 78,96" fill="none" stroke="#19c2c9" stroke-width="2" stroke-linejoin="round"/>
+<line x1="120" y1="150" x2="120" y2="103" stroke="#19c2c9" stroke-width="3" stroke-linecap="round"/>
+<line x1="120" y1="150" x2="120" y2="103" stroke="#f4f8ff" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M96 150 L96 100 L120 116 L144 100 L144 150" fill="none" stroke="url(#spmg)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="120" cy="103" r="4.4" fill="#f4f8ff" stroke="#19c2c9" stroke-width="1.5" style="transform-box:fill-box;transform-origin:center;animation:maiapulse 4.6s ease-in-out infinite"/>
+</svg>
+
   <div class="sp-tag">SEO Cockpit</div>
   <div class="sp-sub">Maïa · données Search Console</div>
 </div>
@@ -303,6 +305,7 @@ document.getElementById('autoBtn').onclick=function(){alert("Auto-refresh : on b
           if(fs.requetes && fs.requetes.length) site.requetes = fs.requetes;
           site.tracked = true; site.pending = false;
           site.tag = "maj " + (feed.updated||"");
+          if(!site.insights || !site.insights.length){var _k=site.kpis||{};site.insights=[["win","<b>"+(_k.clics||0)+" clics</b> &middot; <b>"+(_k.impr||0)+" impressions</b> sur 3 mois (Search Console, rafraîchi chaque semaine)."],["opp","CTR moyen <b>"+(_k.ctr||0)+"%</b> &middot; position moyenne <b>"+(_k.pos||0)+"</b>. Les meilleures requêtes sont dans le tableau ci-dessous."]];}
         }
       });
       var sub = document.querySelector(".subtitle");
@@ -310,6 +313,7 @@ document.getElementById('autoBtn').onclick=function(){alert("Auto-refresh : on b
         sub.innerHTML = '<span class="real">Donnees reelles</span> Google Search Console &mdash; rafraichies automatiquement chaque semaine &middot; derniere maj <b>'+feed.updated+'</b> (fenetre 3 mois).';
       }
       if(typeof render === "function") render();
+      try{var _t=document.querySelectorAll("#tabs .tab");for(var _i=0;_i<_t.length;_i++){var _s=DATA.sites[_i];if(!_s)continue;var _sm=_t[_i].querySelector("small");if(_sm)_sm.textContent=_s.url+(_s.tracked?"":(_s.pending?" · données en cours":" · à connecter"));}}catch(_e){}
     }catch(e){}
   };
   var sc = document.createElement("script");
