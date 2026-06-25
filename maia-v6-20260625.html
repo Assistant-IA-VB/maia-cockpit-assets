@@ -1070,7 +1070,7 @@ try{if(window.speechSynthesis){pickVoice();window.speechSynthesis.onvoiceschange
 
 /* ---------- chat Maïa ---------- */
 var CHAT=[], CHAT_INIT=false;
-var RELAY_URL=""; /* relais isolé (Apps Script) — vide tant que non branché */
+var RELAY_URL="https://script.google.com/macros/s/AKfycbwdw02gBe_-_ErpNY2NGmPZCmBnjHucWNdcRgsVhF7bVOm6V8xn5gm9NgExq_sGjahH/exec"; /* relais Apps Script — branché 25/06 */
 function openChat(){setMode("chat");if(!CHAT_INIT){CHAT_INIT=true;pushMaia("Bonjour Kevin. Je suis l\u00e0. Dis-moi ce que tu veux qu\u2019on regarde, ou pose-moi une question \u2014 je te r\u00e9ponds, et tu peux m\u2019\u00e9couter.");}else{renderChat();}}
 function pushUser(x){CHAT.push({r:"user",t:x});renderChat();}
 function pushMaia(x){CHAT.push({r:"maia",t:"",full:x,stream:true});renderChat();streamLast();}
