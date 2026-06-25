@@ -234,6 +234,11 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
   padding:12px 17px;border-radius:12px;font-size:13.5px;font-weight:500;box-shadow:var(--sh2);opacity:0;transition:.22s;pointer-events:none;z-index:95;display:flex;align-items:center;gap:9px;max-width:90vw}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast .svgi{width:17px;height:17px;color:var(--green)}
+.talk{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:14px 0 2px;padding:13px 16px;border-radius:12px;
+  border:1px solid var(--maia-line);background:var(--maia-soft);color:var(--maia);font-size:14.5px;font-weight:650;font-family:inherit;cursor:pointer;text-decoration:none;transition:.14s}
+.talk:hover{background:rgba(201,182,255,.18);border-color:var(--maia)}
+.talk .svgi{width:17px;height:17px}
+.talk small{display:block;font-weight:500;color:var(--ink3);font-size:11.5px}
 .hidden{display:none!important}
 @media (min-width:760px){.wrap{padding-top:8px}.greet h1{font-size:30px}.mot p{font-size:17px}}
 </style></head>
@@ -251,6 +256,7 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
   <main id="simple">
     <div class="greet"><div class="eyebrow" id="date"></div><h1 id="hello">Bonjour Kevin</h1></div>
     <div id="motWrap"></div>
+    <a class="talk" href="https://claude.ai" target="_blank" rel="noopener" id="talkBtn"></a>
 
     <div class="sec" id="secHero"><span class="t">Ma recommandation</span><span class="ln"></span></div>
     <div id="heroWrap"></div>
@@ -660,7 +666,8 @@ var I={
  sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
  send:'<path d="M21.5 2.5 11 13"/><path d="M21.5 2.5 15 21l-3.8-8.2L3 9z"/>',
  x:'<path d="M18 6 6 18M6 6l12 12"/>',
- dot:'<circle cx="12" cy="12" r="4"/>'
+ dot:'<circle cx="12" cy="12" r="4"/>',
+ chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>'
 };
 function svg(n,c){return '<svg class="svgi'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(I[n]||'')+'</svg>';}
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -837,6 +844,7 @@ function renderSimple(){
   if(!HEROID || st(HEROID)==="pending" || p.length){ if(!HEROID) HEROID=p.length?p[0].id:null; }
   if(p.length===0) HEROID=null;
   renderMot();
+  var tb=document.getElementById("talkBtn"); if(tb&&!tb.innerHTML){tb.innerHTML=svg("chat")+"<span>Parler \u00e0 Ma\u00efa<small>Une question ? \u00c9cris-moi directement.</small></span>";}
   var heroD=HEROID?decById(HEROID):null;
   document.getElementById("heroWrap").innerHTML = heroD ? decisionHtml(heroD,true)
     : '<div class="dcard hero"><div class="heroeye">'+svg("checkc")+'Tout est à jour</div><div class="dttl">Tu es à jour.</div><div class="dwhy">Je m\'occupe du reste en coulisses. Tu peux fermer l\'application.</div></div>';
