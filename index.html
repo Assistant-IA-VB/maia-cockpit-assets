@@ -221,6 +221,13 @@ details.tech[open] summary{color:var(--ink2);margin-bottom:9px}
 .missionbox .mbh{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);padding:11px 13px 0}
 .missionbox pre{margin:6px 0 0;padding:9px 13px 13px;white-space:pre-wrap;word-break:break-word;color:#cdd9ee;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55}
 .statline.ok{color:#86e7bb}.statline.amber{color:#f0c074}.statline.mut{color:var(--ink3)}.statline.ok .dot{background:var(--green)}
+.snote.big{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:11px;padding:12px 13px;color:#dbe3f7;font-size:13.5px;font-weight:500}
+.snote.big .svgi{color:var(--accent2)}.snote.big b{color:#fff;font-weight:700}
+details.optmission{margin-top:14px}
+details.optmission summary{font-size:12.5px;color:var(--ink3);cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:7px}
+details.optmission summary::-webkit-details-marker{display:none}
+details.optmission summary .svgi{width:14px;height:14px}
+details.optmission[open] summary{color:var(--ink2);margin-bottom:6px}
 </style></head>
 <body>
 <div class="app">
@@ -556,9 +563,9 @@ function confirmHtml(d,s){
       +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
   if(s==="transmis"){
-    return '<div class="suite ok"><div class="sline">'+svg("send")+'<div><b>Mission transmise à Claude.</b> Il a la main.</div></div>'
-      +'<div class="snext">'+svg("clock")+'<span>En attente de son retour. Tu peux fermer — plus rien à faire de ton côté pour celle-ci.</span></div>'
-      +'<div class="cfoot"><span class="statline amber"><span class="dot" style="background:var(--amber)"></span>En attente retour Claude</span>'
+    return '<div class="suite ok"><div class="sline">'+svg("checkc")+'<div><b>C\'est entre les mains de Claude.</b></div></div>'
+      +'<div class="snext">'+svg("clock")+'<span>Il s\'en occupe et te montrera le résultat. Tu peux fermer — plus rien à faire de ton côté.</span></div>'
+      +'<div class="cfoot"><span class="statline amber"><span class="dot" style="background:var(--amber)"></span>Claude s\'en occupe</span>'
       +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
   if(d.kind==="guide"){
@@ -582,21 +589,20 @@ function confirmHtml(d,s){
       +'<div class="cfoot"><span class="statline"><span class="dot"></span>Noté</span>'
       +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
   }
-  var hp='<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté. J\'ai préparé la mission pour Claude.</b></div></div>'
-    +'<div class="statebanner"><span class="sb-dot"></span>Préparé — <b>pas encore lancé</b></div>'
+  var hp='<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté.</b> Ta décision est prise.</div></div>'
+    +'<div class="snote big">'+svg("spark")+'<span><b>Tu n\'as rien à copier.</b> Claude a déjà cette mission en mémoire — dis-lui simplement de s\'en occuper.</span></div>'
     +'<div class="clarity">'
     +'<div class="cl"><span>Exécuté maintenant&nbsp;?</span><b class="no">Non</b></div>'
-    +'<div class="cl"><span>Mission préparée&nbsp;?</span><b class="yes">Oui</b></div>'
-    +'<div class="cl"><span>Claude prévenu&nbsp;?</span><b class="soon">Pas encore</b></div>'
-    +'<div class="cl"><span>À toi de jouer&nbsp;?</span><b class="yes">Transmettre la mission à Claude</b></div>'
-    +'<div class="cl"><span>Ensuite</span><b>Claude s\'en occupe et te montre le résultat</b></div></div>'
-    +'<div class="snote strong">'+svg("alert")+'<span>Rien n\'est lancé tant que tu n\'as pas transmis la mission à Claude.</span></div>';
-  if(MISSION_OPEN[d.id]) hp+='<div class="missionbox"><div class="mbh">Mission pour Claude</div><pre>'+esc(d.tech?d.tech.instruction:"")+'</pre></div>';
-  hp+='<div class="acts" style="margin-top:14px">'
-    +'<button class="btn primary" data-act="copier" data-id="'+d.id+'">'+svg("copy")+'Copier la mission pour Claude</button>'
-    +'<button class="btn quiet" data-act="mission" data-id="'+d.id+'">'+svg("eye")+(MISSION_OPEN[d.id]?"Masquer":"Voir la mission")+'</button></div>'
-    +'<div class="cfoot" style="margin-top:12px"><button class="btn ok" data-act="transmis" data-id="'+d.id+'">'+svg("send")+'J\'ai transmis à Claude</button>'
-    +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+    +'<div class="cl"><span>Mission prête&nbsp;?</span><b class="yes">Oui — Claude l\'a déjà</b></div>'
+    +'<div class="cl"><span>Tu dois copier quelque chose&nbsp;?</span><b class="yes">Non</b></div>'
+    +'<div class="cl"><span>Pour la lancer</span><b>Dis à Claude «&nbsp;occupe-toi de ça&nbsp;»</b></div>'
+    +'<div class="cl"><span>Ensuite</span><b>Il fait le travail et te montre le résultat</b></div></div>'
+    +'<div class="snote">'+svg("alert")+'<span>Rien n\'est lancé tant que tu n\'en as pas parlé à Claude.</span></div>'
+    +'<div class="cfoot" style="margin-top:14px"><button class="btn ok" data-act="transmis" data-id="'+d.id+'">'+svg("send")+'J\'en parle à Claude</button>'
+    +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div>'
+    +'<details class="optmission"><summary>'+svg("copy")+'Préférer copier la mission toi-même (optionnel)</summary>'
+    +'<div class="missionbox"><div class="mbh">Mission pour Claude</div><pre>'+esc(d.tech?d.tech.instruction:"")+'</pre></div>'
+    +'<button class="btn quiet block" data-act="copier" data-id="'+d.id+'" style="margin-top:10px">'+svg("copy")+'Copier la mission</button></details></div>';
   return hp;
 }
 
