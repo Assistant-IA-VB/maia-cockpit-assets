@@ -286,5 +286,37 @@ render();
 document.getElementById('connectBtn').onclick=function(){alert("Connecter barmanmariage.com\n\nOption A — connecte le 3e compte Google (celui qui possede barmanmariage.com) dans ce Chrome, comme tu viens de le faire pour Votre Barman.\n\nOption B — depuis ce compte, Search Console > Parametres > Utilisateurs et autorisations > ajoute kevin.votrebarman@gmail.com en lecture.\n\nEnsuite dis-moi : je remonte ses vrais chiffres ici.");};
 document.getElementById('autoBtn').onclick=function(){alert("Auto-refresh : on branche l'API Search Console via un Apps Script qui ecrit un Sheet SEO_DATA chaque jour ; le cockpit lit le Sheet. Dis « go auto-refresh » et je prepare le script. Aucune cle stockee dans la page.");};
 </script>
+
+<!-- ===== Flux dynamique Search Console (auto-refresh hebdomadaire) — ajouté par Maïa ===== -->
+<script>
+(function(){
+  var FEED_URL = "https://script.google.com/macros/s/AKfycbz_XmwewHx7ToBCMcebF8pOipffDWx_6ZZbQgBw6bQTYR2mwr9Tt3ikEP_u5uTop-Hb/exec";
+  function norm(d){ return (d||"").replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/$/,""); }
+  window.maiaSeoData = function(feed){
+    try{
+      if(!feed || !feed.sites || !feed.sites.length) return;
+      feed.sites.forEach(function(fs){
+        var dom = norm(fs.url);
+        var site = DATA.sites.find(function(s){ return norm(s.url)===dom; });
+        if(site){
+          if(fs.kpis) site.kpis = fs.kpis;
+          if(fs.requetes && fs.requetes.length) site.requetes = fs.requetes;
+          site.tracked = true; site.pending = false;
+          site.tag = "maj " + (feed.updated||"");
+        }
+      });
+      var sub = document.querySelector(".subtitle");
+      if(sub && feed.updated){
+        sub.innerHTML = '<span class="real">Donnees reelles</span> Google Search Console &mdash; rafraichies automatiquement chaque semaine &middot; derniere maj <b>'+feed.updated+'</b> (fenetre 3 mois).';
+      }
+      if(typeof render === "function") render();
+    }catch(e){}
+  };
+  var sc = document.createElement("script");
+  sc.src = FEED_URL + "?callback=maiaSeoData&_=" + Date.now();
+  document.body.appendChild(sc);
+})();
+</script>
+
 </body>
 </html>
