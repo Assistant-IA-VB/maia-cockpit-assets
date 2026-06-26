@@ -307,6 +307,9 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
     <div class="sec" id="secWait" style="display:none"><span class="t">Ça demande aussi ton avis</span><span class="ln"></span><span class="c" id="waitN">0</span></div>
     <div id="waitList"></div>
 
+    <div class="sec" id="secAsk" style="display:none"><span class="t">Ce que tu m'as demandé</span><span class="ln"></span><span class="c" id="askN">0</span></div>
+    <div id="askList"></div>
+
     <div class="sec" id="secPrep" style="display:none"><span class="t">Ce que j'ai préparé pour toi</span><span class="ln"></span></div>
     <div id="prepList"></div>
 
@@ -361,6 +364,7 @@ var FALLBACK={"meta": {"version": "V6.0", "build": "2026-06-25", "updated_ts": "
 var SNAP_URL="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-snapshot-v6.json";
 var LIVE_URL="https://script.google.com/macros/s/AKfycbyraUVi69hrRtKovpubwXdZiZzt5pES5ZjSaJfc4KbMEpZ1g1zsk3j1m24ohk-5JYcE/exec?k=maia-cockpit-7";
 var LIVE_OK=false;
+var LIVE_ASKS=[];
 var D=FALLBACK||{decisions:[],managed:[],fil:[],chantiers:[],tech:{}};
 
 /* ---------- storage ---------- */
@@ -649,6 +653,7 @@ function renderSimple(){
   renderAbsence();
   /* reassure */
   document.getElementById("reassure").innerHTML = p.length ? "" : (svg("leaf")+" Tu peux fermer, je veille.");
+  renderAsk();
   bindActs(document.getElementById("simple"));
 }
 
@@ -910,17 +915,29 @@ function loadSnapshot(initial){
 function loadLive(){
   if(!LIVE_URL) return;
   fetch(LIVE_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
-    if(!j||!j.records) return; LIVE_OK=true; var changed=false;
+    if(!j||!j.records) return; LIVE_OK=true; var changed=false; var asks=[];
     j.records.forEach(function(rec){
       var d=rec.data||rec; var id=d.action_id||rec.key; if(!id) return;
       var et=String(d.etat||"").toLowerCase();
       if(et.indexOf("termin")===0){
         if(decById(id)&&st(id)!=="done"){setSt(id,"done");changed=true;}
         (D.chantiers||[]).forEach(function(c){if(c.lien===id&&c.etat!=="stable"){c.etat="stable";changed=true;}});
+      } else if(!decById(id)){
+        asks.push({id:id,projet:d.projet||"",decision:d.decision||d.court||id,statut:d.statut||"",etape:d.prochaine_etape||""});
       }
     });
-    if(changed){if(MODE==="simple")renderSimple();else{var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}}
+    LIVE_ASKS=asks;
+    if(MODE==="simple")renderSimple();else if(changed){var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}
   }).catch(function(){});
+}
+function renderAsk(){
+  var el=document.getElementById("askList"); if(!el) return;
+  var sec=document.getElementById("secAsk"), n=document.getElementById("askN");
+  if(n)n.textContent=LIVE_ASKS.length;
+  if(sec)sec.style.display=LIVE_ASKS.length?"":"none";
+  el.innerHTML=LIVE_ASKS.map(function(a){
+    return '<div class="row calm"><div class="ic maia">'+svg("spark")+'</div><div class="tx"><b>'+esc(a.decision)+'</b><small>'+(a.projet?esc(a.projet)+' \u00b7 ':'')+esc(a.statut||'En file')+(a.etape?' \u2014 '+esc(a.etape):'')+'</small></div></div>';
+  }).join("");
 }
 
 /* ---------- boot ---------- */
