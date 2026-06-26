@@ -1,0 +1,86 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAÏA Cockpit</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cyan:#19c2c9;--sig:#52b6d6}
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{font-family:Jost,system-ui,sans-serif;color:#eef3ff;background:#070b16;overflow:hidden;height:100vh}
+/* APP */
+.app{position:fixed;inset:0;opacity:0;transition:opacity .7s ease;background:radial-gradient(900px 600px at 70% -10%,rgba(25,194,201,.10),transparent 60%),linear-gradient(180deg,#0a1220,#070b16)}
+.app.on{opacity:1}
+.appbar{display:flex;align-items:center;gap:12px;height:60px;padding:0 18px;border-bottom:1px solid rgba(150,180,230,.13);background:#0c1426}
+.appbar .nm{font-weight:500;letter-spacing:.12em}.appbar .nm b{color:var(--sig)}
+.appbody{padding:28px 22px;color:#9fb2da;line-height:1.6;max-width:640px}
+.fav{width:34px;height:34px}
+.fav .favpt{transform-box:fill-box;transform-origin:center;animation:fp 3.8s ease-in-out infinite}
+.fav .favhalo{transform-box:fill-box;transform-origin:center;animation:fp 3.8s ease-in-out infinite}
+.fav .favorbit{transform-box:fill-box;transform-origin:16px 16px;animation:sp 30s linear infinite}
+@keyframes fp{0%,100%{opacity:.55}50%{opacity:1}}@keyframes sp{to{transform:rotate(360deg)}}
+/* INTRO */
+.intro{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:radial-gradient(1200px 800px at 50% 44%,#0c1f2b,#0a1220 46%,#070b16)}
+.holder{position:absolute;left:50%;top:50%;width:min(82vw,460px);aspect-ratio:1;transform:translate(-50%,-50%);transition:transform 1s cubic-bezier(.7,0,.25,1),opacity .8s ease}
+.intro.suck .holder{transform:translate(calc(-50vw + 39px),calc(-50vh + 30px)) scale(.06);opacity:0}
+.intro.suck{background:transparent;transition:background .8s} .intro.gone{opacity:0;pointer-events:none;transition:opacity .4s}
+svg{width:100%;height:100%;overflow:visible}
+.word{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);font-weight:200;font-size:30px;letter-spacing:.32em;opacity:0;animation:fadeW .8s ease forwards 3.8s}
+@keyframes fadeW{to{opacity:.92}}
+/* phase data : lignes convergent (0-1.8) puis nœuds s'effacent */
+.dnode{animation:dOut .6s ease forwards 1.8s}@keyframes dOut{to{opacity:0}}
+/* logo révélé en fondu + glow 1.8-3.0 */
+.logo{opacity:0;animation:logoIn 1.2s ease forwards 1.8s}
+@keyframes logoIn{to{opacity:1}}
+.logo .gl{animation:glowOff 1.2s ease forwards 2.6s}
+@keyframes glowOff{to{filter:none}}
+/* onde 1.8-3.0 */
+.wave{opacity:0;animation:waveGo 1.3s ease forwards 1.8s}
+@keyframes waveGo{0%{opacity:.8;r:10}100%{opacity:0;r:135}}
+/* core 3.2+ : halo, orbite, point, fader */
+.halo{opacity:0;transform-box:fill-box;transform-origin:150px 139px;animation:haloIn .8s ease forwards 3.2s, breathe 4.6s ease-in-out infinite 4.2s}
+@keyframes haloIn{to{opacity:.5}}@keyframes breathe{0%,100%{opacity:.34}50%{opacity:.6}}
+.ringRot{transform-box:fill-box;transform-origin:150px 150px;opacity:0;animation:rIn .8s ease forwards 3.4s, sp 36s linear infinite 3.4s}
+@keyframes rIn{to{opacity:1}}
+.iPoint{transform-box:fill-box;transform-origin:center;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both 3.0s, ptPulse 2.6s ease-in-out infinite 4.0s}
+@keyframes pop{0%{opacity:0;transform:scale(.2)}100%{opacity:1;transform:scale(1)}}@keyframes ptPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+.fader{opacity:0;transform:scaleX(.2);transform-origin:150px 153px;animation:faderIn .6s cubic-bezier(.3,.9,.2,1) forwards 4.0s}
+@keyframes faderIn{to{opacity:1;transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
+</style></head>
+<body>
+<div class="intro" id="intro">
+ <div class="holder">
+  <svg viewBox="0 0 300 300">
+   <defs>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="var(--cyan)" stop-opacity=".8"/><stop offset="100%" stop-color="var(--cyan)" stop-opacity="0"/></radialGradient>
+    <linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#e7eefc"/><stop offset="1" stop-color="#c2d0ee"/></linearGradient>
+    <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   </defs>
+   <g id="dataG"></g>
+   <circle class="halo" cx="150" cy="139" r="58" fill="url(#halo)"/>
+   <g class="ringRot"><circle cx="150" cy="150" r="104" fill="none" stroke="rgba(150,185,235,.16)" stroke-width="1"/><g><circle cx="254" cy="150" r="5" fill="var(--sig)"/></g></g>
+   <g class="logo"><g class="gl" filter="url(#gl)">
+     <polygon points="115,130 150,110 185,130 185,170 150,190 115,170" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linejoin="round"/>
+     <line x1="150" y1="170" x2="150" y2="124" stroke="var(--cyan)" stroke-width="2.4" stroke-linecap="round"/>
+     <line x1="150" y1="170" x2="150" y2="124" stroke="#f4f8ff" stroke-width="1.1" stroke-linecap="round"/>
+     <path d="M130 170 L130 130 L150 142 L170 130 L170 170" fill="none" stroke="url(#mg)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+   </g></g>
+   <circle class="wave" cx="150" cy="150" r="10" fill="none" stroke="var(--cyan)" stroke-width="2"/>
+   <g class="fader"><line x1="141" y1="153" x2="159" y2="153" stroke="var(--cyan)" stroke-width="1.4" stroke-linecap="round"/><circle cx="150" cy="153" r="1.8" fill="#f4f8ff"/></g>
+   <circle class="iPoint" cx="150" cy="124" r="3.6" fill="#f4f8ff" stroke="var(--cyan)" stroke-width="1.3"/>
+  </svg>
+ </div>
+ <div class="word">MAÏA</div>
+</div>
+<script>
+ var dg=document.getElementById('dataG'),h='';
+ for(var i=0;i<14;i++){var x=40+((i*73)%220),y=40+((i*131)%220);
+   h+='<line x1="'+x+'" y1="'+y+'" x2="'+x+'" y2="'+y+'" stroke="var(--cyan)" stroke-opacity=".3" stroke-width=".8"><animate attributeName="x2" values="'+x+';150" dur=".9s" begin="'+(0.04*i)+'s" fill="freeze"/><animate attributeName="y2" values="'+y+';150" dur=".9s" begin="'+(0.04*i)+'s" fill="freeze"/></line>';
+   h+='<circle class="dnode" cx="'+x+'" cy="'+y+'" r="1.5" fill="#9fb6d8"/>';
+ }
+ dg.innerHTML=h;
+ var intro=document.getElementById('intro'),app=document.getElementById('app')||{classList:{add:function(){}}};
+ setTimeout(function(){intro.classList.add('suck')},5400);
+ setTimeout(function(){app.classList.add('on')},6000);
+ setTimeout(function(){intro.classList.add('gone')},6500);
+</script>
+</body></html>

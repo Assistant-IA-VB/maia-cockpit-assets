@@ -39,8 +39,8 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
 .wrap{width:100%;max-width:640px;margin:0 auto;padding:0 18px 120px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:11px;padding:18px 2px 8px;position:sticky;top:0;z-index:30;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
 .wm{display:flex;align-items:center;gap:10px}
-.wm .mk{width:30px;height:30px;display:block}
-.wm .nm{font-size:19px;font-weight:800;letter-spacing:.2em;color:var(--ink)}
+.wm .mk{width:44px;height:44px;display:block}
+.wm .nm{font-size:20px;font-weight:800;letter-spacing:.2em;color:var(--ink)}
 .modetog{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink3);background:var(--surf2);border:1px solid var(--line2);border-radius:999px;padding:8px 13px;cursor:pointer;font-family:inherit;transition:.14s}
 .modetog:hover{color:var(--ink);border-color:var(--line3);background:var(--surf3)}
 .modetog .svgi{width:15px;height:15px}
@@ -274,8 +274,15 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
  .topacts .modetog{padding:12px 20px;font-size:14px;box-shadow:0 10px 26px -10px rgba(0,0,0,.75)}
  .topbar{padding-top:16px}
 }
+
+/* --- écran de lancement (intro Onde) --- */
+#splash{position:fixed;inset:0;z-index:300;background:#070b16;animation:splashOut .8s ease 5.7s forwards}
+#splash iframe{width:100%;height:100%;border:0;display:block}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+#splash.gone{display:none}
 </style></head>
 <body>
+<div id="splash" aria-hidden="true"><iframe src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-intro-cockpit.html" title="MAÏA" scrolling="no"></iframe></div>
 <div class="wrap">
   <div class="topbar">
     <div class="wm">
@@ -921,5 +928,6 @@ setMode("simple");
 loadSnapshot(true);
 loadLive();
 setInterval(loadLive,60000);
+setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classList.add("gone");},6700);
 </script>
 </body></html>
