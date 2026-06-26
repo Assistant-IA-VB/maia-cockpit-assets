@@ -1119,29 +1119,40 @@ function maiaReply(userText,cb){
   }
 }
 function sendChat(){
+  if(typeof RECING!=="undefined"&&RECING){stopVoice();}
   var inp=document.getElementById("chatInput"); var x=(inp.value||"").trim(); if(!x)return;
   inp.value=""; inp.style.height="auto";
   pushUser(x);
   CHAT.push({r:"maia",t:"\u2026",full:"\u2026",stream:false,pending:true}); renderChat();
   setTimeout(function(){ maiaReply(x,function(reply){ CHAT.pop(); pushMaia(reply); }); },350);
 }
-/* ---------- voix : dictée (parler à Maïa) ---------- */
-var REC=null, RECING=false;
+/* ---------- voix : dictée (parler à Maïa) — écoute continue, PAS d'envoi auto ---------- */
+var REC=null, RECING=false, VOICE_TXT="";
 function voiceSupported(){return ("webkitSpeechRecognition" in window)||("SpeechRecognition" in window);}
-function updateMic(){var b=document.getElementById("chatMic");if(!b)return;b.classList.toggle("listening",RECING);b.innerHTML=svg("mic");var inp=document.getElementById("chatInput");if(inp)inp.placeholder=RECING?"Je t'écoute… parle":"Écris ou parle à Maïa…";}
+function updateMic(){var b=document.getElementById("chatMic");if(!b)return;b.classList.toggle("listening",RECING);b.innerHTML=svg(RECING?"check":"mic");var inp=document.getElementById("chatInput");if(inp)inp.placeholder=RECING?"Je t'écoute… (touche \u2713 pour arrêter)":"Écris ou parle à Maïa…";}
 function startVoice(){
-  if(!voiceSupported()){toast("La dictée vocale n'est pas dispo ici — touche le champ et utilise le micro de ton clavier.","mic");return;}
+  if(!voiceSupported()){toast("La dictée vocale n'est pas dispo ici — touche le champ et utilise le micro du clavier.","mic");return;}
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   try{REC=new SR();}catch(e){toast("Micro indisponible ici.","mic");return;}
-  REC.lang="fr-FR"; REC.interimResults=true; REC.continuous=false; REC.maxAlternatives=1;
-  var inp=document.getElementById("chatInput"); var base=(inp.value||"").trim();
+  REC.lang="fr-FR"; REC.interimResults=true; REC.continuous=true; REC.maxAlternatives=1;
+  var inp=document.getElementById("chatInput");
+  VOICE_TXT=(inp.value||"");
   RECING=true; updateMic();
-  REC.onresult=function(e){var t="";for(var i=0;i<e.results.length;i++){t+=e.results[i][0].transcript;} inp.value=(base?base+" ":"")+t; inp.style.height="auto"; inp.style.height=Math.min(120,inp.scrollHeight)+"px";};
-  REC.onerror=function(ev){RECING=false;updateMic(); if(ev&&ev.error==="not-allowed")toast("Micro refusé — autorise le micro pour parler.","mic");};
-  REC.onend=function(){RECING=false;updateMic(); var v=(document.getElementById("chatInput").value||"").trim(); if(v) sendChat();};
+  REC.onresult=function(e){
+    var interim="";
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      var r=e.results[i];
+      if(r.isFinal){ VOICE_TXT=(VOICE_TXT?VOICE_TXT+" ":"")+((r[0].transcript)||"").trim(); }
+      else { interim+=r[0].transcript; }
+    }
+    inp.value=(VOICE_TXT+(interim?" "+interim:"")).replace(/\s+/g," ").trim();
+    inp.style.height="auto"; inp.style.height=Math.min(120,inp.scrollHeight)+"px";
+  };
+  REC.onerror=function(ev){ if(ev&&ev.error==="not-allowed"){RECING=false;updateMic();toast("Micro refusé — autorise le micro pour parler.","mic");} };
+  REC.onend=function(){ if(RECING){ try{REC.start();}catch(e){RECING=false;updateMic();} } else { updateMic(); } };
   try{REC.start();}catch(e){RECING=false;updateMic();}
 }
-function stopVoice(){if(REC){try{REC.stop();}catch(e){}}}
+function stopVoice(){ RECING=false; updateMic(); if(REC){try{REC.stop();}catch(e){}} }
 function toggleVoice(){ if(RECING)stopVoice(); else startVoice(); }
 (function(){
   var tb=document.getElementById("talkBtn"); if(tb)tb.onclick=openChat;
