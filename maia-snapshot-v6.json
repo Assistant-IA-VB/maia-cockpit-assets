@@ -2,37 +2,11 @@
   "meta": {
     "version": "V6.0",
     "build": "2026-06-25",
-    "updated_ts": "2026-06-25T12:00:00+02:00",
+    "updated_ts": "2026-06-26T12:30:00+02:00",
     "fresh_warn_h": 96,
     "fresh_stale_h": 264
   },
   "decisions": [
-    {
-      "id": "STD",
-      "urg": "urgent",
-      "kind": "prepare",
-      "sensible": true,
-      "projet": "Standard téléphonique",
-      "titre": "Ton accueil téléphonique part dans tous les sens",
-      "court": "remettre ton accueil téléphonique au carré",
-      "reco": "J'ai déjà préparé une version sérieuse et carrée de ton agent. Dis oui et je la mets au point pour que tu la valides avant toute mise en ligne.",
-      "why": "En ce moment, l'agent qui répond au téléphone digresse et donne une mauvaise image à tes clients.",
-      "risque": "Chaque appel entrant donne une image peu professionnelle et peut faire fuir un client.",
-      "explain": {
-        "pourquoi": "L'agent raconte des choses hors sujet pendant les appels (anecdotes, détails personnels). Ça fait fuir les clients et rate des prises de contact.",
-        "sinon": "Chaque appel entrant continue de donner une image peu professionnelle.",
-        "maiafait": "Je prépare un nouvel agent sobre, carré, professionnel, sur une copie de test. Je ne touche jamais à ta ligne téléphonique réelle.",
-        "validation": "Avant de remplacer l'agent en ligne, je te montre le résultat et j'attends ton feu vert."
-      },
-      "tech": {
-        "titre": "Standard téléphonique IA — correction anti-digression",
-        "responsable": "Assistant technique, sur une copie de test",
-        "interdits": "Ne pas toucher Retell / Twilio / Make en production. Pas de test sur le numéro public.",
-        "instruction": "MISSION — Standard téléphonique IA : correction anti-digression.\nOBJECTIF : prompt agent SOBRE, court, orienté qualification, sans digression ni anecdote (pas de nez, pas de bavardage, pas d'histoire personnelle).\nCADRE : clone/staging uniquement. Interdit : Retell/Twilio/Make prod, numéro public.\nLIVRABLES : 1) prompt corrigé ; 2) checklist sécurité ; 3) plan de test hors client.",
-        "source": "https://drive.google.com/drive/folders/1lC-ApDaqTF07yODKZdCrhf8wTdbJfwIA",
-        "etat_reel": "Correctif déjà préparé (prompt sobre + plan de test). Pas encore mis en ligne — attend ton feu vert."
-      }
-    },
     {
       "id": "MIG",
       "urg": "important",
@@ -159,11 +133,10 @@
   ],
   "fil": [
     {
-      "id": "f1",
-      "txt": "J'ai préparé la correction de ton standard téléphonique : un agent sobre et carré, sans digression.",
-      "statut": "prepare",
-      "quand": "Aujourd'hui",
-      "lien": "STD"
+      "id": "fstd_done",
+      "txt": "Ton standard téléphonique est remis au carré et EN LIGNE : c'est la bonne version, sobre, qui répond à tes clients.",
+      "statut": "transmis",
+      "quand": "Aujourd'hui"
     },
     {
       "id": "f2",
@@ -207,10 +180,10 @@
   "chantiers": [
     {
       "titre": "Standard téléphonique",
-      "etat": "prepare",
-      "detail": "Correctif anti-digression préparé (agent sobre). Pas encore en ligne — attend le feu vert de Kevin.",
+      "etat": "stable",
+      "detail": "Réparé et EN LIGNE le 26/06 : ligne clients repointée sur la bonne version (anti-digression).",
       "responsable": "Maïa (copie de test)",
-      "kevin": true,
+      "kevin": false,
       "lien": "STD"
     },
     {
@@ -270,15 +243,43 @@
   "tech": {
     "note": "Cet espace est réservé à l'assistant technique. Tu n'as pas besoin d'y venir : tout ce qui compte pour toi est sur l'écran d'accueil.",
     "hermes": [
-      { "k": "Transport de fichiers entre outils", "v": "OK", "ok": true },
-      { "k": "Lecture des documents partagés", "v": "OK", "ok": true },
-      { "k": "Échange de décisions (mode validé)", "v": "OK", "ok": true },
-      { "k": "Écriture directe par l'outil externe", "v": "Bloqué (limite outil)", "ok": false }
+      {
+        "k": "Transport de fichiers entre outils",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Lecture des documents partagés",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Échange de décisions (mode validé)",
+        "v": "OK",
+        "ok": true
+      },
+      {
+        "k": "Écriture directe par l'outil externe",
+        "v": "Bloqué (limite outil)",
+        "ok": false
+      }
     ],
     "exchanges": [
-      { "sujet": "Forme d'écriture qui passe la sécurité", "etat": "Réglé", "detail": "Mode validé : l'outil édite un document pré-créé." },
-      { "sujet": "Écriture/rangement direct", "etat": "Réglé", "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe." },
-      { "sujet": "Prochaine étape de transport", "etat": "Réglé", "detail": "Passage au connecteur de fichiers." }
+      {
+        "sujet": "Forme d'écriture qui passe la sécurité",
+        "etat": "Réglé",
+        "detail": "Mode validé : l'outil édite un document pré-créé."
+      },
+      {
+        "sujet": "Écriture/rangement direct",
+        "etat": "Réglé",
+        "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe."
+      },
+      {
+        "sujet": "Prochaine étape de transport",
+        "etat": "Réglé",
+        "detail": "Passage au connecteur de fichiers."
+      }
     ],
     "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).",
     "note_donnees": "Données au dernier état réel connu (04–25 juin). Mise à jour : republier le fichier de données.",
