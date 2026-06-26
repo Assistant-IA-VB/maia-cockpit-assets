@@ -2,7 +2,7 @@
   "meta": {
     "version": "V6.0",
     "build": "2026-06-25",
-    "updated_ts": "2026-06-26T12:30:00+02:00",
+    "updated_ts": "2026-06-26T13:10:00+02:00",
     "fresh_warn_h": 96,
     "fresh_stale_h": 264
   },
@@ -284,5 +284,16 @@
     "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).",
     "note_donnees": "Données au dernier état réel connu (04–25 juin). Mise à jour : republier le fichier de données.",
     "queue_note": "Ta file d'actions est enregistrée sur cet appareil (navigateur). Pour la rendre exploitable par Claude sans copier-coller, voir la proposition d'architecture livrée avec cette version."
+  },
+  "couts": {
+    "titre": "Je surveille tes crédits Make",
+    "resume": "7 794 crédits restants sur 30 000 ce mois (~74 % utilisés). Remise à zéro le 28/06. Pas de dérive.",
+    "restants": 7794,
+    "total": 30000,
+    "pct": 74,
+    "reset": "28/06",
+    "moyenne_jour": 19,
+    "detail": "Plan Core (30 000 crédits/mois). Usage moyen ~19/jour. Le gros poste historique est coupé. Estimation en crédits Make — le montant exact en euros n'est pas lisible via l'API.",
+    "maj": "26/06 (relevé)"
   }
 }
