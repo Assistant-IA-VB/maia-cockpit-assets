@@ -460,6 +460,7 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
     <div class="sec"><span class="t">Sorties autour de moi</span><span class="ln"></span></div>
     <div class="acard">
       <div class="evmaj" id="evMaj"></div>
+      <div class="chips2" id="evFilters" style="margin-bottom:12px"></div>
       <div id="evList"></div>
       <button class="evmore" id="evMore" style="display:none"></button>
       <div class="evsec" id="evSec">
@@ -1158,7 +1159,29 @@ setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classLis
       +'<div class="sa"><a class="iconbtn cy" href="'+esc(v.u)+'" target="_blank" rel="noopener">'+svg("compass")+'Programme</a>'
       +'<a class="iconbtn" href="'+gmap(v.la,v.lo)+'" target="_blank" rel="noopener">'+svg("pin")+'Y aller</a></div></div>';}).join("");}
   function bindSorties(){var ag=document.getElementById("sAgenda"); if(ag){ag.innerHTML=svg("cal")+"Agenda officiel d’Orléans";ag.href="https://www.tourisme-orleansmetropole.com/agenda";}}
-  var EV_DATA=[], EV_SHOWN=6;
+  var EV_DATA=[], EV_ALL=[], EV_SHOWN=6;
+  function evtxt(e){return ((e.title_fr||'')+' '+(e.description_fr||'')+' '+(e.keywords_fr||'')).toLowerCase();}
+  function evcat(e){return (e.categorie_principale||'');}
+  var INTERESTS=[
+    {k:"kayak",label:"Kayak",test:function(e){return evcat(e).indexOf("Sport")>=0||/kayak|cano|aviron|paddle|rivière|loire à v/.test(evtxt(e));}},
+    {k:"musique",label:"Musique",test:function(e){return evcat(e).indexOf("Musique")>=0;}},
+    {k:"concerts",label:"Concerts",test:function(e){return evcat(e).indexOf("Musique")>=0||/concert/.test(evtxt(e));}},
+    {k:"ateliers",label:"Ateliers créatifs",test:function(e){return evcat(e).indexOf("Stage - atelier")>=0;}},
+    {k:"debats",label:"Débats",test:function(e){return evcat(e).indexOf("Conférence")>=0||/débat|rencontre|conférence/.test(evtxt(e));}},
+    {k:"animations",label:"Animations",test:function(e){return evcat(e).indexOf("Spectacle")>=0||evcat(e).indexOf("Fête")>=0||/animation|insolite|original/.test(evtxt(e));}}
+  ];
+  var SEL={}; INTERESTS.forEach(function(i){SEL[i.k]=true;});
+  function renderFilters(){
+    var el=document.getElementById("evFilters"); if(!el)return;
+    el.innerHTML=INTERESTS.map(function(i){return '<button class="chip2'+(SEL[i.k]?' on':'')+'" data-int="'+i.k+'">'+esc(i.label)+'</button>';}).join("");
+    el.querySelectorAll("[data-int]").forEach(function(b){b.onclick=function(){var k=b.getAttribute("data-int");SEL[k]=!SEL[k];b.classList.toggle("on",SEL[k]);applyFilter();};});
+  }
+  function applyFilter(){
+    var anyOn=INTERESTS.some(function(i){return SEL[i.k];});
+    EV_DATA=anyOn?EV_ALL.filter(function(e){return INTERESTS.some(function(i){return SEL[i.k]&&i.test(e);});}):EV_ALL.slice();
+    EV_SHOWN=6; renderEvList();
+    var m=document.getElementById("evMaj"); if(m)m.innerHTML=svg("clock")+(EV_DATA.length?(EV_DATA.length+" événements pour toi · mis à jour à l’instant"):"Rien dans tes filtres pour l’instant — touche une autre envie.");
+  }
   function gcal(ev){
     function z(n){return ('0'+n).slice(-2);}
     function fmt(iso){var d=new Date(iso);return ''+d.getUTCFullYear()+z(d.getUTCMonth()+1)+z(d.getUTCDate())+'T'+z(d.getUTCHours())+z(d.getUTCMinutes())+'00Z';}
@@ -1187,11 +1210,10 @@ setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classLis
   }
   function loadEvents(){
     var maj=document.getElementById("evMaj"); if(maj)maj.innerHTML=svg("clock")+"Chargement des prochains événements…";
-    var url="https://data.orleans-metropole.fr/api/explore/v2.1/catalog/datasets/agenda-orleans-metropole/records?where=firstdate_begin%3E%3Dnow()&order_by=firstdate_begin&limit=30&select=title_fr,description_fr,daterange_fr,firstdate_begin,firstdate_end,location_name,location_address,location_city,location_coordinates,categorie_principale,canonicalurl,updatedat";
+    var url="https://data.orleans-metropole.fr/api/explore/v2.1/catalog/datasets/agenda-orleans-metropole/records?where=firstdate_begin%3E%3Dnow()&order_by=firstdate_begin&limit=80&select=title_fr,description_fr,keywords_fr,daterange_fr,firstdate_begin,firstdate_end,location_name,location_address,location_city,location_coordinates,categorie_principale,canonicalurl,updatedat";
     fetch(url).then(function(r){return r.json();}).then(function(j){
-      EV_DATA=(j.results||[]).filter(function(e){return e.title_fr && !/^\s*\[ANNUL/i.test(e.title_fr);});
-      EV_SHOWN=6; renderEvList();
-      var m=document.getElementById("evMaj"); if(m)m.innerHTML=svg("clock")+(EV_DATA.length?(EV_DATA.length+" prochains événements · mis à jour à l’instant"):"Aucun événement à venir trouvé");
+      EV_ALL=(j.results||[]).filter(function(e){return e.title_fr && !/^\s*\[ANNUL/i.test(e.title_fr);});
+      applyFilter();
     }).catch(function(){var m=document.getElementById("evMaj"); if(m)m.innerHTML=svg("alert")+"Événements indisponibles pour le moment.";});
   }
   function bindEvents(){
@@ -1221,7 +1243,7 @@ setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classLis
 
   function renderAutour(){
     var saf=document.getElementById("kSafety"); if(saf)saf.innerHTML=svg("shield")+"<span><b>Sécurité d’abord</b> : gilet, vérifie la météo et le niveau d’eau (Vigicrues), préviens un proche, évite seuils et barrages.</span>";
-    loadKLive(); renderSpots(); renderFav(); loadEvents(); renderVenues(); bindSorties(); bindEvents(); buildVoy();
+    loadKLive(); renderSpots(); renderFav(); renderFilters(); loadEvents(); renderVenues(); bindSorties(); bindEvents(); buildVoy();
   }
 
   var AUTOUR_INIT=false;
