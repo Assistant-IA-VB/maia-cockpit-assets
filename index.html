@@ -979,7 +979,7 @@ document.getElementById("modeBtn").onclick=function(){setMode(MODE==="advanced"?
 /* ---------- voix (lecture audio, provisoire) ---------- */
 var MAIA_VOICE=null;
 function pickVoice(){try{var ss=window.speechSynthesis;if(!ss)return;var vs=ss.getVoices();if(!vs.length)return;var fr=vs.filter(function(v){return /fr/i.test(v.lang);});var pref=["Audrey","Amelie","Am\u00e9lie","Virginie","Marie","Thomas","Google fran"];for(var i=0;i<pref.length;i++){var mm=fr.filter(function(v){return v.name.indexOf(pref[i])>=0;})[0];if(mm){MAIA_VOICE=mm;break;}}if(!MAIA_VOICE&&fr.length)MAIA_VOICE=fr[0];}catch(e){}}
-function speak(txt){try{var ss=window.speechSynthesis;if(!ss){toast("Lecture audio non dispo ici.","alert");return;}ss.cancel();var u=new SpeechSynthesisUtterance(txt);u.lang="fr-FR";u.rate=.98;u.pitch=1.04;if(MAIA_VOICE)u.voice=MAIA_VOICE;ss.speak(u);}catch(e){toast("Lecture audio non dispo ici.","alert");}}
+function speak(txt){try{var ss=window.speechSynthesis;if(!ss){toast("Lecture audio non dispo ici.","alert");return;}var go=function(){var u=new SpeechSynthesisUtterance(txt);u.lang="fr-FR";u.rate=.98;u.pitch=1.04;if(MAIA_VOICE)u.voice=MAIA_VOICE;u.onerror=function(){toast("Son coupé ? Vérifie le bouton silence et le volume.","alert");};ss.speak(u);try{ss.resume();}catch(e){}};if(ss.speaking||ss.pending){ss.cancel();setTimeout(go,90);}else{go();}}catch(e){toast("Lecture audio non dispo ici.","alert");}}
 try{if(window.speechSynthesis){pickVoice();window.speechSynthesis.onvoiceschanged=pickVoice;}}catch(e){}
 
 /* ---------- chat Maïa ---------- */
@@ -1032,7 +1032,7 @@ var REC=null, RECING=false, VOICE_TXT="";
 function voiceSupported(){return ("webkitSpeechRecognition" in window)||("SpeechRecognition" in window);}
 function updateMic(){var b=document.getElementById("chatMic");if(!b)return;b.classList.toggle("listening",RECING);b.innerHTML=svg(RECING?"check":"mic");var inp=document.getElementById("chatInput");if(inp)inp.placeholder=RECING?"Je t'écoute… (touche \u2713 pour arrêter)":"Écris ou parle à Maïa…";}
 function startVoice(){
-  if(!voiceSupported()){toast("La dictée vocale n'est pas dispo ici — touche le champ et utilise le micro du clavier.","mic");return;}
+  if(!voiceSupported()){var _inp=document.getElementById("chatInput");if(_inp){try{_inp.focus();}catch(e){}} toast("Sur iPhone : parle avec le micro du clavier (à côté de la barre d'espace). Je t'ai ouvert le clavier.","mic");return;}
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   try{REC=new SR();}catch(e){toast("Micro indisponible ici.","mic");return;}
   REC.lang="fr-FR"; REC.interimResults=true; REC.continuous=true; REC.maxAlternatives=1;
