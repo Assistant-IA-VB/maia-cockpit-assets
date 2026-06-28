@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<script>(function(){try{if(localStorage.getItem("maia_theme")==="light"){document.documentElement.classList.add("light");}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAÏA">
+<title>MAÏA</title>
+<link rel="icon" type="image/svg+xml" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-appicon-180.png">
+<link rel="manifest" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-manifest.json">
+<link rel="canonical" href="https://assistant-ia-vb.github.io/maia-cockpit-assets/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b0e;--bg1:#0c0e12;--surf:#13151b;--surf2:#181b22;--surf3:#1e222b;
+  --line:#23262f;--line2:#2d313c;--line3:#383d49;
+  --ink:#f5f7fa;--ink2:#b6bfcd;--ink3:#838d9d;--ink4:#5a6273;
+  --accent:#6d8bff;--accent2:#9db0ff;--accent-soft:rgba(109,139,255,.14);--accent-line:rgba(109,139,255,.42);
+  --maia:#c9b6ff;--maia-soft:rgba(201,182,255,.12);--maia-line:rgba(201,182,255,.4);
+  --green:#37cd8f;--green-soft:rgba(55,205,143,.13);--green-line:rgba(55,205,143,.4);
+  --amber:#e8ad44;--amber-soft:rgba(232,173,68,.13);--amber-line:rgba(232,173,68,.4);
+  --red:#ef5d6b;--red-soft:rgba(239,93,107,.13);--red-line:rgba(239,93,107,.4);
+  --rad:14px;--rad-sm:10px;--rad-lg:22px;
+  --sh:0 1px 2px rgba(0,0,0,.4);--sh2:0 22px 60px -28px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(1100px 560px at 84% -14%,#12161f 0,transparent 60%),radial-gradient(820px 480px at -10% 0,#0e131c 0,transparent 55%),var(--bg);
+  color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#20242e;border-radius:8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+.svgi{display:inline-block;vertical-align:middle;width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:0 18px 120px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:11px;padding:18px 2px 8px;position:sticky;top:0;z-index:30;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
+.wm{display:flex;align-items:center;gap:10px}
+.wm .mk{width:44px;height:44px;display:block}
+.wm .nm{font-size:20px;font-weight:800;letter-spacing:.2em;color:var(--ink)}
+.modetog{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink3);background:var(--surf2);border:1px solid var(--line2);border-radius:999px;padding:8px 13px;cursor:pointer;font-family:inherit;transition:.14s}
+.modetog:hover{color:var(--ink);border-color:var(--line3);background:var(--surf3)}
+.modetog .svgi{width:15px;height:15px}
+
+/* ===== SIMPLE ===== */
+.greet{margin:16px 2px 2px}
+.greet .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2)}
+.greet h1{font-size:27px;font-weight:800;margin-top:8px;letter-spacing:-.03em}
+
+/* mot de Maïa — editorial */
+.mot{position:relative;margin:18px 0 6px;padding:20px 20px 18px 22px;border:1px solid var(--line2);border-radius:var(--rad-lg);
+  background:linear-gradient(157deg,#161a24 0,#111319 66%);box-shadow:var(--sh2);overflow:hidden}
+.mot:before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--accent),var(--maia))}
+.mot:after{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(closest-side,rgba(109,139,255,.16),transparent);pointer-events:none}
+.mot .ml{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--maia);display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.mot .ml .svgi{width:15px;height:15px}
+.mot p{margin:0;font-size:16.5px;line-height:1.62;color:#e7ecf6;font-weight:420}
+.mot p strong{color:#fff;font-weight:650}
+.mot .sign{margin-top:13px;font-family:"Fraunces",Georgia,serif;font-size:16px;font-style:italic;color:var(--maia);font-weight:500;letter-spacing:.01em}
+
+/* section label */
+.sec{display:flex;align-items:center;gap:11px;margin:28px 2px 13px}
+.sec .t{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.sec .ln{flex:1;height:1px;background:var(--line)}
+.sec .c{font-size:11px;font-weight:700;color:var(--ink2);background:var(--surf2);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.sec.live .t{color:var(--maia)}
+.livedot{width:8px;height:8px;border-radius:50%;background:var(--maia);position:relative}
+.livedot:before{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--maia);opacity:.35;animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.7);opacity:.5}70%{transform:scale(1.9);opacity:0}100%{opacity:0}}
+
+/* urgency pill */
+.urg{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.urg .dot{width:8px;height:8px;border-radius:50%}
+.urg-urgent{color:#ff97a0}.urg-urgent .dot{background:var(--red);box-shadow:0 0 0 4px var(--red-soft)}
+.urg-important{color:#f0c074}.urg-important .dot{background:var(--amber);box-shadow:0 0 0 4px var(--amber-soft)}
+.urg-tranquille{color:#86e7bb}.urg-tranquille .dot{background:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+
+/* decision card */
+.dcard{background:var(--surf);border:1px solid var(--line);border-radius:var(--rad);padding:18px;margin-bottom:13px;box-shadow:var(--sh)}
+.dcard.hero{border-color:var(--line2);border-radius:var(--rad-lg);padding:21px;background:linear-gradient(155deg,#171c2b 0,#12141b 64%);box-shadow:var(--sh2);position:relative;overflow:hidden}
+.dcard.hero:before{content:"";position:absolute;right:-70px;top:-80px;width:230px;height:230px;border-radius:50%;background:radial-gradient(closest-side,rgba(109,139,255,.18),transparent);pointer-events:none}
+.heroeye{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent2);margin-bottom:13px}
+.heroeye .svgi{width:15px;height:15px}
+.dttl{font-size:18px;font-weight:740;line-height:1.32;letter-spacing:-.02em}
+.dcard.hero .dttl{font-size:22px;letter-spacing:-.03em}
+.dtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+.dwhy{font-size:14.5px;color:var(--ink2);line-height:1.6;margin:10px 0 0}
+.dreco{display:flex;gap:9px;align-items:flex-start;margin-top:14px;font-size:14.5px;color:#dde4f6;background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;padding:13px 14px;line-height:1.5}
+.dreco .svgi{width:17px;height:17px;color:var(--accent2);margin-top:1px}
+
+/* buttons */
+.acts{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink);
+  border-radius:12px;padding:13px 17px;font-size:15px;font-weight:650;cursor:pointer;transition:transform .07s,background .14s,border-color .14s;font-family:inherit}
+.btn:hover{border-color:var(--line3);background:var(--surf3)}.btn:active{transform:translateY(1px)}
+.btn .svgi{width:18px;height:18px}
+.btn.primary{flex:1 1 auto;min-width:150px;background:linear-gradient(180deg,#7a92ff,#5b78f4);border-color:#7e97ff;color:#fff;
+  box-shadow:0 12px 28px -14px rgba(109,139,255,.95),inset 0 1px 0 rgba(255,255,255,.18);font-size:16px;font-weight:700;padding:15px 18px}
+.btn.primary:hover{background:linear-gradient(180deg,#8aa0ff,#6582f8)}
+.btn.quiet{background:transparent;color:var(--ink2);border-color:var(--line2)}
+.btn.quiet:hover{color:var(--ink);border-color:var(--line3)}
+.btn.block{width:100%}
+.btn.ok{background:var(--green-soft);border-color:var(--green-line);color:#86e7bb;font-weight:650}.btn.ok:hover{background:rgba(55,205,143,.2)}
+
+/* explain */
+.explain{margin-top:15px;border:1px solid var(--line);border-radius:12px;background:var(--bg1);overflow:hidden}
+.explain .er{display:flex;gap:11px;padding:13px 14px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.55;color:var(--ink2)}
+.explain .er:first-child{border-top:0}
+.explain .er .svgi{width:17px;height:17px;margin-top:1px;flex:none}
+.explain .er b{display:block;color:var(--ink3);font-weight:650;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:3px}
+.er.q .svgi{color:var(--ink3)}.er.s .svgi{color:var(--red)}.er.m .svgi{color:var(--green)}.er.v .svgi{color:var(--accent2)}
+
+/* aftermath / suite (honnête) */
+.suite{margin-top:15px;border:1px solid var(--green-line);background:var(--green-soft);border-radius:14px;padding:16px}
+.suite.amber{border-color:var(--amber-line);background:var(--amber-soft)}
+.suite.mut{border-color:var(--line2);background:var(--surf2)}
+.suite .sline{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--ink);line-height:1.45}
+.suite .sline .svgi{width:21px;height:21px;flex:none;margin-top:1px;color:#86e7bb}
+.suite.amber .sline .svgi{color:#f0c074}.suite.mut .sline .svgi{color:var(--ink3)}
+.suite .sline b{font-weight:700}
+.statechip{display:inline-flex;align-items:center;gap:8px;margin-top:13px;font-size:12.5px;font-weight:650;color:#f0c074;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:999px;padding:6px 13px}
+.statechip .sb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}
+.snext{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:13.5px;color:var(--ink2);line-height:1.5}
+.snext .svgi{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ink3)}
+.sguard{display:flex;gap:9px;align-items:flex-start;margin-top:11px;font-size:13px;color:var(--ink);font-weight:600;background:var(--surf3);border:1px solid var(--line2);border-radius:11px;padding:11px 13px;line-height:1.5}
+.sguard .svgi{width:16px;height:16px;flex:none;margin-top:2px;color:var(--accent2)}
+.cfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.undo{font-size:13px;font-weight:600;color:var(--ink3);background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px;font-family:inherit;margin-left:auto}
+.undo:hover{color:var(--ink)}
+.steps{margin:13px 0 0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:11px;align-items:flex-start;font-size:14px;color:var(--ink);padding:7px 0;line-height:1.5}
+.steps li:before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;background:var(--surf3);border:1px solid var(--line2);color:var(--ink2);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.clarity{margin-top:13px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg1)}
+.clarity .cl{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:11px 13px;border-top:1px solid var(--line);font-size:13px}
+.clarity .cl:first-child{border-top:0}.clarity .cl span{color:var(--ink3)}.clarity .cl b{font-weight:650;text-align:right}
+.clarity .cl b.no{color:#ff97a0}.clarity .cl b.yes{color:#86e7bb}.clarity .cl b.soon{color:#f0c074}
+
+/* rows */
+.row{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid var(--line);border-radius:var(--rad);background:var(--surf);margin-bottom:10px;cursor:pointer;transition:background .12s,border-color .12s;text-align:left;width:100%;font-family:inherit}
+.row:hover{background:var(--surf2);border-color:var(--line2)}
+.row.calm{cursor:default}.row.calm:hover{background:var(--surf);border-color:var(--line)}
+.row .ic{width:37px;height:37px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2)}
+.row .ic.maia{background:var(--maia-soft);color:var(--maia)}
+.row .ic.wait{background:var(--accent-soft);color:var(--accent2)}
+.row .ic.block{background:var(--red-soft);color:#ff97a0}
+.row .ic.prep{background:var(--green-soft);color:#86e7bb}
+.row .ic .svgi{width:18px;height:18px}
+.row .tx{flex:1;min-width:0}
+.row .tx b{display:block;font-size:14.5px;font-weight:650;color:var(--ink)}
+.row .tx small{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px;line-height:1.45}
+.row .rt{flex:none;display:flex;align-items:center;gap:9px}
+.row .rt .urg{font-size:10px}
+.row .chev{color:var(--ink4);width:18px;height:18px;transition:transform .16s}
+.row.open .chev{transform:rotate(90deg)}
+.row .latertag{font-size:11px;font-weight:700;color:var(--ink3);background:var(--surf2);border:1px solid var(--line);border-radius:7px;padding:3px 8px}
+.expander{margin:-4px 0 13px}
+
+.calmnote{display:flex;gap:11px;align-items:center;justify-content:center;text-align:center;color:var(--ink3);font-size:13.5px;padding:22px 16px;border:1px dashed var(--line2);border-radius:var(--rad);margin-top:4px}
+.calmnote .svgi{width:18px;height:18px;color:var(--green)}
+.reassure{text-align:center;color:var(--ink4);font-size:13px;margin:28px 8px 6px;line-height:1.6}
+.reassure .svgi{width:16px;height:16px;color:var(--green)}
+
+/* fil maïa */
+.fil{margin-top:4px;position:relative;padding-left:6px}
+.filitem{position:relative;display:flex;gap:13px;padding:4px 0 16px}
+.filitem:before{content:"";position:absolute;left:9px;top:24px;bottom:-2px;width:2px;background:var(--line)}
+.filitem:last-child:before{display:none}
+.fildot{flex:none;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line2);z-index:1;margin-top:2px}
+.fildot .svgi{width:11px;height:11px;stroke-width:2.4}
+.filbody{flex:1;min-width:0}
+.filbody p{margin:0;font-size:14px;color:var(--ink);line-height:1.5}
+.filmeta{display:flex;align-items:center;gap:9px;margin-top:6px;flex-wrap:wrap}
+.filstat{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid}
+.filwhen{font-size:11.5px;color:var(--ink4)}
+/* status colors */
+.s-prepare{color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)}
+.s-stable{color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)}
+.s-affiche{color:var(--ink2);background:var(--surf2);border-color:var(--line2)}
+.s-valide_local{color:#9db0ff;background:var(--accent-soft);border-color:var(--accent-line)}
+.s-transmis{color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)}
+.s-attente{color:#f0c074;background:var(--amber-soft);border-color:var(--amber-line)}
+.s-encours{color:#9db0ff;background:var(--accent-soft);border-color:var(--accent-line)}
+.s-bloque{color:#ff97a0;background:var(--red-soft);border-color:var(--red-line)}
+.s-info{color:var(--ink3);background:var(--surf2);border-color:var(--line2)}
+.fildot.d-prepare,.fildot.d-stable,.fildot.d-transmis{background:var(--green-soft);color:#86e7bb}
+.fildot.d-affiche,.fildot.d-info{background:var(--surf2);color:var(--ink3)}
+.fildot.d-valide_local,.fildot.d-encours{background:var(--accent-soft);color:#9db0ff}
+.fildot.d-attente{background:var(--amber-soft);color:#f0c074}
+.fildot.d-bloque{background:var(--red-soft);color:#ff97a0}
+
+/* ===== ADVANCED ===== */
+.advhead{padding:16px 2px 2px}
+.advhead h2{font-size:23px;font-weight:800;letter-spacing:-.03em}
+.advhead p{font-size:13.5px;color:var(--ink3);margin:6px 0 0}
+.advnav{display:flex;gap:7px;overflow-x:auto;padding:14px 0 6px;margin:0 -2px;scrollbar-width:none}
+.advnav::-webkit-scrollbar{display:none}
+.advnav button{flex:none;font-size:12.5px;font-weight:650;color:var(--ink3);background:var(--surf);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.14s}
+.advnav button:hover{color:var(--ink2);border-color:var(--line2)}
+.advnav button.on{color:var(--ink);background:var(--surf3);border-color:var(--line3)}
+.advsec{display:none}.advsec.on{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.card{border:1px solid var(--line);border-radius:var(--rad);background:var(--surf);padding:16px;margin-bottom:12px}
+.card h3{font-size:15px;font-weight:700}
+.card .meta{font-size:12.5px;color:var(--ink3);margin-top:3px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.kv:first-child{border-top:0}.kv span:first-child{color:var(--ink3)}.kv span:last-child{color:var(--ink2);text-align:right}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tcell{border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--bg1)}
+.tcell .v{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}
+.tcell.ok .v{color:#86e7bb}.tcell.ko .v{color:#ff97a0}
+.tcell .v .svgi{width:14px;height:14px}.tcell .k{font-size:11.5px;color:var(--ink3);margin-top:4px;line-height:1.4}
+/* queue table */
+.qtable{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.qrow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:13px 14px;border-top:1px solid var(--line)}
+.qrow:first-child{border-top:0}
+.qrow .qmain b{font-size:14px;font-weight:650;color:var(--ink);display:block}
+.qrow .qmain small{font-size:12px;color:var(--ink3);display:block;margin-top:3px;line-height:1.45}
+.qrow .qmeta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right}
+.qid{font-size:10.5px;color:var(--ink4);font-family:ui-monospace,Menlo,Consolas,monospace}
+.qempty{padding:22px 16px;text-align:center;color:var(--ink3);font-size:13.5px}
+.qbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.linklike{font-size:12.5px;color:#9db0ff;background:none;border:0;cursor:pointer;font-family:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;padding:4px}
+.treset{font-size:12px;color:var(--ink4);background:none;border:0;cursor:pointer;text-decoration:underline;font-family:inherit;padding:4px;margin-top:8px}
+.pre{white-space:pre-wrap;word-break:break-word;background:#070a10;border:1px solid var(--line2);border-radius:10px;padding:11px;color:#cdd9ee;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;margin:8px 0 0}
+.note{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink3);background:var(--bg1);border:1px solid var(--line);border-radius:12px;padding:13px;line-height:1.55;margin-bottom:12px}
+.note .svgi{width:17px;height:17px;color:var(--ink4);margin-top:1px;flex:none}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(8px);background:var(--surf3);color:var(--ink);border:1px solid var(--line3);
+  padding:12px 17px;border-radius:12px;font-size:13.5px;font-weight:500;box-shadow:var(--sh2);opacity:0;transition:.22s;pointer-events:none;z-index:95;display:flex;align-items:center;gap:9px;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .svgi{width:17px;height:17px;color:var(--green)}
+.talk{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:14px 0 2px;padding:13px 16px;border-radius:12px;
+  border:1px solid var(--maia-line);background:var(--maia-soft);color:var(--maia);font-size:14.5px;font-weight:650;font-family:inherit;cursor:pointer;text-decoration:none;transition:.14s}
+.talk:hover{background:rgba(201,182,255,.18);border-color:var(--maia)}
+.talk .svgi{width:17px;height:17px}
+.talk small{display:block;font-weight:500;color:var(--ink3);font-size:11.5px}
+.chathead{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 2px 12px;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
+.chatback{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2);background:var(--surf2);border:1px solid var(--line2);border-radius:999px;padding:8px 13px;cursor:pointer;font-family:inherit}
+.chatback:hover{color:var(--ink);border-color:var(--line3)}.chatback .svgi{width:15px;height:15px}
+.chatmsgs{display:flex;flex-direction:column;gap:12px;padding:8px 0 20px;min-height:50vh}
+.cm{display:flex;max-width:88%}
+.cm.user{align-self:flex-end}.cm.maia{align-self:flex-start;flex-direction:column;gap:6px}
+.cm .cb{padding:12px 15px;border-radius:16px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.cm.user .cb{background:linear-gradient(180deg,#6f8bff,#5572ef);color:#fff;border-bottom-right-radius:6px}
+.cm.maia .cb{background:var(--surf2);border:1px solid var(--line2);color:var(--ink);border-bottom-left-radius:6px}
+.cm .cur{display:inline-block;width:7px;color:var(--maia);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.listen{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--maia);background:var(--maia-soft);border:1px solid var(--maia-line);border-radius:999px;padding:5px 11px;cursor:pointer;font-family:inherit}
+.listen:hover{background:rgba(201,182,255,.2)}.listen .svgi{width:13px;height:13px}
+.chatbar{position:sticky;bottom:0;display:flex;gap:9px;align-items:flex-end;padding:12px 0 calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--bg) 80%,transparent)}
+.chatbar textarea{flex:1;resize:none;max-height:120px;background:var(--surf);border:1px solid var(--line2);border-radius:16px;color:var(--ink);font-family:inherit;font-size:15px;line-height:1.5;padding:13px 15px;outline:none}
+.chatbar textarea:focus{border-color:var(--accent-line)}
+.chatsend{flex:none;width:46px;height:46px;border-radius:14px;border:1px solid #7e97ff;background:linear-gradient(180deg,#7a92ff,#5b78f4);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.chatsend .svgi{width:20px;height:20px}.chatsend:active{transform:translateY(1px)}
+.modetog.talk-top{color:var(--maia);background:var(--maia-soft);border-color:var(--maia-line)}
+.modetog.talk-top:hover{background:rgba(201,182,255,.2);border-color:var(--maia)}
+.chatmic{flex:none;width:46px;height:46px;border-radius:14px;border:1px solid var(--maia-line);background:var(--maia-soft);color:var(--maia);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.chatmic .svgi{width:20px;height:20px}
+.chatmic.listening{background:var(--red);border-color:var(--red);color:#fff;animation:micpulse 1.1s ease-out infinite}
+@keyframes micpulse{0%{box-shadow:0 0 0 0 rgba(239,93,107,.55)}70%{box-shadow:0 0 0 12px rgba(239,93,107,0)}100%{box-shadow:0 0 0 0 rgba(239,93,107,0)}}
+.hidden{display:none!important}
+@media (min-width:760px){.wrap{padding-top:8px}.greet h1{font-size:30px}.mot p{font-size:17px}}
+
+/* --- logo image + boutons descendus (pouce) sur mobile --- */
+.wm img.mk{filter:drop-shadow(0 2px 8px rgba(82,182,214,.28))}
+@media(max-width:640px){
+ .topacts{position:fixed;left:0;right:0;bottom:0;z-index:45;justify-content:center;gap:12px!important;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--bg) 74%,rgba(10,11,14,0))}
+ .topacts .modetog{padding:12px 20px;font-size:14px;box-shadow:0 10px 26px -10px rgba(0,0,0,.75)}
+ .topbar{padding-top:16px}
+}
+
+/* --- écran de lancement (intro Onde) --- */
+#splash{position:fixed;inset:0;z-index:300;background:#070b16;animation:splashOut .8s ease 5.7s forwards}
+#splash iframe{width:100%;height:100%;border:0;display:block}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+#splash.gone{display:none}
+
+/* ===== APERÇU v2 — barre du bas + Autour de moi (accent cyan « eau ») ===== */
+:root{--cyan:#52b6d6;--cyan2:#86d4ec;--cyan-soft:rgba(82,182,214,.13);--cyan-line:rgba(82,182,214,.42)}
+.wm .mk{width:54px;height:54px}
+.topbar{justify-content:flex-start}
+.wrap{padding-bottom:96px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;justify-content:center;gap:2px;max-width:640px;margin:0 auto;
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--bg) 76%,rgba(10,11,14,.55));backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);border-top:1px solid var(--line)}
+.tab{flex:1 1 0;max-width:132px;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;cursor:pointer;font-family:inherit;color:var(--ink4);padding:6px 4px;border-radius:12px;transition:.14s}
+.tab .svgi{width:22px;height:22px}
+.tab span{font-size:11px;font-weight:650;letter-spacing:.01em}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--cyan2)}
+.tab.on .svgi{filter:drop-shadow(0 2px 8px rgba(82,182,214,.5))}
+#chat .chatbar{bottom:58px;background:linear-gradient(0deg,var(--bg) 88%,transparent)}
+#chat .chatmsgs{padding-bottom:18px}
+.aintro{margin:14px 2px 2px}
+.aintro h2{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.aintro p{font-size:13.5px;color:var(--ink3);margin:7px 0 0;line-height:1.55}
+.acard{border:1px solid var(--line);border-radius:var(--rad);background:var(--surf);padding:15px;margin-bottom:12px}
+.afield{display:flex;flex-direction:column;gap:6px;margin-bottom:11px}
+.afield label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3)}
+.afield input,.afield select{background:var(--bg1);border:1px solid var(--line2);border-radius:11px;color:var(--ink);font-family:inherit;font-size:15px;padding:12px 13px;outline:none}
+.afield input:focus,.afield select:focus{border-color:var(--cyan-line)}
+.arow{display:flex;gap:9px;flex-wrap:wrap}.arow .afield{flex:1;min-width:120px}
+.live2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:2px 0 10px}
+.livecard{border:1px solid var(--line2);border-radius:12px;background:var(--bg1);padding:12px 13px;min-width:0}
+.livecard .lk{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:7px}
+.livecard .lk .svgi{width:14px;height:14px;color:var(--cyan2)}
+.livecard .lv{font-size:20px;font-weight:750;margin-top:6px;letter-spacing:-.02em}
+.livecard .lx{font-size:11.5px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.livecard.warn{border-color:var(--amber-line);background:var(--amber-soft)}
+.spot{border:1px solid var(--line);border-radius:var(--rad);background:var(--surf2);padding:13px 14px;margin-bottom:10px}
+.spot .sh{display:flex;align-items:center;gap:11px}
+.spot .sh .sn{flex:1;min-width:0}
+.spot .sh .sn b{font-size:15px;font-weight:700;display:block}
+.spot .sh .sn small{font-size:12.5px;color:var(--ink3);display:block;margin-top:2px}
+.spot .sa{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.iconbtn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2);background:var(--surf3);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;cursor:pointer;font-family:inherit;text-decoration:none}
+.iconbtn:hover{color:var(--ink);border-color:var(--line3)}
+.iconbtn .svgi{width:16px;height:16px}
+.iconbtn.cy{color:var(--cyan2);background:var(--cyan-soft);border-color:var(--cyan-line)}
+.iconbtn.cy:hover{background:rgba(82,182,214,.2)}
+.favbtn{flex:none;width:42px;height:42px;border-radius:11px;border:1px solid var(--line2);background:var(--surf3);color:var(--ink4);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.favbtn.on{color:var(--amber);background:var(--amber-soft);border-color:var(--amber-line)}
+.favbtn .svgi{width:19px;height:19px}
+.safetynote{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--ink2);background:var(--cyan-soft);border:1px solid var(--cyan-line);border-radius:12px;padding:12px 13px;line-height:1.55;margin:2px 0 11px}
+.safetynote .svgi{width:18px;height:18px;color:var(--cyan2);margin-top:1px;flex:none}
+.chips2{display:flex;gap:7px;flex-wrap:wrap}
+.chip2{font-size:12.5px;font-weight:600;color:var(--ink2);background:var(--surf2);border:1px solid var(--line2);border-radius:999px;padding:7px 12px;cursor:pointer;font-family:inherit}
+.chip2.on{color:var(--cyan2);background:var(--cyan-soft);border-color:var(--cyan-line)}
+
+/* ===== APERÇU v3 — en-tête (logo + menus), chat d'accueil, événements ===== */
+.wm .mk{width:60px;height:60px}
+.topbar{justify-content:space-between;gap:8px;align-items:center}
+.topnav{display:flex;gap:2px}
+.tnav{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;cursor:pointer;font-family:inherit;color:var(--ink4);padding:5px 7px;border-radius:11px;transition:.14s}
+.tnav .svgi{width:21px;height:21px}
+.tnav span{font-size:10px;font-weight:650}
+.tnav:hover{color:var(--ink2)}
+.tnav.on{color:var(--cyan2)}
+.tnav.on .svgi{filter:drop-shadow(0 2px 7px rgba(82,182,214,.5))}
+#chat .chathead{display:none}
+#chat .chatbar{bottom:0;background:linear-gradient(0deg,var(--bg) 86%,transparent)}
+.wrap{padding-bottom:26px}
+.evmaj{font-size:11.5px;color:var(--ink3);display:flex;align-items:center;gap:7px;margin:0 2px 12px}
+.evmaj .svgi{width:14px;height:14px;color:var(--cyan2)}
+.ev{border:1px solid var(--line);border-radius:var(--rad);background:var(--surf2);padding:13px 14px;margin-bottom:10px}
+.ev .ed{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--cyan2);text-transform:uppercase}
+.ev .ed .svgi{width:13px;height:13px;flex:none}
+.ev .ecat{margin-left:auto;font-size:10px;font-weight:700;color:var(--ink2);background:var(--surf3);border:1px solid var(--line2);border-radius:999px;padding:2px 9px;text-transform:none;letter-spacing:0}
+.ev .et{font-size:15.5px;font-weight:700;line-height:1.3;margin:8px 0 4px}
+.ev .el{font-size:12.5px;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.ev .el .svgi{width:13px;height:13px;flex:none}
+.ev .eu{font-size:10.5px;color:var(--ink4);margin-top:5px}
+.ev .ea{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.evmore{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surf2);border:1px solid var(--line2);border-radius:12px;padding:12px;color:var(--ink2);font-weight:650;font-size:14px;font-family:inherit;cursor:pointer;margin:2px 0 4px}
+.evmore:hover{border-color:var(--line3);color:var(--ink)}
+.evmore .svgi{width:16px;height:16px;transform:rotate(90deg)}
+.evsec .evtoggle{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:14px 2px 4px;color:var(--ink3);font-weight:650;font-size:13px;font-family:inherit;cursor:pointer}
+.evsec .evtoggle .svgi{width:16px;height:16px;transition:transform .16s}
+.evsec.open .evtoggle .svgi{transform:rotate(90deg)}
+.evsec .evbody{display:none;margin-top:10px}
+.evsec.open .evbody{display:block}
+
+/* logo en-tete agrandi (demande Kevin) */
+.topbar .wm .mk{width:80px!important;height:80px!important}
+
+/* ===== THEME CLAIR (bouton bascule) ===== */
+html.light{
+  --bg:#eef1f6;--bg1:#e7ebf2;--surf:#ffffff;--surf2:#f4f6fa;--surf3:#eceff4;
+  --line:#dde3ec;--line2:#d2d9e4;--line3:#c4cdda;
+  --ink:#141a22;--ink2:#48515f;--ink3:#6a7382;--ink4:#8a92a0;
+  --accent:#5570f0;--accent2:#3f5fd6;--maia:#7a5cd6;
+  --sh:0 1px 2px rgba(20,30,50,.08);--sh2:0 18px 50px -28px rgba(20,30,50,.28);
+}
+html.light body{background:radial-gradient(1100px 560px at 84% -14%,#e7edf7 0,transparent 60%),radial-gradient(820px 480px at -10% 0,#eef2f9 0,transparent 55%),var(--bg)}
+html.light #projetsBox,html.light #coutsBox{background:#fff!important;border-color:#e3e8ef!important}
+html.light #projetsBox [style*="#eaf2f8"],html.light #coutsBox [style*="#eaf2f8"],html.light #projetsBox [style*="#cfe0ec"],html.light #coutsBox [style*="#cfe0ec"]{color:#1d2530!important}
+html.light #projetsBox [style*="#8aa6b8"],html.light #coutsBox [style*="#8aa6b8"]{color:#6a7585!important}
+html.light #projetsBox [style*="255,255,255,.08"],html.light #coutsBox [style*="255,255,255,.08"]{background:#e6eaf0!important}
+html.light #projModal>div{background:#fff!important;border-color:#e3e8ef!important}
+html.light #pmTitle{color:#141a22!important}
+html.light #pmPct,html.light #projModal [style*="#8aa6b8"]{color:#6a7585!important}
+html.light #pmReste{color:#384150!important}
+html.light #pmClose{background:#edf0f4!important;color:#333!important}
+html.light #pmRappel{background:#edf0f4!important;color:#141a22!important;border-color:#d7dde6!important}
+</style></head>
+<body>
+<div id="maiaGate" style="position:fixed;inset:0;z-index:100000;background:#0b1622;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#eaf2f8;gap:16px;padding:24px;text-align:center">
+  <img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" width="56" height="56" alt="MAIA">
+  <div style="font-size:18px;font-weight:600;letter-spacing:.5px">MAÏA — accès</div>
+  <input id="maiaGateInput" type="password" inputmode="text" autocomplete="off" placeholder="Code d'accès" style="font-size:16px;padding:12px 14px;border-radius:10px;border:1px solid #2a3a4a;background:#0f1d2b;color:#eaf2f8;width:min(260px,80vw);text-align:center;outline:none">
+  <button id="maiaGateBtn" style="font-size:15px;font-weight:600;padding:11px 24px;border-radius:10px;border:0;background:#52b6d6;color:#06121c;cursor:pointer">Entrer</button>
+  <div id="maiaGateErr" style="color:#ff8a8a;font-size:13px;min-height:16px"></div>
+</div>
+<script>
+(function(){
+  var CODE="MAIA26";
+  try{ if(localStorage.getItem("maia_gate_ok")==="1"){ var g0=document.getElementById("maiaGate"); if(g0){g0.parentNode.removeChild(g0);} return; } }catch(e){}
+  document.documentElement.style.overflow="hidden";
+  function unlock(){
+    var el=document.getElementById("maiaGateInput");
+    var v=(el&&el.value||"").trim();
+    if(v===CODE){ try{localStorage.setItem("maia_gate_ok","1");}catch(e){} var g=document.getElementById("maiaGate"); if(g){g.parentNode.removeChild(g);} document.documentElement.style.overflow=""; }
+    else{ var er=document.getElementById("maiaGateErr"); if(er) er.textContent="Code incorrect."; }
+  }
+  function ready(){
+    var b=document.getElementById("maiaGateBtn"); if(b) b.addEventListener("click",unlock);
+    var i=document.getElementById("maiaGateInput");
+    if(i){ i.addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();unlock();} }); try{i.focus();}catch(e){} }
+  }
+  if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded",ready); } else { ready(); }
+})();
+</script>
+
+<div id="splash" aria-hidden="true"><iframe src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-intro-cockpit.html" title="MAÏA" scrolling="no"></iframe></div>
+<div class="wrap">
+  <div class="topbar">
+    <div class="wm">
+      <img class="mk" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA" width="80" height="80"><button id="themeTog" title="Thème clair / foncé" style="margin-left:8px;padding:6px 11px;border-radius:16px;border:1px solid var(--line);background:var(--surf2);color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">Clair</button>
+    </div>
+    <nav class="topnav">
+      <button class="tnav on" id="tabAccueil"></button>
+      <button class="tnav" id="tabMaia"></button>
+      <button class="tnav" id="tabAutour"></button>
+      <button class="tnav" id="tabAvance"></button>
+    </nav>
+    <div class="topacts" style="display:none">
+      <button class="modetog talk-top" id="chatTopBtn"></button>
+      <button class="modetog" id="modeBtn"></button>
+    </div>
+  </div>
+
+  <!-- ===== SIMPLE ===== -->
+  <main id="simple">
+    <div class="greet"><div class="eyebrow" id="date"></div><h1 id="hello">Bonjour Kevin</h1></div>
+    <div id="motWrap"></div>
+    <!-- Projets en cours (porte depuis l'ancien cockpit) -->
+    <section id="projetsBox" style="margin:14px 2px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-weight:700;font-size:14px;color:#eaf2f8">Projets en cours</span><span style="font-size:11px;color:#8aa6b8">touche un projet · 28/06</span></div><div data-proj="0" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Maïa au téléphone (partenaire + éco)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">85%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:85%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="1" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Maïa t'appelle (appel sortant)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">70%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:70%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="2" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Cockpit (app + code d'accès)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">80%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:80%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="3" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Autour de moi (kayak, sorties…)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">60%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:60%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="4" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Audit des coûts IA</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">40%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:40%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="5" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Sécurisation (clé + webhooks)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">30%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:30%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="6" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Fiches clients CRM (auto)</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">10%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:10%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div><div data-proj="7" role="button" tabindex="0" style="margin:4px 0;padding:7px 8px;border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Refonte barman-mariage.com</span><span style="display:flex;align-items:center;gap:7px"><span style="color:#52b6d6;font-weight:700">5%</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6f8ba0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div><div style="height:6px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:5%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div></div></section>
+    <!-- Suivi des couts (bloc visible) -->
+    <section id="coutsBox" style="margin:14px 2px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><span style="font-weight:700;font-size:14px;color:#eaf2f8">Suivi des coûts</span><span style="font-size:11px;color:#8aa6b8">relevé 26/06</span></div><div style="margin:6px 0 2px"><div style="display:flex;justify-content:space-between;font-size:13px;color:#cfe0ec;margin-bottom:3px"><span>Crédits Make ce mois</span><span style="color:#52b6d6;font-weight:700">7 794 / 30 000</span></div><div style="height:7px;border-radius:5px;background:rgba(255,255,255,.08)"><div style="height:100%;width:74%;border-radius:5px;background:linear-gradient(90deg,#3a8fb0,#6fd0ec)"></div></div><div style="font-size:11px;color:#8aa6b8;margin-top:4px">74 % utilisés · ~19/jour · cycle mensuel · pas de dérive</div></div><div style="height:1px;background:rgba(255,255,255,.08);margin:12px 0"></div><div style="font-size:13px;color:#cfe0ec;line-height:1.7"><div style="display:flex;justify-content:space-between"><span>ChatGPT (×3)</span><span style="color:#eaf2f8">≈ 60 €/mois</span></div><div style="display:flex;justify-content:space-between"><span>Cloud (Claude)</span><span style="color:#eaf2f8">≈ 100 €/mois</span></div><div style="display:flex;justify-content:space-between"><span>Make / Hermès</span><span style="color:#eaf2f8">≈ 20 €/mois</span></div><div style="display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);margin-top:6px;padding-top:6px;font-weight:700"><span>Total abonnements</span><span style="color:#52b6d6">≈ 180 €/mois</span></div></div><div style="font-size:11px;color:#8aa6b8;margin-top:10px">Abonnements déclarés par toi — dis-moi pour ajuster. Le coût exact des appels n'est pas lisible automatiquement (estimation).</div></section>
+
+
+
+    <div class="sec" id="secHero"><span class="t">Ma recommandation</span><span class="ln"></span></div>
+    <div id="heroWrap"></div>
+
+    <div class="sec" id="secWait" style="display:none"><span class="t">Ça demande aussi ton avis</span><span class="ln"></span><span class="c" id="waitN">0</span></div>
+    <div id="waitList"></div>
+
+    <div class="sec" id="secAsk" style="display:none"><span class="t">Ce que tu m'as demandé</span><span class="ln"></span><span class="c" id="askN">0</span></div>
+    <div id="askList"></div>
+
+    <div class="sec" id="secPrep" style="display:none"><span class="t">Ce que j'ai préparé pour toi</span><span class="ln"></span></div>
+    <div id="prepList"></div>
+
+    <div class="sec" id="secManage"><span class="t">Ce qui avance sans toi</span><span class="ln"></span></div>
+    <div id="manageList"></div>
+
+    <div class="sec" id="secLater" style="display:none"><span class="t">Ce qui attend une action de toi</span><span class="ln"></span></div>
+    <div id="laterList"></div>
+
+    <div class="sec live"><span class="livedot"></span><span class="t">Fil Maïa</span><span class="ln"></span></div>
+    <div class="fil" id="filList"></div>
+
+    <div class="sec"><span class="t">Si tu t'absentes</span><span class="ln"></span></div>
+    <div id="absenceWrap"></div>
+
+    <div class="reassure" id="reassure"></div>
+  </main>
+
+  <!-- ===== ADVANCED ===== -->
+  <main id="advanced" class="hidden">
+    <div class="advhead"><h2>Mode avancé</h2><p>Les coulisses : chantiers, décisions, file d'exécution, échanges, données. Tu peux revenir au mode simple à tout moment.</p></div>
+    <div class="advnav" id="advNav"></div>
+    <section class="advsec on" id="a-chantiers"></section>
+    <section class="advsec" id="a-decisions"></section>
+    <section class="advsec" id="a-queue"></section>
+    <section class="advsec" id="a-echanges"></section>
+    <section class="advsec" id="a-sources"></section>
+    <section class="advsec" id="a-historique"></section>
+  </main>
+
+  <!-- ===== CHAT ===== -->
+  <main id="chat" class="hidden">
+    <div class="chathead">
+      <button class="chatback" id="chatBack"></button>
+      <div class="wm"><img class="mk" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA" width="34" height="34" style="width:34px;height:34px"></div>
+      <span style="width:62px"></span>
+    </div>
+    <div class="chatmsgs" id="chatMsgs"></div>
+    <div class="chatbar">
+      <button class="chatmic" id="chatMic" title="Parler"></button>
+      <textarea id="chatInput" rows="1" placeholder="Écris ou parle à Maïa…"></textarea>
+      <button class="chatsend" id="chatSend"></button>
+    </div>
+  </main>
+
+  <!-- ===== AUTOUR DE MOI ===== -->
+  <main id="autour" class="hidden">
+    <div class="aintro"><h2>Autour de moi</h2><p>Tes coins kayak près d'Orléans — avec la météo et le débit de la Loire en direct — les sorties du coin, et un coup de main pour préparer un voyage.</p></div>
+
+    <div class="sec"><span class="t">Kayak / mise à l'eau</span><span class="ln"></span></div>
+    <div class="acard">
+      <div class="live2" id="kLive"></div>
+      <div class="safetynote" id="kSafety"></div>
+      <div class="arow"><div class="afield" style="flex:.9"><label>Rayon autour d'Orléans</label><select id="kRad"><option>15 km</option><option selected>30 km</option><option>60 km</option></select></div></div>
+      <div id="kSpots"></div>
+      <div class="sec" style="margin:14px 2px 11px"><span class="t">Mes spots favoris</span><span class="ln"></span><span class="c" id="kFavN">0</span></div>
+      <div id="kFavList"></div>
+    </div>
+
+    <div class="sec"><span class="t">Sorties autour de moi</span><span class="ln"></span></div>
+    <div class="acard">
+      <div class="evmaj" id="evMaj"></div>
+      <div class="chips2" id="evFilters" style="margin-bottom:12px"></div>
+      <div id="evList"></div>
+      <button class="evmore" id="evMore" style="display:none"></button>
+      <div class="evsec" id="evSec">
+        <button class="evtoggle" id="evToggle"></button>
+        <div class="evbody">
+          <div id="sVenues"></div>
+          <div class="arow" style="margin-top:6px"><a class="iconbtn" id="sAgenda" target="_blank" rel="noopener"></a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="t">Voyage &amp; recherche</span><span class="ln"></span></div>
+    <div class="acard">
+      <div class="arow"><div class="afield"><label>Départ</label><input id="vFrom" value="Orléans"></div><div class="afield"><label>Destination</label><input id="vTo" placeholder="ex : Lisbonne"></div></div>
+      <div class="arow"><div class="afield"><label>Aller</label><input id="vDep" type="date"></div><div class="afield"><label>Retour</label><input id="vRet" type="date"></div></div>
+      <div class="arow" id="vBtns" style="margin-top:2px"></div>
+      <div class="note" id="vNote"></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var FALLBACK={"meta": {"version": "V6.0", "build": "2026-06-25", "updated_ts": "2026-06-26T13:10:00+02:00", "fresh_warn_h": 96, "fresh_stale_h": 264}, "decisions": [{"id": "MIG", "urg": "important", "kind": "prepare", "sensible": false, "projet": "Automatisations", "titre": "Deux de tes automatisations risquent de tomber en panne", "court": "fiabiliser deux automatisations menacées", "reco": "Laisse-moi vérifier lesquelles et préparer la correction.", "why": "Elles utilisent une technologie qui vient d'être arrêtée ; sans correction, elles s'arrêteront sans prévenir.", "risque": "Une tâche que tu crois automatique peut s'arrêter en silence, sans alerte.", "explain": {"pourquoi": "Deux automatisations pointent vers un moteur qui a été retiré. Le jour où il est coupé, elles échouent en silence.", "sinon": "Une tâche que tu crois automatique peut s'arrêter sans alerte.", "maiafait": "Je fais l'inventaire en lecture seule et je te propose le remplacement. Je n'active rien.", "validation": "Tu valides le remplacement avant que quoi que ce soit ne change."}, "tech": {"titre": "Migration modèles Claude (Make)", "responsable": "Assistant technique, en lecture seule", "interdits": "Lecture seule. Aucune activation, aucun Run once, aucune écriture en production.", "instruction": "MISSION — Migration modèles (Make).\nOBJECTIF : inventaire LECTURE SEULE des scénarios utilisant un ancien modèle, puis mapping de remplacement.\nCADRE : lecture seule, aucune activation.\nLIVRABLE : tableau scénario | modèle actuel | modèle cible | risque.", "source": "", "etat_reel": "Pas encore commencé. Inventaire à faire en lecture seule dès ton feu vert."}}, {"id": "SECU", "urg": "urgent", "kind": "guide", "sensible": true, "projet": "Sécurité", "titre": "Une clé d'accès doit être changée (sécurité)", "court": "refermer une clé d'accès exposée", "reco": "C'est une action sensible : à faire toi-même. Je te montre où, en 3 étapes simples.", "why": "Une clé d'accès à ton agent téléphonique est exposée. La changer referme la porte.", "risque": "Tant que la clé n'est pas changée, un tiers pourrait s'en servir.", "etapes": ["Ouvre la console de ton outil de téléphonie.", "Révoque l'ancienne clé et génère-en une nouvelle.", "Mets la nouvelle clé là où l'ancienne était utilisée."], "explain": {"pourquoi": "Une clé d'accès est visible alors qu'elle devrait être secrète. Tant qu'elle n'est pas changée, un tiers pourrait s'en servir.", "sinon": "La porte reste entrouverte sur ton agent téléphonique.", "maiafait": "Rien : par sécurité, je ne touche jamais à tes clés et mots de passe. Je te guide seulement.", "validation": "Tout est entre tes mains : c'est une action 100 % manuelle, réservée à toi."}, "tech": {"titre": "Rotation clé Retell (zone rouge)", "responsable": "Kevin uniquement — l'assistant ne touche aucun secret", "interdits": "L'assistant ne touche aucune clé ni secret. Action 100 % manuelle.", "instruction": "ÉTAPE KEVIN (manuelle) : ouvrir la console Retell, révoquer/roter la clé exposée, mettre à jour la clé côté appelant.", "source": "", "etat_reel": "En attente de toi : action manuelle réservée à Kevin. Maïa n'y touche pas."}}, {"id": "AVOCAT", "urg": "important", "kind": "prepare", "sensible": false, "projet": "Juridique", "titre": "Ton avocat attend une réponse", "court": "préparer la réponse à ton avocat", "reco": "Laisse-moi préparer un brouillon ; tu n'auras qu'à le relire et l'envoyer.", "why": "Une réponse est en attente sur tes contrats et l'étude de holding.", "risque": "Le dossier juridique et les contrats restent en suspens.", "explain": {"pourquoi": "Une réponse à ton avocat est en attente (contrats barmans/commerciaux et étude de holding).", "sinon": "Le dossier juridique et les contrats n'avancent pas.", "maiafait": "Je rédige un brouillon de réponse prêt à relire.", "validation": "Tu relis, tu ajustes et tu l'envoies toi-même."}, "tech": {"titre": "Brouillon réponse avocat", "responsable": "Assistant technique — brouillon seulement", "interdits": "Aucun envoi d'e-mail. Gmail n'est pas touché.", "instruction": "MISSION — Brouillon réponse avocat (contrats + holding). Brouillon uniquement, AUCUN envoi.", "source": "", "etat_reel": "Pas encore rédigé. Brouillon à préparer dès ton feu vert — aucun envoi."}}, {"id": "MAIL", "urg": "tranquille", "kind": "decide", "sensible": true, "projet": "Suivi commercial", "titre": "Veux-tu que je suive tes mails commerciaux ?", "court": "suivre tes prospects par mail (si tu veux)", "reco": "Rien d'urgent. Dis-moi oui quand tu veux, et je m'occupe du suivi de tes prospects.", "why": "Sans accès à ta boîte mail, je ne peux pas suivre tes prospects automatiquement.", "risque": "Le suivi commercial reste partiel — sans gravité à court terme.", "explain": {"pourquoi": "Pour suivre tes prospects et préparer des réponses, j'ai besoin de lire (en lecture seule) tes mails commerciaux.", "sinon": "Le suivi commercial reste partiel — ce n'est pas grave à court terme.", "maiafait": "Rien tant que tu n'as pas dit oui. Si tu acceptes, je prépare le branchement et tu donnes l'autorisation finale toi-même.", "validation": "L'autorisation d'accès, c'est toi qui la donnes, quand tu veux."}, "tech": {"titre": "Connexion Gmail (lecture seule) — décision", "responsable": "Kevin décide ; autorisation OAuth réalisée par Kevin", "interdits": "Aucune connexion sans le feu vert explicite de Kevin.", "instruction": "DÉCISION KEVIN : autoriser ou non la lecture seule de Gmail (OAuth). Si oui : préparer l'architecture, Kevin réalise l'autorisation.", "source": "", "etat_reel": "En attente de ta décision. Rien n'est connecté tant que tu n'as pas dit oui."}}], "managed": [{"titre": "Je surveille tes automatisations", "detail": "Tout est stable en ce moment : 6 automatisations actives, sous contrôle, sans dérive de coût."}, {"titre": "Je fais circuler tes fichiers entre tes outils", "detail": "Le transport de documents entre tes outils fonctionne et reste stable."}, {"titre": "Je tiens ce tableau de bord à jour", "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher."}], "fil": [{"id": "fstd_done", "txt": "Ton standard téléphonique est remis au carré et EN LIGNE : c'est la bonne version, sobre, qui répond à tes clients.", "statut": "transmis", "quand": "Aujourd'hui"}, {"id": "f2", "txt": "Le transport de fichiers entre tes outils est stable : je peux faire circuler tes documents.", "statut": "stable", "quand": "Hier"}, {"id": "f3", "txt": "Ton tableau de bord est publié et en ligne. Les chiffres qu'il affiche ne se mettent pas encore à jour tout seuls.", "statut": "affiche", "quand": "Hier"}, {"id": "f4", "txt": "J'ai repéré deux automatisations à fiabiliser. Je n'ai encore rien touché — j'attends ton feu vert.", "statut": "attente", "quand": "Aujourd'hui", "lien": "MIG"}, {"id": "f5", "txt": "Une clé de sécurité doit être changée. C'est une action réservée à toi : je ne touche à aucun secret.", "statut": "bloque", "quand": "Aujourd'hui", "lien": "SECU"}, {"id": "f6", "txt": "Je mets en place ta file d'exécution : un endroit clair où tes décisions deviennent des actions suivies.", "statut": "encours", "quand": "Aujourd'hui"}, {"id": "f7", "txt": "Pour le reste, tu n'as rien à faire : je veille et je te préviens dès qu'une décision t'attend.", "statut": "info", "quand": "En continu"}], "chantiers": [{"titre": "Standard téléphonique", "etat": "stable", "detail": "Réparé et EN LIGNE le 26/06 : ligne clients repointée sur la bonne version (anti-digression).", "responsable": "Maïa (copie de test)", "kevin": false, "lien": "STD"}, {"titre": "Automatisations à fiabiliser", "etat": "attente", "detail": "Deux scénarios pointent vers un moteur retiré. Inventaire en lecture seule à lancer.", "responsable": "Maïa (lecture seule)", "kevin": true, "lien": "MIG"}, {"titre": "Sécurité — clé d'accès", "etat": "bloque", "detail": "Clé exposée à changer. Action 100 % manuelle, réservée à Kevin.", "responsable": "Kevin uniquement", "kevin": true, "lien": "SECU"}, {"titre": "Réponse à l'avocat", "etat": "attente", "detail": "Brouillon de réponse (contrats + holding) à préparer. Aucun envoi automatique.", "responsable": "Maïa (brouillon)", "kevin": true, "lien": "AVOCAT"}, {"titre": "Suivi commercial par mail", "etat": "decision", "detail": "En attente d'une décision : autoriser ou non la lecture seule des mails.", "responsable": "Kevin décide", "kevin": true, "lien": "MAIL"}, {"titre": "Tableau de bord MAÏA", "etat": "affiche", "detail": "Publié et en ligne. Les données sont figées au dernier état réel ; l'automatisation des chiffres reste à faire.", "responsable": "Maïa", "kevin": false}, {"titre": "Transport de fichiers entre outils", "etat": "stable", "detail": "Fonctionne et reste stable (mode édition d'un document pré-créé).", "responsable": "Maïa", "kevin": false}, {"titre": "File d'exécution", "etat": "encours", "detail": "En cours de mise en place : transforme tes décisions en actions suivies, sans copier-coller.", "responsable": "Maïa", "kevin": false}], "tech": {"note": "Cet espace est réservé à l'assistant technique. Tu n'as pas besoin d'y venir : tout ce qui compte pour toi est sur l'écran d'accueil.", "hermes": [{"k": "Transport de fichiers entre outils", "v": "OK", "ok": true}, {"k": "Lecture des documents partagés", "v": "OK", "ok": true}, {"k": "Échange de décisions (mode validé)", "v": "OK", "ok": true}, {"k": "Écriture directe par l'outil externe", "v": "Bloqué (limite outil)", "ok": false}], "exchanges": [{"sujet": "Forme d'écriture qui passe la sécurité", "etat": "Réglé", "detail": "Mode validé : l'outil édite un document pré-créé."}, {"sujet": "Écriture/rangement direct", "etat": "Réglé", "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe."}, {"sujet": "Prochaine étape de transport", "etat": "Réglé", "detail": "Passage au connecteur de fichiers."}], "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).", "note_donnees": "Données au dernier état réel connu (04–25 juin). Mise à jour : republier le fichier de données.", "queue_note": "Ta file d'actions est enregistrée sur cet appareil (navigateur). Pour la rendre exploitable par Claude sans copier-coller, voir la proposition d'architecture livrée avec cette version."}, "couts": {"titre": "Je surveille tes crédits Make", "resume": "7 794 crédits restants sur 30 000 ce mois (~74 % utilisés). Remise à zéro le 28/06. Pas de dérive.", "restants": 7794, "total": 30000, "pct": 74, "reset": "28/06", "moyenne_jour": 19, "detail": "Plan Core (30 000 crédits/mois). Usage moyen ~19/jour. Le gros poste historique est coupé. Estimation en crédits Make — le montant exact en euros n'est pas lisible via l'API.", "maj": "26/06 (relevé)"}};
+var SNAP_URL="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-snapshot-v6.json";
+var LIVE_URL="https://script.google.com/macros/s/AKfycbyraUVi69hrRtKovpubwXdZiZzt5pES5ZjSaJfc4KbMEpZ1g1zsk3j1m24ohk-5JYcE/exec?k=maia-cockpit-7";
+var LIVE_OK=false;
+var LIVE_ASKS=[];
+var D=FALLBACK||{decisions:[],managed:[],fil:[],chantiers:[],tech:{}};
+
+/* ---------- storage ---------- */
+var LS="maia.v6.state", LQ="maia.v6.queue";
+function jget(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function jset(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
+var STATE=jget(LS)||{};            /* {id:{status,ts}} status: accepted|later|done|transmis */
+var QUEUE=jget(LQ)||[];            /* MAIA_ACTION_QUEUE */
+function saveState(){jset(LS,STATE);}
+function saveQueue(){jset(LQ,QUEUE);}
+function st(id){return (STATE[id]&&STATE[id].status)||"pending";}
+function setSt(id,s){STATE[id]=STATE[id]||{};STATE[id].status=s;STATE[id].ts=new Date().toISOString();saveState();}
+function clearSt(id){delete STATE[id];saveState();}
+
+/* ---------- MAIA_ACTION_QUEUE ---------- */
+/* schema: {action_id, projet, decision, statut, responsable, prochaine_etape, kevin_requis, etat, ts} */
+var ETAT_LABEL={local:"Local",prete:"Prête",transmise:"Transmise",en_attente:"En attente",bloquee:"Bloquée",terminee:"Terminée"};
+function qFind(id){for(var i=0;i<QUEUE.length;i++){if(QUEUE[i].action_id===id)return i;}return -1;}
+function qUpsert(d,etat){
+  var statutMap={prete:"Mission prête",en_attente:"En attente de ta décision",bloquee:"À faire par toi",transmise:"Reprise par Claude",terminee:"Terminée"};
+  var nextMap={
+    prete:"Je la reprends à notre prochaine conversation.",
+    en_attente:"Tu donnes l'autorisation quand tu veux.",
+    bloquee:"Action manuelle réservée à toi (les étapes sont dans l'app).",
+    transmise:"Claude exécute, puis te montre le résultat.",
+    terminee:"Rien de plus à faire."
+  };
+  var o={action_id:d.id,projet:d.projet||d.titre,decision:d.court||d.titre,statut:statutMap[etat]||etat,
+    responsable:(d.tech&&d.tech.responsable)||"Maïa",prochaine_etape:nextMap[etat]||"",
+    kevin_requis:(d.kind==="guide"||d.kind==="decide"||etat==="prete"),etat:etat,ts:new Date().toISOString()};
+  var i=qFind(d.id); if(i>=0)QUEUE[i]=o; else QUEUE.push(o);
+  saveQueue();
+}
+function qRemove(id){var i=qFind(id);if(i>=0){QUEUE.splice(i,1);saveQueue();}}
+function qExport(){
+  var blob=new Blob([JSON.stringify({generated:new Date().toISOString(),queue:QUEUE},null,2)],{type:"application/json"});
+  var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="MAIA_ACTION_QUEUE.json";document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+  toast("File exportée (MAIA_ACTION_QUEUE.json)","doc");
+}
+/* ---------- pont vers la file réelle (écriture permanente, armé côté Make) ---------- */
+var BRIDGE_URL="https://hook.eu1.make.com/g1skwky1jfh0rut2mp73bwidb5gf2bxq";
+var BRIDGE_TK="maia6pont";
+function postBridge(d){
+  try{
+    var i=qFind(d.id), q=i>=0?QUEUE[i]:{};
+    var p=new URLSearchParams({tk:BRIDGE_TK,action_id:d.id,projet:d.projet||d.titre||"",decision:d.court||d.titre||"",
+      statut:q.statut||"",responsable:q.responsable||"",prochaine_etape:q.prochaine_etape||"",
+      kevin_requis:String(!!q.kevin_requis),etat:q.etat||"",safe:"false",ts:new Date().toISOString(),resultat:""}).toString();
+    fetch(BRIDGE_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p}).catch(function(){});
+  }catch(e){}
+}
+
+/* ---------- icons ---------- */
+var I={
+ spark:'<path d="M12 3.5 13.7 9 19 10.7 13.7 12.4 12 18 10.3 12.4 5 10.7 10.3 9z"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ checkc:'<circle cx="12" cy="12" r="9"/><path d="m8.4 12 2.6 2.6 4.6-5.2"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/>',
+ help:'<circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/>',
+ eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+ alert:'<path d="M10.3 3.8 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17h.01"/>',
+ shield:'<path d="M12 22s8-4 8-10V5.5l-8-3-8 3V12c0 6 8 10 8 10z"/>',
+ hand:'<path d="M18 11V6a1.6 1.6 0 0 0-3.2 0M14.8 10V4.2a1.6 1.6 0 0 0-3.2 0V10M11.6 10V5.4a1.6 1.6 0 0 0-3.2 0V12"/><path d="M8.4 12l-1-1.7a1.6 1.6 0 0 0-2.8 1.6L7 17a6 6 0 0 0 5.4 4h1.6a5 5 0 0 0 5-5v-5"/>',
+ chev:'<path d="m9 6 6 6-6 6"/>',
+ arrow:'<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+ leaf:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.18 2 8a7 7 0 0 1-7 7"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+ doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+ hourglass:'<path d="M6 3h12M6 21h12M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9"/>',
+ gauge:'<path d="M12 13a3 3 0 0 0 3-3"/><path d="M3.5 16a9 9 0 1 1 17 0"/>',
+ layers:'<path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>',
+ swap:'<path d="M7 4 3 8l4 4"/><path d="M3 8h13a4 4 0 0 1 0 8h-1"/><path d="m17 20 4-4-4-4"/>',
+ db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>',
+ history:'<path d="M3 3v6h6"/><path d="M3.5 9a9 9 0 1 1-.9 5"/><path d="M12 8v4l3 2"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ scale:'<path d="M12 3v18M5 7h14M5 7l-3 6a3 3 0 0 0 6 0L5 7zM19 7l-3 6a3 3 0 0 0 6 0l-3-6zM7 21h10"/>',
+ sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+ send:'<path d="M21.5 2.5 11 13"/><path d="M21.5 2.5 15 21l-3.8-8.2L3 9z"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ dot:'<circle cx="12" cy="12" r="4"/>',
+ mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/>',
+ audio:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/>',
+ chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>'
+};
+function svg(n,c){return '<svg class="svgi'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(I[n]||'')+'</svg>';}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function toast(m,ic){var t=document.getElementById("toast");t.innerHTML=svg(ic||"check")+'<span>'+esc(m)+'</span>';t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("show");},2300);}
+var URGLABEL={urgent:"Urgent",important:"Important",tranquille:"Tranquille"};
+function urgPill(u){return '<span class="urg urg-'+u+'"><span class="dot"></span>'+esc(URGLABEL[u]||u)+'</span>';}
+function decById(id){for(var i=0;i<(D.decisions||[]).length;i++){if(D.decisions[i].id===id)return D.decisions[i];}return null;}
+function primaryLabel(d){return d.kind==="guide"?"Montre-moi":"Oui, fais-le";}
+
+/* ---------- ordering ---------- */
+var URGRANK={urgent:0,important:1,tranquille:2};
+function decOrder(a,b){
+  var pa=st(a.id)==="pending"?0:1, pb=st(b.id)==="pending"?0:1;
+  if(pa!==pb)return pa-pb;
+  function ru(u){return URGRANK[u]==null?3:URGRANK[u];}
+  return ru(a.urg)-ru(b.urg);
+}
+function pendings(){return (D.decisions||[]).filter(function(d){return st(d.id)==="pending";}).sort(decOrder);}
+function topDecision(){return pendings()[0]||null;}
+
+/* ---------- narrative: le mot de Maïa ---------- */
+function motDeMaia(){
+  var hour=new Date().getHours(), hi=(hour>=18||hour<5)?"Bonsoir":"Bonjour";
+  var p=pendings();
+  var parts=[];
+  parts.push("<strong>"+hi+" Kevin.</strong>");
+  parts.push("Ce matin, tout est sous contr\u00f4le : tes automatisations tournent et je veille en coulisses.");
+  if(decById("STD")&&st("STD")==="pending"){parts.push("J'ai d\u00e9j\u00e0 pr\u00e9par\u00e9 la correction de ton standard t\u00e9l\u00e9phonique.");}
+  var heroPending = HEROID && st(HEROID)==="pending";
+  if(heroPending){
+    var h=decById(HEROID);
+    var w=p.length===1?"d\u00e9cision attend":"d\u00e9cisions attendent";
+    parts.push("De ton c\u00f4t\u00e9, "+p.length+" "+w+" ton avis \u2014 la plus importante : <strong>"+esc(h.court||h.titre)+"</strong>.");
+  } else if(p.length>0){
+    var w2=p.length===1?"d\u00e9cision":"d\u00e9cisions";
+    parts.push("Tu viens de trancher l'essentiel. Il te reste "+p.length+" "+w2+", \u00e0 ton rythme.");
+  } else {
+    parts.push("De ton c\u00f4t\u00e9, tout est trait\u00e9 \u2014 rien ne r\u00e9clame ton attention.");
+  }
+  parts.push("Pour le reste, je m'en charge \u2014 tu n'as rien \u00e0 faire.");
+  return parts.join(" ");
+}
+function renderMot(){
+  document.getElementById("motWrap").innerHTML=
+    '<div class="mot"><div class="ml">'+svg("spark")+'Le mot de Maïa</div>'
+    +'<p>'+motDeMaia()+'</p>'
+    +'<div class="sign">— Maïa</div></div>';
+}
+
+/* ---------- decision card ---------- */
+var EXPL={}, OPEN={};
+function decisionHtml(d,hero){
+  var s=st(d.id);
+  var cls="dcard"+(hero?" hero":"");
+  var h='<div class="'+cls+'" data-card="'+d.id+'">';
+  if(hero) h+='<div class="heroeye">'+svg("spark")+'Ma recommandation principale</div>';
+  h+='<div class="dtop">'+urgPill(d.urg)+'</div>';
+  h+='<div class="dttl">'+esc(d.titre)+'</div>';
+  if(hero) h+='<div class="dwhy">'+esc(d.why)+'</div>';
+  h+='<div class="dreco">'+svg("spark")+'<span>'+esc(d.reco)+'</span></div>';
+  if(EXPL[d.id]) h+=explainHtml(d);
+  if(s==="pending"){
+    h+='<div class="acts">'
+      +'<button class="btn primary" data-act="valider" data-id="'+d.id+'">'+svg("check")+esc(primaryLabel(d))+'</button>'
+      +'<button class="btn quiet" data-act="later" data-id="'+d.id+'">'+svg("clock")+'Pas maintenant</button>'
+      +'<button class="btn quiet" data-act="explain" data-id="'+d.id+'">'+svg("help")+(EXPL[d.id]?"Masquer":"Explique-moi")+'</button>'
+      +'</div>';
+  } else {
+    h+=confirmHtml(d,s);
+  }
+  if(hero&&s!=="pending"){
+    var moreP=pendings();
+    if(moreP.length){h+='<button class="btn quiet block" data-act="nextHero" data-id="'+d.id+'" style="margin-top:12px">'+svg("arrow")+'Voir la décision suivante</button>';}
+    else{h+='<div class="reassure" style="margin:16px 0 2px">'+svg("leaf")+' C\'est tout pour aujourd\'hui. Tu peux fermer, je veille.</div>';}
+  }
+  h+='</div>';
+  return h;
+}
+function explainHtml(d){
+  var e=d.explain||{};
+  return '<div class="explain">'
+    +'<div class="er q">'+svg("eye")+'<div><b>Pourquoi</b>'+esc(e.pourquoi)+'</div></div>'
+    +'<div class="er s">'+svg("alert")+'<div><b>Si on ne fait rien</b>'+esc(e.sinon)+'</div></div>'
+    +'<div class="er m">'+svg("checkc")+'<div><b>Ce que je fais</b>'+esc(e.maiafait)+'</div></div>'
+    +'<div class="er v">'+svg("hand")+'<div><b>Ce que je te redemanderai</b>'+esc(e.validation)+'</div></div>'
+    +'</div>';
+}
+function confirmHtml(d,s){
+  if(s==="later"){
+    return '<div class="suite mut"><div class="sline">'+svg("clock")+'<div><b>Mis de côté.</b> Je te le represente plus tard.</div></div>'
+      +'<div class="cfoot"><button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+  }
+  if(s==="done"){
+    return '<div class="suite ok"><div class="sline">'+svg("checkc")+'<div><b>C\'est réglé.</b> Je l\'ai retiré de tes décisions.</div></div>'
+      +'<div class="cfoot"><button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+  }
+  /* guide = action sécurité, Kevin seul */
+  if(d.kind==="guide"){
+    var hg='<div class="suite amber"><div class="sline">'+svg("shield")+'<div><b>C\'est à toi de le faire</b> — c\'est une action de sécurité.</div></div>';
+    if(d.etapes&&d.etapes.length) hg+='<ol class="steps">'+d.etapes.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol>';
+    hg+='<div class="sguard">'+svg("hand")+'<span>Je ne touche jamais à tes accès ni à tes mots de passe. Je te guide, c\'est tout.</span></div>'
+      +'<div class="cfoot"><button class="btn ok" data-act="done" data-id="'+d.id+'">'+svg("check")+'C\'est fait</button>'
+      +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+    return hg;
+  }
+  /* decide = on attend le feu vert de Kevin */
+  if(d.kind==="decide"){
+    return '<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté.</b> On le fera ensemble quand tu voudras.</div></div>'
+      +'<div class="snext">'+svg("eye")+'<span>Rien n\'est connecté tant que tu n\'as pas donné l\'autorisation. C\'est toi qui décides du moment.</span></div>'
+      +'<div class="cfoot"><span class="statechip" style="color:#86e7bb;background:var(--green-soft);border-color:var(--green-line)"><span class="sb-dot" style="background:var(--green)"></span>Noté</span>'
+      +'<button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+  }
+  /* prepare = mission prête, honnête : rien n'est lancé sans toi */
+  return '<div class="suite"><div class="sline">'+svg("checkc")+'<div><b>C\'est noté.</b> J\'ai préparé cette mission, elle est prête.</div></div>'
+    +'<div class="statechip"><span class="sb-dot"></span>En attente d\'exécution</div>'
+    +'<div class="snext">'+svg("clock")+'<span>Je la reprends dès notre prochaine conversation, et je te montre le résultat.</span></div>'
+    +'<div class="sguard">'+svg("shield")+'<span>Rien ne se lance sans toi. Tu peux fermer l\'application.</span></div>'
+    +'<div class="cfoot"><button class="undo" data-act="undo" data-id="'+d.id+'">Revenir en arrière</button></div></div>';
+}
+
+/* ---------- actions ---------- */
+function doAct(id,act){
+  var d=decById(id); if(!d){toast("Action introuvable","alert");return;}
+  if(act==="explain"){EXPL[id]=!EXPL[id];renderSimple();scrollToCard(id);return;}
+  if(act==="expand"){OPEN[id]=!OPEN[id];renderSimple();scrollToCard(id);return;}
+  if(act==="nextHero"){HEROID=null;var t=topDecision();HEROID=t?t.id:null;renderSimple();window.scrollTo(0,0);return;}
+  if(act==="valider"){
+    EXPL[id]=false;OPEN[id]=true;setSt(id,"accepted");
+    if(d.kind==="guide"){qUpsert(d,"bloquee");toast("Voici les étapes — c'est à toi");}
+    else if(d.kind==="decide"){qUpsert(d,"en_attente");toast("C'est noté");}
+    else{qUpsert(d,"prete");toast("Mission prête — en attente d'exécution","clock");}
+    postBridge(d);
+    renderSimple();scrollToCard(id);return;
+  }
+  if(act==="later"){setSt(id,"later");EXPL[id]=false;OPEN[id]=true;qUpsert(d,"en_attente");var qi=qFind(id);if(qi>=0){QUEUE[qi].statut="Mis de côté";saveQueue();}toast("Mis de côté — je te le represente plus tard","clock");renderSimple();return;}
+  if(act==="done"){setSt(id,"done");qUpsert(d,"terminee");toast("Bravo, c'est réglé");renderSimple();return;}
+  if(act==="undo"){clearSt(id);qRemove(id);toast("Revenu en arrière");renderSimple();return;}
+}
+function scrollToCard(id){setTimeout(function(){var el=document.querySelector('[data-card="'+id+'"]');if(el&&el.scrollIntoView)el.scrollIntoView({block:"nearest",behavior:"smooth"});},60);}
+function bindActs(root){root.querySelectorAll("[data-act]").forEach(function(b){b.onclick=function(ev){ev.preventDefault();ev.stopPropagation();doAct(b.getAttribute("data-id"),b.getAttribute("data-act"));};});}
+
+/* ---------- SIMPLE render ---------- */
+var HEROID=null;
+function statusTag(d,s){
+  if(s==="accepted"&&d.kind==="prepare")return "Préparé";
+  if(s==="accepted"&&d.kind==="decide")return "Noté";
+  if(s==="accepted"&&d.kind==="guide")return "À toi";
+  if(s==="later")return "Plus tard";
+  if(s==="done")return "Réglé";
+  return "";
+}
+/* one decision as an expandable row; expanded = full card (buttons if pending, honest aftermath if acted) */
+function decRow(d){
+  var s=st(d.id), open=OPEN[d.id];
+  var ic="wait",icn="arrow",sub=d.reco;
+  if(s==="accepted"&&d.kind==="prepare"){ic="prep";icn="checkc";sub="Mission prête — en attente d'exécution.";}
+  else if(s==="accepted"&&d.kind==="decide"){ic="prep";icn="checkc";sub="C'est noté — on le fera quand tu voudras.";}
+  else if(s==="accepted"&&d.kind==="guide"){ic="block";icn="shield";sub="À faire par toi — les étapes sont là.";}
+  else if(s==="later"){ic="block";icn="clock";sub="Mis de côté — j'attends que tu sois prêt.";}
+  else if(s==="done"){ic="prep";icn="checkc";sub="Réglé.";}
+  var rt = s==="pending" ? (urgPill(d.urg)+svg("chev","chev"))
+                         : ('<span class="latertag">'+esc(statusTag(d,s))+'</span>'+svg("chev","chev"));
+  var row='<button class="row'+(open?" open":"")+'" data-act="expand" data-id="'+d.id+'"><div class="ic '+ic+'">'+svg(icn)+'</div>'
+    +'<div class="tx"><b>'+esc(d.titre)+'</b><small>'+esc(sub)+'</small></div><div class="rt">'+rt+'</div></button>';
+  if(open) row+='<div class="expander">'+decisionHtml(d,false)+'</div>';
+  return row;
+}
+function renderSimple(){
+  var dt=new Date();
+  document.getElementById("date").textContent=dt.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+  /* hero : top pending. If nothing pending -> reassuring. */
+  if(HEROID&&!decById(HEROID))HEROID=null;
+  var p=pendings();
+  if(!HEROID || st(HEROID)==="pending" || p.length){ if(!HEROID) HEROID=p.length?p[0].id:null; }
+  if(p.length===0) HEROID=null;
+  renderMot();
+  var tb=document.getElementById("talkBtn"); if(tb&&!tb.innerHTML){tb.innerHTML=svg("chat")+"<span>Parler \u00e0 Ma\u00efa<small>Le chat s\u2019ouvre ici, dans l\u2019app.</small></span>";}
+  var heroD=HEROID?decById(HEROID):null;
+  document.getElementById("heroWrap").innerHTML = heroD ? decisionHtml(heroD,true)
+    : '<div class="dcard hero"><div class="heroeye">'+svg("checkc")+'Tout est à jour</div><div class="dttl">Tu es à jour.</div><div class="dwhy">Je m\'occupe du reste en coulisses. Tu peux fermer l\'application.</div></div>';
+  document.getElementById("secHero").style.display = "";
+  /* arbitrage : pending hors hero */
+  var others=p.filter(function(d){return d.id!==HEROID;});
+  document.getElementById("secWait").style.display=others.length?"":"none";
+  document.getElementById("waitN").textContent=others.length;
+  document.getElementById("waitList").innerHTML=others.map(decRow).join("");
+  /* préparé pour toi : prepare/decide validés + réglés (hors hero) */
+  var prep=(D.decisions||[]).filter(function(d){var s=st(d.id);return d.id!==HEROID && ((s==="accepted"&&(d.kind==="prepare"||d.kind==="decide"))||s==="done"||st(d.id)==="transmis");});
+  document.getElementById("secPrep").style.display=prep.length?"":"none";
+  document.getElementById("prepList").innerHTML=prep.map(decRow).join("");
+  /* ce qui avance sans toi : managed (calm) */
+  var _mg=(D.managed||[]).map(function(m){
+    return '<div class="row calm"><div class="ic maia">'+svg("spark")+'</div><div class="tx"><b>'+esc(m.titre)+'</b><small>'+esc(m.detail)+'</small></div></div>';
+  }).join("");
+  if(D.couts){_mg+='<div class="row calm"><div class="ic maia">'+svg("spark")+'</div><div class="tx"><b>'+esc(D.couts.titre)+'</b><small>'+esc(D.couts.resume)+'</small></div></div>';}
+  document.getElementById("manageList").innerHTML=_mg;
+  /* bloqué / réservé à toi + mis de côté (hors hero) */
+  var reserved=(D.decisions||[]).filter(function(d){var s=st(d.id);return d.id!==HEROID && ((s==="accepted"&&d.kind==="guide")||s==="later");});
+  document.getElementById("secLater").style.display=reserved.length?"":"none";
+  document.getElementById("laterList").innerHTML=reserved.map(decRow).join("");
+  /* fil */
+  renderFil();
+  renderAbsence();
+  /* reassure */
+  document.getElementById("reassure").innerHTML = p.length ? "" : (svg("leaf")+" Tu peux fermer, je veille.");
+  renderAsk();
+  bindActs(document.getElementById("simple"));
+}
+
+/* ---------- Fil Maïa ---------- */
+var STAT_LABEL={prepare:"Préparé",stable:"Stable",affiche:"Publié",valide_local:"Validé",transmis:"Repris par Claude",attente:"En attente",encours:"En cours",bloque:"Réservé à toi",info:"Info"};
+var STAT_ICON={prepare:"checkc",stable:"checkc",affiche:"eye",valide_local:"check",transmis:"send",attente:"hourglass",encours:"spark",bloque:"shield",info:"dot"};
+function dynamicFil(){
+  /* prepend entries reflecting Kevin's own validated actions (honest, alive) */
+  var out=[];
+  (D.decisions||[]).forEach(function(d){
+    var s=st(d.id);
+    if(s==="accepted"&&d.kind==="prepare"){out.push({txt:"Tu as validé : "+(d.court||d.titre)+". La mission est prête, je la reprends à notre prochaine conversation.",statut:"valide_local",quand:"À l'instant"});}
+    if(s==="accepted"&&d.kind==="decide"){out.push({txt:"Tu as dit oui pour : "+(d.court||d.titre)+". On le fera quand tu donneras l'autorisation.",statut:"valide_local",quand:"À l'instant"});}
+    if(s==="done"){out.push({txt:"Tu as réglé : "+(d.court||d.titre)+".",statut:"transmis",quand:"À l'instant"});}
+  });
+  return out;
+}
+function renderAbsence(){
+  var H=[
+    ["Une semaine","Je veille en continu. J'ex\u00e9cute toute seule les t\u00e2ches s\u00fbres \u2014 brouillons, v\u00e9rifications en lecture seule. Tout ce qui touche tes cl\u00e9s, tes mails, ton t\u00e9l\u00e9phone ou ton argent t'attend : je n'y touche pas. Tu retrouves une liste propre."],
+    ["Un mois","Pareil, sur la dur\u00e9e. Ta liste de d\u00e9cisions s'allonge, mais rien de risqu\u00e9 ne se d\u00e9clenche sans toi. Je te pr\u00e9pare un r\u00e9capitulatif clair pour ton retour."],
+    ["Six mois","M\u00eame longtemps, je ne touche jamais \u00e0 tes acc\u00e8s ni \u00e0 ta production sans toi. Je garde tout en ordre, je signale l'urgent, et rien d'irr\u00e9versible ne se fait en ton absence."]
+  ];
+  document.getElementById("absenceWrap").innerHTML=
+    '<div class="card">'
+    +'<div style="display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--ink2);line-height:1.55;margin-bottom:4px">'+svg("shield")+'<span>Tu peux partir tranquille. Voici exactement ce que je fais \u2014 et ce que je ne fais pas \u2014 pendant ton absence.</span></div>'
+    +H.map(function(h){return '<div class="kv" style="display:block;border-top:1px solid var(--line)"><b style="color:var(--maia);font-size:11px;letter-spacing:.05em;text-transform:uppercase">'+esc(h[0])+'</b><div style="color:var(--ink2);font-size:13.5px;line-height:1.55;margin-top:5px">'+esc(h[1])+'</div></div>';}).join("")
+    +'</div>';
+}
+function renderFil(){
+  var items=dynamicFil().concat(D.fil||[]);
+  document.getElementById("filList").innerHTML=items.map(function(f){
+    var stt=f.statut||"info";
+    return '<div class="filitem"><div class="fildot d-'+stt+'">'+svg(STAT_ICON[stt]||"dot")+'</div>'
+      +'<div class="filbody"><p>'+esc(f.txt)+'</p>'
+      +'<div class="filmeta"><span class="filstat s-'+stt+'">'+esc(STAT_LABEL[stt]||stt)+'</span>'
+      +(f.quand?'<span class="filwhen">'+esc(f.quand)+'</span>':'')+'</div></div></div>';
+  }).join("");
+}
+
+/* ---------- ADVANCED ---------- */
+var ETAT_CHIP={prepare:"s-prepare",stable:"s-stable",affiche:"s-affiche",attente:"s-attente",bloque:"s-bloque",decision:"s-attente",encours:"s-encours"};
+var ETAT_TXT={prepare:"Préparé",stable:"Stable",affiche:"Publié",attente:"En attente",bloque:"Réservé à Kevin",decision:"Décision",encours:"En cours"};
+var ADVNAV=[["chantiers","Chantiers","grid"],["decisions","Décisions","scale"],["queue","File d'exécution","layers"],["echanges","Échanges IA","swap"],["sources","Sources & données","db"],["historique","Historique","history"]];
+function buildAdvNav(){
+  document.getElementById("advNav").innerHTML=ADVNAV.map(function(n,i){
+    return '<button data-asec="'+n[0]+'" class="'+(i===0?"on":"")+'">'+svg(n[2])+esc(n[1])+'</button>';
+  }).join("");
+  document.querySelectorAll("[data-asec]").forEach(function(b){b.onclick=function(){goAdv(b.getAttribute("data-asec"));};});
+}
+function goAdv(sec){
+  document.querySelectorAll(".advsec").forEach(function(s){s.classList.remove("on");});
+  var el=document.getElementById("a-"+sec);if(el)el.classList.add("on");
+  document.querySelectorAll("[data-asec]").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-asec")===sec);});
+  if(sec==="chantiers")renderChantiers();
+  if(sec==="decisions")renderDecisions();
+  if(sec==="queue")renderQueue();
+  if(sec==="echanges")renderEchanges();
+  if(sec==="sources")renderSources();
+  if(sec==="historique")renderHistorique();
+}
+function renderChantiers(){
+  var c=(D.chantiers||[]);
+  document.getElementById("a-chantiers").innerHTML=
+    '<div class="note">'+svg("grid")+'<span>Tous tes chantiers, avec leur état réel. « Publié » ne veut pas dire « automatisé » ; « Préparé » ne veut pas dire « en ligne ».</span></div>'
+    +c.map(function(x){
+      var chip=ETAT_CHIP[x.etat]||"s-info", txt=ETAT_TXT[x.etat]||x.etat;
+      return '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><div><h3>'+esc(x.titre)+'</h3><div class="meta">'+esc(x.responsable||"")+(x.kevin?' · décision possible':'')+'</div></div>'
+        +'<span class="chip '+chip+'">'+esc(txt)+'</span></div>'
+        +'<div style="font-size:13.5px;color:var(--ink2);margin-top:10px;line-height:1.55">'+esc(x.detail)+'</div></div>';
+    }).join("");
+}
+function renderDecisions(){
+  var list=(D.decisions||[]).slice().sort(decOrder);
+  document.getElementById("a-decisions").innerHTML=
+    '<div class="note">'+svg("scale")+'<span>Vue détaillée des décisions : recommandation, raison, risque si rien n\'est fait, qui agit. Tu peux aussi tout faire depuis le mode simple.</span></div>'
+    +list.map(function(d){
+      return '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><h3>'+esc(d.titre)+'</h3>'+urgPill(d.urg)+'</div>'
+        +'<div class="kv"><span>Recommandation</span><span>'+esc(d.reco)+'</span></div>'
+        +'<div class="kv"><span>Pourquoi</span><span>'+esc(d.why)+'</span></div>'
+        +'<div class="kv"><span>Risque si rien</span><span>'+esc(d.risque||(d.explain&&d.explain.sinon)||"")+'</span></div>'
+        +'<div class="kv"><span>Qui agit</span><span>'+esc((d.tech&&d.tech.responsable)||"")+'</span></div>'
+        +'<div class="kv"><span>État réel</span><span>'+esc((d.tech&&d.tech.etat_reel)||"")+'</span></div>'
+        +'<div class="kv"><span>Statut local</span><span>'+esc(st(d.id)==="pending"?"À trancher":st(d.id))+'</span></div>'
+        +'</div>';
+    }).join("");
+}
+function renderQueue(){
+  var rows=QUEUE.length? QUEUE.slice().reverse().map(function(q){
+    var etatTxt=ETAT_LABEL[q.etat]||q.etat;
+    var chipCls=q.etat==="prete"?"s-valide_local":q.etat==="transmise"?"s-transmis":q.etat==="terminee"?"s-prepare":q.etat==="bloquee"?"s-bloque":"s-attente";
+    return '<div class="qrow"><div class="qmain"><b>'+esc(q.decision)+'</b><small>'+esc(q.projet)+' · '+esc(q.responsable)+'<br>Prochaine \u00e9tape : '+esc(q.prochaine_etape)+'</small></div>'
+      +'<div class="qmeta"><span class="chip '+chipCls+'">'+esc(etatTxt)+'</span>'
+      +'<span class="chip s-info">'+(q.kevin_requis?"Toi requis":"Sans toi")+'</span>'
+      +'<span class="qid">'+esc(q.action_id)+'</span></div></div>';
+  }).join("") : '<div class="qempty">Ta file est vide. Dès que tu valides une décision (mode simple), elle apparaît ici.</div>';
+  document.getElementById("a-queue").innerHTML=
+    '<div class="note">'+svg("layers")+'<span><b>MAIA_ACTION_QUEUE</b> — chaque décision validée devient une action suivie : projet, décision, responsable, prochaine étape, état (local / prête / transmise / en attente / bloquée / terminée). Enregistrée sur cet appareil.</span></div>'
+    +'<div class="qtable">'+rows+'</div>'
+    +'<div class="qbar"><button class="btn quiet" data-q="export">'+svg("doc")+'Exporter la file (JSON)</button>'
+    +'<button class="btn quiet" data-q="clear">'+svg("x")+'Vider la file</button></div>'
+    +'<div class="note" style="margin-top:12px">'+svg("alert")+'<span>Vérité produit : cette file vit dans ton navigateur. Pour qu\'elle devienne <b>directement exploitable par Claude sans copier-coller</b>, une architecture cible est prête à déployer (voir le document livré avec cette version). En attendant, le lien réel = tu me dis « occupe-toi de la file validée » et je reprends ces actions.</span></div>';
+  var ex=document.querySelector('[data-q="export"]');if(ex)ex.onclick=qExport;
+  var cl=document.querySelector('[data-q="clear"]');if(cl)cl.onclick=function(){if(confirm("Vider la file d'actions de cet appareil ?")){QUEUE=[];saveQueue();renderQueue();toast("File vidée");}};
+}
+function renderEchanges(){
+  var t=D.tech||{};
+  var h='<div class="note">'+svg("swap")+'<span>Comment mes outils se parlent entre eux, en clair. Tu n\'as pas à gérer ça.</span></div>';
+  if(t.hermes&&t.hermes.length){
+    h+='<div class="card"><h3 style="margin-bottom:11px">Transport entre outils</h3><div class="cgrid">'
+      +t.hermes.map(function(x){return '<div class="tcell '+(x.ok?"ok":"ko")+'"><div class="v">'+svg(x.ok?"checkc":"x")+esc(x.v)+'</div><div class="k">'+esc(x.k)+'</div></div>';}).join("")
+      +'</div></div>';
+  }
+  if(t.exchanges&&t.exchanges.length){
+    h+='<div class="card"><h3 style="margin-bottom:6px">Points réglés en coulisses</h3>'
+      +t.exchanges.map(function(x){return '<div class="kv"><span>'+esc(x.sujet)+'</span><span>'+esc(x.etat)+'</span></div>';}).join("")
+      +'</div>';
+  }
+  document.getElementById("a-echanges").innerHTML=h;
+}
+function renderSources(){
+  var t=D.tech||{}, m=D.meta||{};
+  document.getElementById("a-sources").innerHTML=
+    '<div class="card"><h3 style="margin-bottom:8px">Version & données</h3>'
+    +'<div class="kv"><span>Version</span><span>MAÏA '+esc(m.version||"")+'</span></div>'
+    +'<div class="kv"><span>Mise à jour</span><span>'+esc(m.updated_ts?new Date(m.updated_ts).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"")+'</span></div>'
+    +'<div class="kv"><span>Sources</span><span>'+esc(t.sources||"")+'</span></div>'
+    +'<div class="kv"><span>État des données</span><span>'+esc(t.note_donnees||"")+'</span></div>'
+    +'</div>'
+    +'<div class="card"><h3 style="margin-bottom:8px">File d\'actions</h3><div style="font-size:13px;color:var(--ink2);line-height:1.55">'+esc(t.queue_note||"")+'</div>'
+    +'<button class="treset" id="resetAll">Réinitialiser l\'état local de cet appareil (décisions + file)</button></div>';
+  var r=document.getElementById("resetAll");if(r)r.onclick=function(){if(confirm("Remettre à zéro tes choix et ta file sur cet appareil ?")){STATE={};QUEUE=[];saveState();saveQueue();EXPL={};OPEN={};toast("Remis à zéro");renderSimple();goAdv("sources");}};
+}
+function renderHistorique(){
+  var ev=QUEUE.slice().sort(function(a,b){return (b.ts||"").localeCompare(a.ts||"");});
+  var rows=ev.length? ev.map(function(q){
+    return '<div class="kv"><span>'+esc(new Date(q.ts).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}))+'</span><span>'+esc(q.decision+" — "+(ETAT_LABEL[q.etat]||q.etat))+'</span></div>';
+  }).join("") : '<div class="qempty">Aucune action enregistrée pour l\'instant.</div>';
+  document.getElementById("a-historique").innerHTML=
+    '<div class="note">'+svg("history")+'<span>Le journal de tes décisions sur cet appareil. Honnête : c\'est l\'historique local, pas une exécution distante.</span></div>'
+    +'<div class="card" style="padding:6px 16px">'+rows+'</div>';
+}
+
+/* ---------- views (simple / advanced / chat) ---------- */
+var MODE="simple";
+function setMode(m){
+  MODE=m;
+  document.getElementById("simple").classList.toggle("hidden",m!=="simple");
+  document.getElementById("advanced").classList.toggle("hidden",m!=="advanced");
+  document.getElementById("chat").classList.toggle("hidden",m!=="chat");
+  var b=document.getElementById("modeBtn");
+  var tb2=document.getElementById("chatTopBtn"); if(tb2)tb2.innerHTML=svg("chat")+"Parler";
+  var tbar=document.querySelector(".topbar"); if(tbar)tbar.style.display=(m==="chat")?"none":"flex";
+  b.style.display=(m==="chat")?"none":"";
+  if(m==="simple"){b.innerHTML=svg("sliders")+"Avanc\u00e9";renderSimple();}
+  else if(m==="advanced"){b.innerHTML=svg("leaf")+"Simple";buildAdvNav();goAdv("chantiers");}
+  window.scrollTo(0,0);
+}
+document.getElementById("modeBtn").onclick=function(){setMode(MODE==="advanced"?"simple":"advanced");};
+
+/* ---------- voix (lecture audio, provisoire) ---------- */
+var MAIA_VOICE=null;
+function pickVoice(){try{var ss=window.speechSynthesis;if(!ss)return;var vs=ss.getVoices();if(!vs.length)return;var fr=vs.filter(function(v){return /fr/i.test(v.lang);});var pref=["Audrey","Amelie","Am\u00e9lie","Virginie","Marie","Thomas","Google fran"];for(var i=0;i<pref.length;i++){var mm=fr.filter(function(v){return v.name.indexOf(pref[i])>=0;})[0];if(mm){MAIA_VOICE=mm;break;}}if(!MAIA_VOICE&&fr.length)MAIA_VOICE=fr[0];}catch(e){}}
+function speak(txt){try{var ss=window.speechSynthesis;if(!ss){toast("Lecture audio non dispo ici.","alert");return;}var go=function(){var u=new SpeechSynthesisUtterance(txt);u.lang="fr-FR";u.rate=.98;u.pitch=1.04;if(MAIA_VOICE)u.voice=MAIA_VOICE;u.onerror=function(){toast("Son coupé ? Vérifie le bouton silence et le volume.","alert");};ss.speak(u);try{ss.resume();}catch(e){}};if(ss.speaking||ss.pending){ss.cancel();setTimeout(go,90);}else{go();}}catch(e){toast("Lecture audio non dispo ici.","alert");}}
+try{if(window.speechSynthesis){pickVoice();window.speechSynthesis.onvoiceschanged=pickVoice;}}catch(e){}
+
+/* ---------- chat Maïa ---------- */
+var CHAT=[], CHAT_INIT=false;
+var RELAY_URL="https://script.google.com/macros/s/AKfycbwdw02gBe_-_ErpNY2NGmPZCmBnjHucWNdcRgsVhF7bVOm6V8xn5gm9NgExq_sGjahH/exec"; /* relais Apps Script — branché 25/06 */
+function openChat(){setMode("chat");if(!CHAT_INIT){CHAT_INIT=true;pushMaia("Bonjour Kevin. Je suis l\u00e0. Dis-moi ce que tu veux qu\u2019on regarde, ou pose-moi une question \u2014 je te r\u00e9ponds, et tu peux m\u2019\u00e9couter.");}else{renderChat();}}
+function pushUser(x){CHAT.push({r:"user",t:x});renderChat();}
+function pushMaia(x){CHAT.push({r:"maia",t:"",full:x,stream:true});renderChat();streamLast();}
+function renderChat(){
+  var c=document.getElementById("chatMsgs"); if(!c)return;
+  c.innerHTML=CHAT.map(function(m,i){
+    if(m.r==="user")return '<div class="cm user"><div class="cb">'+esc(m.t)+'</div></div>';
+    var body='<div class="cb" data-mi="'+i+'">'+esc(m.t)+(m.stream?'<span class="cur">\u258d</span>':'')+'</div>';
+    var btn=(!m.stream&&!m.pending)?'<button class="listen" data-listen="'+i+'">'+svg("audio")+'\u00c9couter</button>':'';
+    return '<div class="cm maia">'+body+btn+'</div>';
+  }).join("");
+  c.scrollTop=c.scrollHeight;
+  c.querySelectorAll("[data-listen]").forEach(function(b){b.onclick=function(){var m=CHAT[+b.getAttribute("data-listen")];speak(m.full||m.t);};});
+}
+function streamLast(){
+  var k=CHAT.length-1, m=CHAT[k]; if(!m||!m.stream)return; var full=m.full||""; var idx=0;
+  clearInterval(m._iv);
+  m._iv=setInterval(function(){
+    idx+=Math.max(2,Math.round(full.length/110));
+    if(idx>=full.length){idx=full.length;clearInterval(m._iv);m.stream=false;m.t=full;renderChat();return;}
+    m.t=full.slice(0,idx);
+    var el=document.querySelector('#chatMsgs [data-mi="'+k+'"]');
+    if(el){el.innerHTML=esc(m.t)+'<span class="cur">\u258d</span>';var c=document.getElementById("chatMsgs");c.scrollTop=c.scrollHeight;}
+  },26);
+}
+function maiaReply(userText,cb){
+  if(RELAY_URL){
+    fetch(RELAY_URL,{method:"POST",mode:"cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({message:userText}).toString()})
+      .then(function(r){return r.text();}).then(function(x){cb((x||"").trim()||"(r\u00e9ponse vide)");})
+      .catch(function(){cb("Je n\u2019arrive pas \u00e0 r\u00e9pondre ici pour le moment (r\u00e9seau).");});
+  }else{
+    cb("Je suis presque pr\u00eate \u00e0 te r\u00e9pondre directement ici \u2014 il me reste un dernier petit branchement (3 minutes) pour parler dans l\u2019app. En attendant, dis-moi \u00ab go relais \u00bb et je te guide pas \u00e0 pas.");
+  }
+}
+function sendChat(){
+  if(typeof RECING!=="undefined"&&RECING){stopVoice();}
+  var inp=document.getElementById("chatInput"); var x=(inp.value||"").trim(); if(!x)return;
+  inp.value=""; inp.style.height="auto";
+  pushUser(x);
+  CHAT.push({r:"maia",t:"\u2026",full:"\u2026",stream:false,pending:true}); renderChat();
+  setTimeout(function(){ maiaReply(x,function(reply){ CHAT.pop(); pushMaia(reply); }); },350);
+}
+/* ---------- voix : dictée (parler à Maïa) — écoute continue, PAS d'envoi auto ---------- */
+var REC=null, RECING=false, VOICE_TXT="";
+function voiceSupported(){return ("webkitSpeechRecognition" in window)||("SpeechRecognition" in window);}
+function updateMic(){var b=document.getElementById("chatMic");if(!b)return;b.classList.toggle("listening",RECING);b.innerHTML=svg(RECING?"check":"mic");var inp=document.getElementById("chatInput");if(inp)inp.placeholder=RECING?"Je t'écoute… (touche \u2713 pour arrêter)":"Écris ou parle à Maïa…";}
+function startVoice(){
+  if(!voiceSupported()){var _inp=document.getElementById("chatInput");if(_inp){try{_inp.focus();}catch(e){}} toast("Sur iPhone : parle avec le micro du clavier (à côté de la barre d'espace). Je t'ai ouvert le clavier.","mic");return;}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  try{REC=new SR();}catch(e){toast("Micro indisponible ici.","mic");return;}
+  REC.lang="fr-FR"; REC.interimResults=true; REC.continuous=true; REC.maxAlternatives=1;
+  var inp=document.getElementById("chatInput");
+  VOICE_TXT=(inp.value||"");
+  RECING=true; updateMic();
+  REC.onresult=function(e){
+    var interim="";
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      var r=e.results[i];
+      if(r.isFinal){ VOICE_TXT=(VOICE_TXT?VOICE_TXT+" ":"")+((r[0].transcript)||"").trim(); }
+      else { interim+=r[0].transcript; }
+    }
+    inp.value=(VOICE_TXT+(interim?" "+interim:"")).replace(/\s+/g," ").trim();
+    inp.style.height="auto"; inp.style.height=Math.min(120,inp.scrollHeight)+"px";
+  };
+  REC.onerror=function(ev){ if(ev&&ev.error==="not-allowed"){RECING=false;updateMic();toast("Micro refusé — autorise le micro pour parler.","mic");} };
+  REC.onend=function(){ if(RECING){ try{REC.start();}catch(e){RECING=false;updateMic();} } else { updateMic(); } };
+  try{REC.start();}catch(e){RECING=false;updateMic();}
+}
+function stopVoice(){ RECING=false; updateMic(); if(REC){try{REC.stop();}catch(e){}} }
+function toggleVoice(){ if(RECING)stopVoice(); else startVoice(); }
+(function(){
+  var tb=document.getElementById("talkBtn"); if(tb)tb.onclick=openChat;
+  var ctb=document.getElementById("chatTopBtn"); if(ctb)ctb.onclick=openChat;
+  var mic=document.getElementById("chatMic"); if(mic){mic.innerHTML=svg("mic"); mic.onclick=toggleVoice;}
+  var cb=document.getElementById("chatBack"); if(cb){cb.innerHTML=svg("back")+"Accueil"; cb.onclick=function(){setMode("simple");};}
+  var cs=document.getElementById("chatSend"); if(cs){cs.innerHTML=svg("send"); cs.onclick=sendChat;}
+  var ci=document.getElementById("chatInput");
+  if(ci){ci.onkeydown=function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}};
+    ci.oninput=function(){ci.style.height="auto";ci.style.height=Math.min(120,ci.scrollHeight)+"px";};}
+})();
+
+/* ---------- semi-live ---------- */
+function loadSnapshot(initial){
+  fetch(SNAP_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    if(j&&j.decisions){D=j;if(MODE==="simple"){renderSimple();}else{var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}if(!initial)toast("Donnees rafraichies","spark");}
+    loadLive();
+  }).catch(function(){});
+}
+
+function loadLive(){
+  if(!LIVE_URL) return;
+  fetch(LIVE_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    if(!j||!j.records) return; LIVE_OK=true; var changed=false; var asks=[];
+    j.records.forEach(function(rec){
+      var d=rec.data||rec; var id=d.action_id||rec.key; if(!id) return;
+      var et=String(d.etat||"").toLowerCase();
+      if(et.indexOf("termin")===0){
+        if(decById(id)&&st(id)!=="done"){setSt(id,"done");changed=true;}
+        (D.chantiers||[]).forEach(function(c){if(c.lien===id&&c.etat!=="stable"){c.etat="stable";changed=true;}});
+      } else if(!decById(id)){
+        asks.push({id:id,projet:d.projet||"",decision:d.decision||d.court||id,statut:d.statut||"",etape:d.prochaine_etape||""});
+      }
+    });
+    LIVE_ASKS=asks;
+    if(MODE==="simple")renderSimple();else if(changed){var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}
+  }).catch(function(){});
+}
+function renderAsk(){
+  var el=document.getElementById("askList"); if(!el) return;
+  var sec=document.getElementById("secAsk"), n=document.getElementById("askN");
+  if(n)n.textContent=LIVE_ASKS.length;
+  if(sec)sec.style.display=LIVE_ASKS.length?"":"none";
+  el.innerHTML=LIVE_ASKS.map(function(a){
+    return '<div class="row calm"><div class="ic maia">'+svg("spark")+'</div><div class="tx"><b>'+esc(a.decision)+'</b><small>'+(a.projet?esc(a.projet)+' \u00b7 ':'')+esc(a.statut||'En file')+(a.etape?' \u2014 '+esc(a.etape):'')+'</small></div></div>';
+  }).join("");
+}
+
+/* ---------- boot ---------- */
+setMode("simple");
+loadSnapshot(true);
+loadLive();
+setInterval(loadLive,60000);
+setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classList.add("gone");},6700);
+</script>
+<script>
+"use strict";
+/* ===== APERÇU v2 — Autour de moi : tout fonctionne, données réelles ===== */
+(function(){
+  Object.assign(I,{
+    home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/>',
+    compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 5.3L8 16l2.2-5.3z"/>',
+    pin:'<path d="M12 21s-7-6.4-7-11a7 7 0 0 1 14 0c0 4.6-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+    droplet:'<path d="M12 3s6 6.3 6 10.2A6 6 0 0 1 6 13.2C6 9.3 12 3 12 3z"/>',
+    thermo:'<path d="M12 4a2 2 0 0 0-2 2v8.4a4 4 0 1 0 4 0V6a2 2 0 0 0-2-2z"/>',
+    star:'<path d="M12 3.5 14.6 9l6 .6-4.5 4 1.3 5.9L12 16.6 6.6 19.5 7.9 13.6 3.4 9.6l6-.6z"/>',
+    cal:'<rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/>',
+    plane:'<path d="M10.5 13.5 3 11l1.2-2 6.8 1 4.6-4.7a2 2 0 0 1 2.9 2.8L14.8 12.8l1 6.8-2 1z"/>',
+    search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+    bed:'<path d="M3 7v11M3 12h15a3 3 0 0 1 3 3v3M3 18h18"/><path d="M6 12V9.6A1.6 1.6 0 0 1 7.6 8h3.8A1.6 1.6 0 0 1 13 9.6V12"/>',
+    train:'<rect x="6" y="3.5" width="12" height="13" rx="3"/><path d="M6 10h12M9.5 20l-2 2M14.5 20l2 2M9.5 16.5h.01M14.5 16.5h.01"/>'
+  });
+
+  var OR={lat:47.9026,lon:1.9090};
+  function hav(la1,lo1,la2,lo2){var R=6371,t=Math.PI/180;var d1=(la2-la1)*t,d2=(lo2-lo1)*t;var a=Math.sin(d1/2)*Math.sin(d1/2)+Math.cos(la1*t)*Math.cos(la2*t)*Math.sin(d2/2)*Math.sin(d2/2);return Math.round(2*R*Math.asin(Math.sqrt(a)));}
+  function gmap(la,lo){return "https://www.google.com/maps/search/?api=1&query="+la+","+lo;}
+
+  var SPOTS=[
+    {n:"Le Loiret — Olivet",w:"Le Loiret",lvl:"Calme · débutant",la:47.8606,lo:1.8970,note:"Rivière lente et abritée, parfaite pour débuter ou pagayer tranquille (vers les moulins d'Olivet)."},
+    {n:"Île Charlemagne — Orléans",w:"Plan d'eau",lvl:"Calme · famille",la:47.8745,lo:1.9460,note:"Base de loisirs, plan d'eau surveillé l'été. Idéal initiation et sortie famille."},
+    {n:"Combleux — confluence",w:"Loire + canal",lvl:"Intermédiaire",la:47.8940,lo:1.9850,note:"Joli site Loire / canal d'Orléans. Beau, mais courant de Loire : prudence, hors période de crue."},
+    {n:"Jargeau",w:"La Loire",lvl:"Intermédiaire",la:47.8640,lo:2.1180,note:"Mise à l'eau Loire en aval, club nautique. Vérifie le débit avant de partir."},
+    {n:"Châteauneuf-sur-Loire",w:"La Loire",lvl:"Intermédiaire",la:47.8640,lo:2.2250,note:"Loire large, belle descente. Bancs de sable et courant : reste vigilant."}
+  ];
+  var ST=["concert","expo","resto","nature","famille","marché","sport"];
+  var VENUES=[
+    {n:"Zénith d'Orléans",s:"concerts & spectacles",u:"https://www.zenith-orleans.fr/",la:47.9038,lo:1.9530},
+    {n:"CO'Met",s:"arena, sport & événements",u:"https://www.co-met.fr/",la:47.8650,lo:1.9300},
+    {n:"Théâtre d'Orléans",s:"théâtre, danse, musique",u:"https://www.theatredorleans.com/",la:47.9010,lo:1.9020},
+    {n:"FRAC Centre — Les Turbulences",s:"art & architecture",u:"https://www.frac-centre.fr/",la:47.9080,lo:1.9120},
+    {n:"Office de tourisme",s:"agenda, visites & idées",u:"https://www.tourisme-orleansmetropole.com/",la:47.8990,lo:1.9090}
+  ];
+
+  var KF="maia.autour.kfav";
+  function kfav(){try{return JSON.parse(localStorage.getItem(KF))||[];}catch(e){return [];}}
+  function kfavSet(a){try{localStorage.setItem(KF,JSON.stringify(a));}catch(e){}}
+  function isFav(n){return kfav().indexOf(n)>=0;}
+  function toggleFav(n){var a=kfav(),i=a.indexOf(n);if(i>=0)a.splice(i,1);else a.unshift(n);kfavSet(a);renderSpots();renderFav();toast(i>=0?"Retiré des favoris":"Ajouté aux favoris","star");}
+
+  function wmo(c){var m={0:"ciel clair",1:"plutôt clair",2:"peu nuageux",3:"couvert",45:"brouillard",48:"brouillard givrant",51:"bruine",53:"bruine",55:"bruine",61:"pluie faible",63:"pluie",65:"forte pluie",71:"neige",80:"averses",81:"averses",82:"fortes averses",95:"orage",96:"orage",99:"orage"};return m[c]||"variable";}
+
+  function spotCard(s){
+    var d=hav(OR.lat,OR.lon,s.la,s.lo), fav=isFav(s.n);
+    return '<div class="spot"><div class="sh"><div class="sn"><b>'+esc(s.n)+'</b><small>'+esc(s.w)+' · '+esc(s.lvl)+' · '+d+' km d’Orléans</small></div>'
+      +'<button class="favbtn'+(fav?' on':'')+'" data-fav="'+esc(s.n)+'" aria-label="Favori">'+svg("star")+'</button></div>'
+      +'<div style="font-size:13px;color:var(--ink2);margin-top:9px;line-height:1.5">'+esc(s.note)+'</div>'
+      +'<div class="sa"><a class="iconbtn cy" href="'+gmap(s.la,s.lo)+'" target="_blank" rel="noopener">'+svg("pin")+'Itinéraire</a>'
+      +'<a class="iconbtn" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent("canoë kayak "+s.n)+'" target="_blank" rel="noopener">'+svg("search")+'Accès &amp; infos</a></div></div>';
+  }
+  function renderSpots(){
+    var sel=document.getElementById("kRad"), rad=sel?parseInt(sel.value):60;
+    var el=document.getElementById("kSpots"); if(!el)return;
+    var list=SPOTS.filter(function(s){return hav(OR.lat,OR.lon,s.la,s.lo)<=rad;});
+    if(!list.length)list=[SPOTS[0]];
+    el.innerHTML=list.map(spotCard).join(""); bindFav(el);
+  }
+  function renderFav(){
+    var el=document.getElementById("kFavList"), n=document.getElementById("kFavN"); if(!el)return;
+    var a=kfav(); if(n)n.textContent=a.length;
+    if(!a.length){el.innerHTML='<div class="calmnote">'+svg("star")+'Aucun favori — touche l’étoile d’un spot pour le garder ici.</div>';return;}
+    el.innerHTML=a.map(function(nm){var s=SPOTS.filter(function(x){return x.n===nm;})[0];return s?spotCard(s):"";}).join(""); bindFav(el);
+  }
+  function bindFav(scope){(scope||document).querySelectorAll("[data-fav]").forEach(function(b){b.onclick=function(){toggleFav(b.getAttribute("data-fav"));};});}
+
+  function loadKLive(){
+    var box=document.getElementById("kLive"); if(!box)return;
+    box.innerHTML='<div class="livecard"><div class="lk">'+svg("thermo")+'Météo Orléans</div><div class="lv" id="kvW">…</div><div class="lx" id="kxW">chargement…</div></div>'
+      +'<div class="livecard"><div class="lk">'+svg("droplet")+'Niveau de la Loire</div><div style="margin-top:9px"><a class="iconbtn cy" href="https://www.vigicrues.gouv.fr/" target="_blank" rel="noopener" style="padding:8px 11px">'+svg("droplet")+'Vigicrues officiel</a></div><div class="lx" style="margin-top:7px">niveau &amp; vigilance en direct</div></div>';
+    fetch("https://api.open-meteo.com/v1/forecast?latitude="+OR.lat+"&longitude="+OR.lon+"&current=temperature_2m,wind_speed_10m,precipitation,weather_code")
+      .then(function(r){return r.json();}).then(function(j){
+        var c=j.current||{}, w=document.getElementById("kvW"), x=document.getElementById("kxW");
+        if(w)w.textContent=Math.round(c.temperature_2m)+" °C";
+        if(x)x.textContent=wmo(c.weather_code)+" · vent "+Math.round(c.wind_speed_10m)+" km/h · maj "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+      }).catch(function(){var x=document.getElementById("kxW");if(x)x.textContent="météo indisponible";});
+  }
+
+  function renderVenues(){var el=document.getElementById("sVenues"); if(!el)return;
+    el.innerHTML=VENUES.map(function(v){return '<div class="spot"><div class="sh"><div class="sn"><b>'+esc(v.n)+'</b><small>'+esc(v.s)+'</small></div></div>'
+      +'<div class="sa"><a class="iconbtn cy" href="'+esc(v.u)+'" target="_blank" rel="noopener">'+svg("compass")+'Programme</a>'
+      +'<a class="iconbtn" href="'+gmap(v.la,v.lo)+'" target="_blank" rel="noopener">'+svg("pin")+'Y aller</a></div></div>';}).join("");}
+  function bindSorties(){var ag=document.getElementById("sAgenda"); if(ag){ag.innerHTML=svg("cal")+"Agenda officiel d’Orléans";ag.href="https://www.tourisme-orleansmetropole.com/agenda";}}
+  var EV_DATA=[], EV_ALL=[], EV_SHOWN=6;
+  function evtxt(e){return ((e.title_fr||'')+' '+(e.description_fr||'')+' '+(e.keywords_fr||'')).toLowerCase();}
+  function evcat(e){return (e.categorie_principale||'');}
+  var INTERESTS=[
+    {k:"kayak",label:"Kayak",test:function(e){return evcat(e).indexOf("Sport")>=0||/kayak|cano|aviron|paddle|rivière|loire à v/.test(evtxt(e));}},
+    {k:"musique",label:"Musique",test:function(e){return evcat(e).indexOf("Musique")>=0;}},
+    {k:"concerts",label:"Concerts",test:function(e){return evcat(e).indexOf("Musique")>=0||/concert/.test(evtxt(e));}},
+    {k:"ateliers",label:"Ateliers créatifs",test:function(e){return evcat(e).indexOf("Stage - atelier")>=0;}},
+    {k:"debats",label:"Débats",test:function(e){return evcat(e).indexOf("Conférence")>=0||/débat|rencontre|conférence/.test(evtxt(e));}},
+    {k:"animations",label:"Animations",test:function(e){return evcat(e).indexOf("Spectacle")>=0||evcat(e).indexOf("Fête")>=0||/animation|insolite|original/.test(evtxt(e));}}
+  ];
+  var SEL={}; INTERESTS.forEach(function(i){SEL[i.k]=true;});
+  function renderFilters(){
+    var el=document.getElementById("evFilters"); if(!el)return;
+    el.innerHTML=INTERESTS.map(function(i){return '<button class="chip2'+(SEL[i.k]?' on':'')+'" data-int="'+i.k+'">'+esc(i.label)+'</button>';}).join("");
+    el.querySelectorAll("[data-int]").forEach(function(b){b.onclick=function(){var k=b.getAttribute("data-int");SEL[k]=!SEL[k];b.classList.toggle("on",SEL[k]);applyFilter();};});
+  }
+  function applyFilter(){
+    var anyOn=INTERESTS.some(function(i){return SEL[i.k];});
+    EV_DATA=anyOn?EV_ALL.filter(function(e){return INTERESTS.some(function(i){return SEL[i.k]&&i.test(e);});}):EV_ALL.slice();
+    EV_SHOWN=6; renderEvList();
+    var m=document.getElementById("evMaj"); if(m)m.innerHTML=svg("clock")+(EV_DATA.length?(EV_DATA.length+" événements pour toi · mis à jour à l’instant"):"Rien dans tes filtres pour l’instant — touche une autre envie.");
+  }
+  function gcal(ev){
+    function z(n){return ('0'+n).slice(-2);}
+    function fmt(iso){var d=new Date(iso);return ''+d.getUTCFullYear()+z(d.getUTCMonth()+1)+z(d.getUTCDate())+'T'+z(d.getUTCHours())+z(d.getUTCMinutes())+'00Z';}
+    var s2=ev.firstdate_begin, e2=ev.firstdate_end||ev.firstdate_begin, dates=s2?(fmt(s2)+'/'+fmt(e2)):'';
+    var loc=[ev.location_name,ev.location_address,ev.location_city].filter(Boolean).join(', ');
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(ev.title_fr||'Événement')+(dates?'&dates='+dates:'')+'&location='+encodeURIComponent(loc)+'&details='+encodeURIComponent((ev.description_fr||'')+(ev.canonicalurl?'\n\n'+ev.canonicalurl:''));
+  }
+  function evCard(ev){
+    var cat=(ev.categorie_principale||'').split(';')[0];
+    var maj=ev.updatedat?new Date(ev.updatedat).toLocaleDateString('fr-FR'):'';
+    var loc=[ev.location_name,ev.location_city].filter(Boolean).join(' · ');
+    var c=ev.location_coordinates, mapHref=c?('https://www.google.com/maps/search/?api=1&query='+c.lat+','+c.lon):('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(loc||'Orléans'));
+    return '<div class="ev"><div class="ed">'+svg("cal")+esc(ev.daterange_fr||'')+(cat?'<span class="ecat">'+esc(cat)+'</span>':'')+'</div>'
+      +'<div class="et">'+esc(ev.title_fr||'')+'</div>'
+      +'<div class="el">'+svg("pin")+esc(loc||'Orléans')+'</div>'
+      +(maj?'<div class="eu">mis à jour le '+esc(maj)+'</div>':'')
+      +'<div class="ea"><a class="iconbtn cy" href="'+gcal(ev)+'" target="_blank" rel="noopener">'+svg("cal")+'Ça m’intéresse → Agenda</a>'
+      +'<a class="iconbtn" href="'+mapHref+'" target="_blank" rel="noopener">'+svg("pin")+'Y aller</a>'
+      +(ev.canonicalurl?'<a class="iconbtn" href="'+esc(ev.canonicalurl)+'" target="_blank" rel="noopener">'+svg("search")+'Détail</a>':'')+'</div></div>';
+  }
+  function renderEvList(){
+    var el=document.getElementById("evList"); if(!el)return;
+    el.innerHTML=EV_DATA.slice(0,EV_SHOWN).map(evCard).join("");
+    var more=document.getElementById("evMore");
+    if(more){if(EV_DATA.length>EV_SHOWN){more.style.display="";more.innerHTML=svg("chev")+"Voir plus d’événements ("+(EV_DATA.length-EV_SHOWN)+")";}else{more.style.display="none";}}
+  }
+  function loadEvents(){
+    var maj=document.getElementById("evMaj"); if(maj)maj.innerHTML=svg("clock")+"Chargement des prochains événements…";
+    var url="https://data.orleans-metropole.fr/api/explore/v2.1/catalog/datasets/agenda-orleans-metropole/records?where=firstdate_begin%3E%3Dnow()&order_by=firstdate_begin&limit=80&select=title_fr,description_fr,keywords_fr,daterange_fr,firstdate_begin,firstdate_end,location_name,location_address,location_city,location_coordinates,categorie_principale,canonicalurl,updatedat";
+    fetch(url).then(function(r){return r.json();}).then(function(j){
+      EV_ALL=(j.results||[]).filter(function(e){return e.title_fr && !/^\s*\[ANNUL/i.test(e.title_fr);});
+      applyFilter();
+    }).catch(function(){var m=document.getElementById("evMaj"); if(m)m.innerHTML=svg("alert")+"Événements indisponibles pour le moment.";});
+  }
+  function bindEvents(){
+    var more=document.getElementById("evMore"); if(more)more.onclick=function(){EV_SHOWN=EV_DATA.length;renderEvList();};
+    var tog=document.getElementById("evToggle"); if(tog){tog.innerHTML=svg("chev")+"Agenda officiel & lieux du coin"; tog.onclick=function(){var x=document.getElementById("evSec");if(x)x.classList.toggle("open");};}
+  }
+
+  function buildVoy(){
+    var note=document.getElementById("vNote"); if(note)note.innerHTML=svg("shield")+"<span>Je <b>prépare et ouvre</b> la recherche avec tes critères. Je ne réserve rien et je ne paie rien — tu gardes la main.</span>";
+    var el=document.getElementById("vBtns"); if(!el)return;
+    el.innerHTML='<button class="iconbtn cy" data-vy="flights">'+svg("plane")+'Vols</button>'
+      +'<button class="iconbtn" data-vy="hotels">'+svg("bed")+'Hôtels</button>'
+      +'<button class="iconbtn" data-vy="train">'+svg("train")+'Train</button>'
+      +'<button class="iconbtn" data-vy="ideas">'+svg("compass")+'Idées</button>';
+    el.querySelectorAll("[data-vy]").forEach(function(b){b.onclick=function(){openVoy(b.getAttribute("data-vy"));};});
+  }
+  function openVoy(kind){
+    var from=(document.getElementById("vFrom").value||"Orléans").trim(), to=(document.getElementById("vTo").value||"").trim();
+    var dep=document.getElementById("vDep").value, ret=document.getElementById("vRet").value, url;
+    if(kind==="hotels"){ if(!to){toast("Indique une destination pour les hôtels.","alert");return;}
+      url="https://www.booking.com/searchresults.fr.html?ss="+encodeURIComponent(to)+(dep?"&checkin="+dep:"")+(ret?"&checkout="+ret:""); }
+    else if(kind==="train"){ url="https://www.sncf-connect.com/"; }
+    else if(kind==="flights"){ url="https://www.google.com/travel/flights?q="+encodeURIComponent("vols "+from+" "+to); }
+    else { url="https://www.google.com/search?q="+encodeURIComponent(to?("que faire à "+to+" idées voyage"):("idées week-end depuis "+from)); }
+    window.open(url,"_blank","noopener");
+  }
+
+  function renderAutour(){
+    var saf=document.getElementById("kSafety"); if(saf)saf.innerHTML=svg("shield")+"<span><b>Sécurité d’abord</b> : gilet, vérifie la météo et le niveau d’eau (Vigicrues), préviens un proche, évite seuils et barrages.</span>";
+    loadKLive(); renderSpots(); renderFav(); renderFilters(); loadEvents(); renderVenues(); bindSorties(); bindEvents(); buildVoy();
+  }
+
+  var AUTOUR_INIT=false;
+  var TABS={simple:"tabAccueil",chat:"tabMaia",autour:"tabAutour",advanced:"tabAvance"};
+  setMode=function(m){
+    MODE=m;
+    ["simple","advanced","chat","autour"].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("hidden",id!==m);});
+    var tbar=document.querySelector(".topbar"); if(tbar)tbar.style.display="flex";
+    Object.keys(TABS).forEach(function(k){var t=document.getElementById(TABS[k]);if(t)t.classList.toggle("on",k===m);});
+    if(m==="simple")renderSimple();
+    else if(m==="advanced"){buildAdvNav();goAdv("chantiers");}
+    else if(m==="autour"&&!AUTOUR_INIT){AUTOUR_INIT=true;renderAutour();}
+    window.scrollTo(0,0);
+  };
+  function tab(id,icon,label,fn){var e=document.getElementById(id);if(!e)return;e.innerHTML=svg(icon)+'<span>'+label+'</span>';e.onclick=fn;}
+  tab("tabAccueil","home","Accueil",function(){setMode("simple");});
+  tab("tabMaia","chat","Maïa",function(){openChat();});
+  tab("tabAutour","compass","Autour",function(){setMode("autour");});
+  tab("tabAvance","sliders","Avancé",function(){setMode("advanced");});
+  var kr=document.getElementById("kRad"); if(kr)kr.onchange=renderSpots;
+  openChat=function(){setMode("chat");if(!CHAT_INIT){CHAT_INIT=true;pushMaia("Bonjour Kevin, contente de te retrouver. Je suis là, et tout est sous contrôle de mon côté. Qu’est-ce qui t’occupe l’esprit aujourd’hui — une idée, une question, ou quelque chose à régler ? Dis-moi, on le fait ensemble.");}else{renderChat();}};
+  openChat();
+})();
+</script>
+
+<!-- fiche projet (cliquable + actions reelles) -->
+<div id="projModal" style="position:fixed;inset:0;z-index:90000;background:rgba(4,10,16,.72);display:none;align-items:flex-end;justify-content:center"><div style="background:#0f1d2b;border:1px solid rgba(255,255,255,.12);border-radius:18px 18px 0 0;max-width:560px;width:100%;padding:20px 18px 30px;max-height:86vh;overflow:auto"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div id="pmTitle" style="font-weight:800;font-size:17px;color:#eaf2f8;line-height:1.3"></div><button id="pmClose" style="flex:0 0 auto;background:rgba(255,255,255,.06);border:0;color:#cfe0ec;border-radius:9px;width:34px;height:34px;font-size:16px;cursor:pointer">✕</button></div><div id="pmPct" style="font-size:12px;color:#8aa6b8;margin-top:4px"></div><div style="font-size:11px;letter-spacing:.1em;color:#8aa6b8;margin:16px 0 6px">CE QU'IL RESTE À FAIRE</div><ul id="pmReste" style="margin:0;padding-left:18px;font-size:14px;color:#dCE7f0;line-height:1.5"></ul><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button id="pmRelance" style="flex:1 1 auto;min-width:150px;background:#52b6d6;color:#06121c;font-weight:700;border:0;border-radius:11px;padding:13px 16px;font-size:14px;cursor:pointer">Relancer la tâche</button><button id="pmRappel" style="flex:1 1 auto;min-width:150px;background:rgba(255,255,255,.07);color:#eaf2f8;font-weight:600;border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:13px 16px;font-size:14px;cursor:pointer">Demander un rappel Maïa</button></div><div id="pmMsg" style="margin-top:14px;font-size:13px;color:#7fd0a0;min-height:18px;line-height:1.45"></div></div></div>
+<script>(function(){
+var PROJ=[{"n": "Maïa au téléphone (partenaire + éco)", "p": 85, "r": ["Valider le nouveau cerveau (V9) par de vrais appels", "Corriger la consigne si elle digresse encore", "Confirmer le coût réel par appel"]}, {"n": "Maïa t'appelle (appel sortant)", "p": 70, "r": ["Tester le point du matin + alertes plusieurs jours", "Déclencher l'alerte seulement sur une vraie décision", "Régler les bons horaires (9h–22h)"]}, {"n": "Cockpit (app + code d'accès)", "p": 80, "r": ["Ajouter le bloc coûts réels", "Rendre les projets actionnables (en cours)", "Sécuriser le webhook d'écriture"]}, {"n": "Autour de moi (kayak, sorties…)", "p": 60, "r": ["Niveau de la Loire chiffré chaque jour", "« Ça m'intéresse → agenda » en un tap", "Garder des sources fiables et datées"]}, {"n": "Audit des coûts IA", "p": 40, "r": ["Brancher les coûts réels au cockpit", "Alerte avant de dépasser 20 €", "Lister les abonnements (ChatGPT, cloud, Make…)"]}, {"n": "Sécurisation (clé + webhooks)", "p": 30, "r": ["Roter la clé exposée (action réservée à toi)", "Poser une clé sur les webhooks ouverts", "Nettoyer les anciens webhooks de test"]}, {"n": "Fiches clients CRM (auto)", "p": 10, "r": ["Cadrer le flux email → fiche client", "Décider l'accès à la boîte mail (lecture)", "Tester sur quelques mails réels"]}, {"n": "Refonte barman-mariage.com", "p": 5, "r": ["Définir les forfaits mariage", "Maquette de la nouvelle page", "Rédiger le contenu"]}];
+var BRIDGE_URL="https://hook.eu1.make.com/g1skwky1jfh0rut2mp73bwidb5gf2bxq",BRIDGE_TK="maia6pont",LQ="maia.v6.queue";
+ var CALL_URL="https://hook.eu1.make.com/h8v1x3ewkiei1clvmxjtjb38te1c7pcw",CALL_TK="maia6call";
+ function callNow(pr){try{var p=new URLSearchParams({tk:CALL_TK,sujet:pr.n,resume:"Rappel demande depuis le cockpit pour : "+pr.n,source_id:"COCK-"+slug(pr.n)}).toString();fetch(CALL_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p}).catch(function(){});}catch(e){}}
+function jget(k){try{return JSON.parse(localStorage.getItem(k))||[];}catch(e){return [];}}
+function jset(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"").slice(0,22);}
+function writeAction(pr,kind){var isR=(kind==="rappel");var id="PROJ-"+slug(pr.n)+"-"+kind+"-"+Date.now();
+ var o={action_id:id,projet:pr.n,decision:(isR?"Rappel Maïa : parler de ":"Relancer : ")+pr.n,statut:(isR?"Rappel demandé":"Relance demandée"),responsable:"Maïa",prochaine_etape:(isR?"Maïa en parle à son prochain point.":"Reprise au prochain échange."),kevin_requis:isR,etat:(isR?"en_attente":"prete"),ts:new Date().toISOString()};
+ var q=jget(LQ);q.push(o);jset(LQ,q);
+ try{var p=new URLSearchParams({tk:BRIDGE_TK,action_id:o.action_id,projet:o.projet,decision:o.decision,statut:o.statut,responsable:o.responsable,prochaine_etape:o.prochaine_etape,kevin_requis:String(o.kevin_requis),etat:o.etat,safe:"false",ts:o.ts,resultat:""}).toString();
+  fetch(BRIDGE_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p}).catch(function(){});}catch(e){}
+ return o;}
+var cur=-1;
+function openM(i){var pr=PROJ[i];if(!pr)return;cur=i;document.getElementById("pmTitle").textContent=pr.n;document.getElementById("pmPct").textContent="Avancement estimé : "+pr.p+"%";document.getElementById("pmReste").innerHTML=pr.r.map(function(x){return "<li style=\"margin:5px 0\">"+x+"</li>";}).join("");document.getElementById("pmMsg").textContent="";document.getElementById("projModal").style.display="flex";}
+function closeM(){document.getElementById("projModal").style.display="none";}
+document.addEventListener("click",function(e){var r=e.target.closest&&e.target.closest("[data-proj]");if(r){openM(parseInt(r.getAttribute("data-proj"),10));}});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"){var a=document.activeElement;if(a&&a.getAttribute&&a.getAttribute("data-proj")){openM(parseInt(a.getAttribute("data-proj"),10));}}});
+document.getElementById("pmClose").onclick=closeM;
+document.getElementById("projModal").addEventListener("click",function(e){if(e.target===this)closeM();});
+document.getElementById("pmRelance").onclick=function(){if(cur<0)return;writeAction(PROJ[cur],"relance");document.getElementById("pmMsg").textContent="C'est noté dans ta file — je le remets en haut de la pile. Tu le vois dans « Ce que tu m'as demandé ».";};
+document.getElementById("pmRappel").onclick=function(){if(cur<0)return;var pr=PROJ[cur];if(!confirm("Maïa va t'appeler à propos de \u00ab "+pr.n+" \u00bb. Confirmer ?"))return;var b=this;if(b.dataset.busy==="1")return;writeAction(pr,"rappel");callNow(pr);document.getElementById("pmMsg").textContent="C'est noté \u2014 Maïa t'appelle dans un instant (entre 8h et 21h30).";b.dataset.busy="1";b.style.opacity="0.5";b.textContent="Appel demand\u00e9\u2026";setTimeout(function(){b.dataset.busy="0";b.style.opacity="1";b.textContent="Demander un rappel Maïa";},60000);};
+})();</script>
+<script>(function(){var b=document.getElementById("themeTog");if(!b)return;function upd(){b.textContent=document.documentElement.classList.contains("light")?"Foncé":"Clair";}upd();b.addEventListener("click",function(){var l=document.documentElement.classList.toggle("light");try{localStorage.setItem("maia_theme",l?"light":"dark");}catch(e){}upd();});})();</script></body></html>
