@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
+<script>(function(){try{if(localStorage.getItem("maia_theme")==="light"){document.documentElement.classList.add("light");}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0b0e">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -367,6 +368,30 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
 
 /* logo en-tete agrandi (demande Kevin) */
 .topbar .wm .mk{width:80px!important;height:80px!important}
+
+/* ===== THEME CLAIR (bouton bascule) ===== */
+html.light{
+  --bg:#eef1f6;--bg1:#e7ebf2;--surf:#ffffff;--surf2:#f4f6fa;--surf3:#eceff4;
+  --line:#dde3ec;--line2:#d2d9e4;--line3:#c4cdda;
+  --ink:#141a22;--ink2:#48515f;--ink3:#6a7382;--ink4:#8a92a0;
+  --accent:#5570f0;--accent2:#3f5fd6;--maia:#7a5cd6;
+  --sh:0 1px 2px rgba(20,30,50,.08);--sh2:0 18px 50px -28px rgba(20,30,50,.28);
+}
+html.light body{background:radial-gradient(1100px 560px at 84% -14%,#e7edf7 0,transparent 60%),radial-gradient(820px 480px at -10% 0,#eef2f9 0,transparent 55%),var(--bg)}
+html.light #projetsBox,html.light #coutsBox{background:#fff!important;border-color:#e3e8ef!important}
+html.light #projetsBox [style*="#eaf2f8"],html.light #coutsBox [style*="#eaf2f8"],html.light #projetsBox [style*="#cfe0ec"],html.light #coutsBox [style*="#cfe0ec"]{color:#1d2530!important}
+html.light #projetsBox [style*="#8aa6b8"],html.light #coutsBox [style*="#8aa6b8"]{color:#6a7585!important}
+html.light #projetsBox [style*="255,255,255,.08"],html.light #coutsBox [style*="255,255,255,.08"]{background:#e6eaf0!important}
+html.light #projModal>div{background:#fff!important;border-color:#e3e8ef!important}
+html.light #pmTitle{color:#141a22!important}
+html.light #pmPct,html.light #projModal [style*="#8aa6b8"]{color:#6a7585!important}
+html.light #pmReste{color:#384150!important}
+html.light #pmClose{background:#edf0f4!important;color:#333!important}
+html.light #pmRappel{background:#edf0f4!important;color:#141a22!important;border-color:#d7dde6!important}
+html.light .mot{background:linear-gradient(157deg,#ffffff 0,#f4f6fa 66%)!important;border-color:#e3e8ef!important}
+html.light .mot p{color:#222a35!important}
+html.light .mot p strong{color:#0f1620!important}
+html.light .dcard.hero{background:linear-gradient(155deg,#ffffff 0,#eef1f7 64%)!important;border-color:#dbe2ec!important}
 </style></head>
 <body>
 <div id="maiaGate" style="position:fixed;inset:0;z-index:100000;background:#0b1622;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#eaf2f8;gap:16px;padding:24px;text-align:center">
@@ -400,7 +425,7 @@ h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
 <div class="wrap">
   <div class="topbar">
     <div class="wm">
-      <img class="mk" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA" width="80" height="80">
+      <img class="mk" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA" width="80" height="80"><button id="themeTog" title="Thème clair / foncé" style="margin-left:8px;padding:6px 11px;border-radius:16px;border:1px solid var(--line);background:var(--surf2);color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">Clair</button>
     </div>
     <nav class="topnav">
       <button class="tnav on" id="tabAccueil"></button>
@@ -1331,4 +1356,4 @@ document.getElementById("projModal").addEventListener("click",function(e){if(e.t
 document.getElementById("pmRelance").onclick=function(){if(cur<0)return;writeAction(PROJ[cur],"relance");document.getElementById("pmMsg").textContent="C'est noté dans ta file — je le remets en haut de la pile. Tu le vois dans « Ce que tu m'as demandé ».";};
 document.getElementById("pmRappel").onclick=function(){if(cur<0)return;var pr=PROJ[cur];if(!confirm("Maïa va t'appeler à propos de \u00ab "+pr.n+" \u00bb. Confirmer ?"))return;var b=this;if(b.dataset.busy==="1")return;writeAction(pr,"rappel");callNow(pr);document.getElementById("pmMsg").textContent="C'est noté \u2014 Maïa t'appelle dans un instant (entre 8h et 21h30).";b.dataset.busy="1";b.style.opacity="0.5";b.textContent="Appel demand\u00e9\u2026";setTimeout(function(){b.dataset.busy="0";b.style.opacity="1";b.textContent="Demander un rappel Maïa";},60000);};
 })();</script>
-</body></html>
+<script>(function(){var b=document.getElementById("themeTog");if(!b)return;function upd(){b.textContent=document.documentElement.classList.contains("light")?"Foncé":"Clair";}upd();b.addEventListener("click",function(){var l=document.documentElement.classList.toggle("light");try{localStorage.setItem("maia_theme",l?"light":"dark");}catch(e){}upd();});})();</script></body></html>
