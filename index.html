@@ -557,7 +557,7 @@ var SNAP_URL="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-snapsho
 var LIVE_URL="https://script.google.com/macros/s/AKfycbyraUVi69hrRtKovpubwXdZiZzt5pES5ZjSaJfc4KbMEpZ1g1zsk3j1m24ohk-5JYcE/exec?k=maia-cockpit-7";
 var LIVE_OK=false;
 var LIVE_ASKS=[];
-var LIVE_DONE=[];var LIVE_MAP={};var DONE_OPEN=false;
+var LIVE_DONE=[];var LIVE_MAP={};var DONE_OPEN=false;var ARMED={};
 var D=FALLBACK||{decisions:[],managed:[],fil:[],chantiers:[],tech:{}};
 
 /* ---------- storage ---------- */
@@ -1126,6 +1126,11 @@ function loadLive(){
     if(MODE==="simple")renderSimple();else if(changed){var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}
   }).catch(function(){});
 }
+function prettyTitle(s){
+  s=String(s||"");
+  s=s.replace(/^\s*[A-Z][A-Z0-9_]{2,}\s*[-–—:]\s*/,"");
+  return s.trim()||"(sans titre)";
+}
 function renderAsk(){
   var el=document.getElementById("askList"); if(!el) return;
   var sec=document.getElementById("secAsk"), n=document.getElementById("askN");
@@ -1133,9 +1138,14 @@ function renderAsk(){
   if(sec)sec.style.display=LIVE_ASKS.length?"":"none";
   el.innerHTML=LIVE_ASKS.map(function(a){
     var chip=a.blocked?' <span style="font-size:10px;color:#f0b65c;border:1px solid rgba(240,182,92,.45);border-radius:6px;padding:1px 6px">Bloquée</span>':'';
+    var armed=!!ARMED[a.key];
+    var btn=armed
+      ? '<button class="btn" data-done-key="'+esc(a.key)+'" style="align-self:center;white-space:nowrap;padding:6px 10px;background:#e8a13a;color:#1a1205;border-color:#e8a13a;font-weight:700">'+svg("check")+'Confirmer ?</button>'
+      : '<button class="btn" data-done-key="'+esc(a.key)+'" style="align-self:center;white-space:nowrap;padding:6px 10px">'+svg("check")+'Fait</button>';
+    var hint=armed?'<small style="color:#e8a13a">Appuie encore pour valider</small>':'';
     return '<div class="row calm"><div class="ic maia">'+svg("spark")+'</div>'
-      +'<div class="tx"><b>'+esc(a.decision)+chip+'</b><small>'+(a.projet?esc(a.projet)+' · ':'')+esc(a.statut||'En file')+(a.etape?' — '+esc(a.etape):'')+'</small></div>'
-      +'<button class="btn" data-done-key="'+esc(a.key)+'" style="align-self:center;white-space:nowrap;padding:6px 10px">'+svg("check")+'Fait</button></div>';
+      +'<div class="tx"><b>'+esc(prettyTitle(a.decision))+chip+'</b><small>'+(a.projet?esc(a.projet)+' · ':'')+esc(a.statut||'En file')+(a.etape?' — '+esc(a.etape):'')+'</small>'+hint+'</div>'
+      +btn+'</div>';
   }).join("");
   renderDone(); bindAsk();
 }
@@ -1148,13 +1158,21 @@ function renderDone(){
   if(!DONE_OPEN){el.innerHTML="";return;}
   el.innerHTML=LIVE_DONE.slice().sort(function(a,b){return (b.ts||"").localeCompare(a.ts||"");}).map(function(a){
     return '<div class="row calm" style="opacity:.72"><div class="ic">'+svg("checkc")+'</div>'
-      +'<div class="tx"><b style="text-decoration:line-through;opacity:.85">'+esc(a.decision)+'</b><small>'+(a.projet?esc(a.projet)+' · ':'')+'Fait'+(a.ts?' · '+esc(fmtD(a.ts)):'')+'</small></div></div>';
+      +'<div class="tx"><b style="text-decoration:line-through;opacity:.85">'+esc(prettyTitle(a.decision))+'</b><small>'+(a.projet?esc(a.projet)+' · ':'')+'Fait'+(a.ts?' · '+esc(fmtD(a.ts)):'')+'</small></div></div>';
   }).join("");
 }
 function fmtD(ts){try{return new Date(ts).toLocaleDateString("fr-FR",{day:"numeric",month:"short"});}catch(e){return "";}}
+function disarmAll(){for(var k in ARMED){try{clearTimeout(ARMED[k]);}catch(e){}} ARMED={};}
+function askDone(key){
+  if(!key)return;
+  if(ARMED[key]){ clearTimeout(ARMED[key]); delete ARMED[key]; markLiveDone(key); return; }
+  disarmAll();
+  ARMED[key]=setTimeout(function(){ delete ARMED[key]; if(MODE==="simple")renderAsk(); }, 4000);
+  if(MODE==="simple")renderAsk();
+}
 function bindAsk(){
   document.querySelectorAll("#askList [data-done-key]").forEach(function(b){
-    b.onclick=function(ev){ev.preventDefault();ev.stopPropagation();markLiveDone(b.getAttribute("data-done-key"));};
+    b.onclick=function(ev){ev.preventDefault();ev.stopPropagation();askDone(b.getAttribute("data-done-key"));};
   });
   var h=document.getElementById("doneHead"); if(h)h.onclick=function(){DONE_OPEN=!DONE_OPEN;renderDone();};
 }
