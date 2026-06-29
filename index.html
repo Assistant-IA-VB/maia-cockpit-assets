@@ -429,6 +429,7 @@ html.light .dcard.hero{background:linear-gradient(155deg,#ffffff 0,#eef1f7 64%)!
     </div>
     <nav class="topnav">
       <button class="tnav on" id="tabAccueil"></button>
+      <button class="tnav" id="tabTaches"></button>
       <button class="tnav" id="tabMaia"></button>
       <button class="tnav" id="tabAutour"></button>
       <button class="tnav" id="tabAvance"></button>
@@ -456,13 +457,7 @@ html.light .dcard.hero{background:linear-gradient(155deg,#ffffff 0,#eef1f7 64%)!
     <div class="sec" id="secWait" style="display:none"><span class="t">Ça demande aussi ton avis</span><span class="ln"></span><span class="c" id="waitN">0</span></div>
     <div id="waitList"></div>
 
-    <div class="sec" id="secAsk" style="display:none"><span class="t">Ce que tu m'as demandé</span><span class="ln"></span><span class="c" id="askN">0</span></div>
-    <div id="askList"></div>
-
-    <div id="secDone" style="display:none">
-      <div class="sec" id="doneHead" style="cursor:pointer"><span class="t">Tâches faites</span><span class="ln"></span><span class="c" id="doneN">0</span><span class="caret" style="margin-left:6px;color:#8aa6b8;font-weight:700">+</span></div>
-      <div id="doneList"></div>
-    </div>
+    <!-- (tâches déplacées dans l'onglet Tâches) -->
 
     <div class="sec" id="secPrep" style="display:none"><span class="t">Ce que j'ai préparé pour toi</span><span class="ln"></span></div>
     <div id="prepList"></div>
@@ -480,6 +475,18 @@ html.light .dcard.hero{background:linear-gradient(155deg,#ffffff 0,#eef1f7 64%)!
     <div id="absenceWrap"></div>
 
     <div class="reassure" id="reassure"></div>
+  </main>
+
+  <!-- ===== TÂCHES (onglet dédié) ===== -->
+  <main id="taches" class="hidden">
+    <div style="margin:18px 2px 8px"><h2 style="font-size:23px;font-weight:800;color:var(--ink);margin:0">Mes tâches</h2><p style="font-size:13px;color:var(--ink2);margin:5px 0 0">Ce que tu as à faire, et ce qui est fait. <b style="color:var(--ink)">Appuie deux fois sur « Fait »</b> pour valider (anti-fausse-manip).</p></div>
+    <div class="sec" id="secAsk" style=""><span class="t">À faire</span><span class="ln"></span><span class="c" id="askN">0</span></div>
+    <div id="askList"></div>
+    <div id="tachesEmpty" style="display:none;color:var(--ink2);font-size:14px;padding:14px 2px;line-height:1.5">Rien à faire pour l'instant. 🎉<br>Pour ajouter une tâche : <b style="color:var(--ink)">appelle Maïa</b> ou <b style="color:var(--ink)">écris-lui</b> dans l'onglet Maïa.</div>
+    <div id="secDone" style="display:none">
+      <div class="sec" id="doneHead" style="cursor:pointer"><span class="t">Tâches faites</span><span class="ln"></span><span class="c" id="doneN">0</span><span class="caret" style="margin-left:6px;color:#8aa6b8;font-weight:700">+</span></div>
+      <div id="doneList"></div>
+    </div>
   </main>
 
   <!-- ===== ADVANCED ===== -->
@@ -1100,7 +1107,7 @@ function toggleVoice(){ if(RECING)stopVoice(); else startVoice(); }
 /* ---------- semi-live ---------- */
 function loadSnapshot(initial){
   fetch(SNAP_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
-    if(j&&j.decisions){D=j;if(MODE==="simple"){renderSimple();}else{var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}if(!initial)toast("Donnees rafraichies","spark");}
+    if(j&&j.decisions){D=j;if(MODE==="simple"){renderSimple();}else if(MODE==="taches"){renderAsk();}else{var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}if(!initial)toast("Donnees rafraichies","spark");}
     loadLive();
   }).catch(function(){});
 }
@@ -1123,7 +1130,7 @@ function loadLive(){
       }
     });
     LIVE_ASKS=asks; LIVE_DONE=done;
-    if(MODE==="simple")renderSimple();else if(changed){var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}
+    if(MODE==="simple")renderSimple();else if(MODE==="taches")renderAsk();else if(changed){var on=document.querySelector(".advsec.on");goAdv(on?on.id.replace("a-",""):"chantiers");}
   }).catch(function(){});
 }
 function prettyTitle(s){
@@ -1136,6 +1143,7 @@ function renderAsk(){
   var sec=document.getElementById("secAsk"), n=document.getElementById("askN");
   if(n)n.textContent=LIVE_ASKS.length;
   if(sec)sec.style.display=LIVE_ASKS.length?"":"none";
+  var emptyEl=document.getElementById("tachesEmpty"); if(emptyEl)emptyEl.style.display=(LIVE_ASKS.length||MODE!=="taches")?"none":"";
   el.innerHTML=LIVE_ASKS.map(function(a){
     var chip=a.blocked?' <span style="font-size:10px;color:#f0b65c;border:1px solid rgba(240,182,92,.45);border-radius:6px;padding:1px 6px">Bloquée</span>':'';
     var armed=!!ARMED[a.key];
@@ -1167,8 +1175,8 @@ function askDone(key){
   if(!key)return;
   if(ARMED[key]){ clearTimeout(ARMED[key]); delete ARMED[key]; markLiveDone(key); return; }
   disarmAll();
-  ARMED[key]=setTimeout(function(){ delete ARMED[key]; if(MODE==="simple")renderAsk(); }, 4000);
-  if(MODE==="simple")renderAsk();
+  ARMED[key]=setTimeout(function(){ delete ARMED[key]; if(MODE==="simple"||MODE==="taches")renderAsk(); }, 4000);
+  if(MODE==="simple"||MODE==="taches")renderAsk();
 }
 function bindAsk(){
   document.querySelectorAll("#askList [data-done-key]").forEach(function(b){
@@ -1374,19 +1382,21 @@ setTimeout(function(){var sp=document.getElementById("splash");if(sp)sp.classLis
   }
 
   var AUTOUR_INIT=false;
-  var TABS={simple:"tabAccueil",chat:"tabMaia",autour:"tabAutour",advanced:"tabAvance"};
+  var TABS={simple:"tabAccueil",taches:"tabTaches",chat:"tabMaia",autour:"tabAutour",advanced:"tabAvance"};
   setMode=function(m){
     MODE=m;
-    ["simple","advanced","chat","autour"].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("hidden",id!==m);});
+    ["simple","advanced","chat","autour","taches"].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("hidden",id!==m);});
     var tbar=document.querySelector(".topbar"); if(tbar)tbar.style.display="flex";
     Object.keys(TABS).forEach(function(k){var t=document.getElementById(TABS[k]);if(t)t.classList.toggle("on",k===m);});
     if(m==="simple")renderSimple();
+    else if(m==="taches")renderAsk();
     else if(m==="advanced"){buildAdvNav();goAdv("chantiers");}
     else if(m==="autour"&&!AUTOUR_INIT){AUTOUR_INIT=true;renderAutour();}
     window.scrollTo(0,0);
   };
   function tab(id,icon,label,fn){var e=document.getElementById(id);if(!e)return;e.innerHTML=svg(icon)+'<span>'+label+'</span>';e.onclick=fn;}
   tab("tabAccueil","home","Accueil",function(){setMode("simple");});
+  tab("tabTaches","checkc","Tâches",function(){setMode("taches");});
   tab("tabMaia","chat","Maïa",function(){openChat();});
   tab("tabAutour","compass","Autour",function(){setMode("autour");});
   tab("tabAvance","sliders","Avancé",function(){setMode("advanced");});
