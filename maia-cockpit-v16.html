@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0f">
+<title>MAÏA — cockpit</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.7.0/tabler-icons.min.css">
+<style>
+  :root{--bg:#0b0c0f;--card:#15171c;--card2:#1c1f26;--line:rgba(255,255,255,.08);
+    --tx:#f3f1ea;--tx2:#a7a49c;--tx3:#706d64;
+    --cu:#d08a52;--cu2:#e3a972;--cu-soft:rgba(208,138,82,.15);--cu-line:rgba(208,138,82,.4);
+    --ok:#5ec08a;--warn:#d8a45c;--bad:#e07a5a;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#070809;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .phone{max-width:430px;margin:0 auto;background:var(--bg);min-height:100vh;padding:18px 16px 96px;position:relative}
+  .row{display:flex;align-items:center}.between{justify-content:space-between}
+  .logo{height:25px}
+  h1{font-size:22px;font-weight:600;margin:0}
+  .muted{color:var(--tx2)}.dim{color:var(--tx3)}
+  .sect{font-size:13px;color:var(--tx2);margin:0 0 9px;display:flex;align-items:center;gap:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .kpi-n{font-size:25px;font-weight:600;margin:2px 0 0}
+  .lbl{font-size:12px;color:var(--tx2);margin:0}
+  .track{height:6px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-top:9px}
+  .fill{height:100%;border-radius:99px;background:var(--cu)}
+  .todo{display:flex;align-items:flex-start;gap:12px;border-radius:14px;padding:13px 14px;margin-bottom:9px}
+  .todo .ic{font-size:21px;flex-shrink:0;margin-top:1px}
+  .todo-cu{background:var(--cu-soft);border:1px solid var(--cu-line)}
+  .todo-n{background:var(--card);border:1px solid var(--line)}
+  .chip{font-size:10px;font-weight:700;letter-spacing:.04em;border-radius:99px;padding:2px 8px;text-transform:uppercase;white-space:nowrap}
+  .mot{position:relative;background:linear-gradient(157deg,#1b1610 0,#15171c 70%);border:1px solid var(--cu-line);border-radius:16px;padding:15px 16px 15px 19px;margin-bottom:20px}
+  .mot:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--cu)}
+  .mot .ml{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cu2);display:flex;align-items:center;gap:7px;margin-bottom:9px}
+  .mot p{margin:0;font-size:14.5px;line-height:1.5}
+  .gw{position:relative;flex-shrink:0}
+  .gw span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600}
+  .lrow{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .lrow:last-child{border-bottom:0}
+  .stamp{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
+  .panel[hidden]{display:none}
+  .nav{position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;
+    background:rgba(11,12,15,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:9px 0 22px}
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--tx3);text-decoration:none;font-size:11px;cursor:pointer}
+  .nav a.on{color:var(--cu)}
+  .nav i{font-size:22px}
+  #maiaGate{position:fixed;inset:0;z-index:100000;background:#0b0c0f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center}
+  #maiaGate input{font-size:16px;padding:12px 14px;border-radius:10px;border:1px solid var(--cu-line);background:var(--card);color:var(--tx);width:min(260px,80vw);text-align:center;outline:none}
+  #maiaGate button{font-size:15px;font-weight:600;padding:11px 24px;border-radius:10px;border:0;background:var(--cu);color:#181206;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="maiaGate">
+  <img src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" width="56" height="56" alt="MAÏA">
+  <div style="font-size:18px;font-weight:600;letter-spacing:.5px">MAÏA — accès</div>
+  <input id="maiaGateInput" type="password" inputmode="text" autocomplete="off" placeholder="Code d'accès">
+  <button id="maiaGateBtn">Entrer</button>
+  <div id="maiaGateErr" style="color:#ff8a8a;font-size:13px;min-height:16px"></div>
+</div>
+
+<div class="phone">
+  <div class="row between" style="margin-bottom:16px">
+    <img class="logo" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA">
+    <span class="stamp" id="updatedStamp"><i class="ti ti-refresh" style="font-size:13px"></i>chargement…</span>
+  </div>
+
+  <!-- ACCUEIL -->
+  <div class="panel" id="panel-accueil">
+    <h1>Bonjour Kevin</h1>
+    <p class="dim" id="todayLine" style="font-size:13px;margin:2px 0 16px"></p>
+
+    <div class="mot"><div class="ml"><i class="ti ti-sparkles"></i>Le mot de Maïa</div><p id="motTxt">…</p></div>
+
+    <p class="sect"><i class="ti ti-bell"></i>À traiter <span id="aTraiterN" style="margin-left:4px;color:var(--cu2);font-weight:700"></span></p>
+    <div id="aTraiter" style="margin-bottom:18px">
+      <div class="todo todo-n"><i class="ti ti-loader ic dim"></i><div style="flex:1"><p style="margin:0;font-size:14px" class="dim">Chargement des données…</p></div></div>
+    </div>
+
+    <p class="sect"><i class="ti ti-coin"></i>Crédits Make</p>
+    <div class="card row" style="gap:15px;margin-bottom:18px">
+      <div class="gw" style="width:78px;height:78px">
+        <svg viewBox="0 0 36 36" width="78" height="78"><circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3.3" pathLength="100"/><circle id="creditArc" cx="18" cy="18" r="15.9" fill="none" stroke="var(--cu)" stroke-width="3.3" stroke-linecap="round" stroke-dasharray="26 100" pathLength="100" transform="rotate(-90 18 18)"/></svg>
+        <span id="creditPct" style="font-size:17px">…</span>
+      </div>
+      <div><p style="font-size:18px;font-weight:600;margin:0" id="creditTxt">…</p><p style="font-size:12px;margin:4px 0 0" class="dim" id="creditSub">…</p></div>
+    </div>
+
+    <p class="sect"><i class="ti ti-rocket"></i>Projets</p>
+    <div id="projets"></div>
+  </div>
+
+  <!-- MAÏA -->
+  <div class="panel" id="panel-maia" hidden>
+    <div class="row" style="gap:8px;margin-bottom:14px"><h1>Maïa</h1><span style="font-size:12px;color:var(--ok);display:flex;align-items:center;gap:4px"><span class="dot" style="background:var(--ok);width:8px;height:8px;border-radius:50%"></span>en ligne</span></div>
+    <div class="mot" style="margin-bottom:18px"><div class="ml"><i class="ti ti-sparkles"></i>Le mot de Maïa</div><p id="maiaMot">…</p></div>
+    <p class="sect"><i class="ti ti-shield-check"></i>Ce que je gère sans toi</p>
+    <div id="managed" style="margin-bottom:18px"></div>
+    <div class="card" style="border-color:var(--cu-line)"><p style="margin:0;font-size:13px;line-height:1.5" class="muted"><i class="ti ti-microphone" style="color:var(--cu2)"></i> La conversation vocale avec Maïa arrive bientôt ici.</p></div>
+  </div>
+
+  <!-- AUTOUR -->
+  <div class="panel" id="panel-autour" hidden>
+    <div class="row" style="gap:8px;margin-bottom:15px"><i class="ti ti-map-pin" style="font-size:20px;color:var(--tx2)"></i><h1 style="font-size:19px">Autour de moi</h1></div>
+    <div class="card" id="weatherCard" style="margin-bottom:14px">
+      <div class="row between">
+        <div><p class="lbl">Orléans — maintenant</p><p style="font-size:30px;font-weight:600;margin:2px 0" id="wTemp">…</p><p style="font-size:13px;margin:0" class="muted" id="wDesc">chargement…</p></div>
+        <i class="ti ti-sun" style="font-size:42px;color:var(--cu2)"></i>
+      </div>
+      <p class="stamp" id="wMaj" style="margin-top:8px"></p>
+    </div>
+    <a class="lrow" href="https://www.vigicrues.gouv.fr/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><i class="ti ti-droplet" style="font-size:20px;color:var(--cu2)"></i><span style="flex:1;font-size:14px">Niveau de la Loire (Vigicrues)</span><i class="ti ti-external-link" style="color:var(--tx3)"></i></a>
+    <a class="lrow" href="https://www.tourisme-orleansmetropole.com/agenda" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><i class="ti ti-calendar-event" style="font-size:20px;color:var(--cu2)"></i><span style="flex:1;font-size:14px">Agenda &amp; sorties à Orléans</span><i class="ti ti-external-link" style="color:var(--tx3)"></i></a>
+    <p class="stamp" style="margin-top:14px"><i class="ti ti-shield" style="font-size:13px"></i>Avant de pagayer : gilet, météo et niveau d'eau, et préviens un proche.</p>
+  </div>
+
+  <!-- AVANCÉ -->
+  <div class="panel" id="panel-avance" hidden>
+    <div class="row" style="gap:8px;margin-bottom:16px"><i class="ti ti-adjustments" style="font-size:20px;color:var(--tx2)"></i><h1 style="font-size:19px">Avancé</h1></div>
+    <p class="sect">Systèmes</p>
+    <div style="margin-bottom:18px">
+      <div class="lrow"><span class="dot" style="background:var(--ok);width:8px;height:8px;border-radius:50%"></span><span style="flex:1;font-size:14px">Téléphonie (Retell)</span><span style="font-size:12px;color:var(--ok)">actif</span></div>
+      <div class="lrow"><span class="dot" style="background:var(--ok);width:8px;height:8px;border-radius:50%"></span><span style="flex:1;font-size:14px">CRM fiches — flux contrôlé</span><span style="font-size:12px;color:var(--ok)">actif</span></div>
+      <div class="lrow"><span class="dot" style="background:var(--ok);width:8px;height:8px;border-radius:50%"></span><span style="flex:1;font-size:14px">Transport de fichiers</span><span style="font-size:12px;color:var(--ok)">stable</span></div>
+      <div class="lrow"><span class="dot" style="background:var(--warn);width:8px;height:8px;border-radius:50%"></span><span style="flex:1;font-size:14px">Automatisations à fiabiliser</span><span style="font-size:12px;color:var(--warn)">à voir</span></div>
+    </div>
+    <p class="sect">Fil d'exécution</p>
+    <div id="fil"></div>
+    <p class="stamp" id="dataNote" style="margin-top:16px"></p>
+  </div>
+</div>
+
+<div class="nav">
+  <a class="on" data-t="accueil" onclick="show('accueil')"><i class="ti ti-layout-dashboard"></i>Accueil</a>
+  <a data-t="maia" onclick="show('maia')"><i class="ti ti-message-chatbot"></i>Maïa</a>
+  <a data-t="autour" onclick="show('autour')"><i class="ti ti-map-pin"></i>Autour</a>
+  <a data-t="avance" onclick="show('avance')"><i class="ti ti-adjustments"></i>Avancé</a>
+</div>
+
+<script>
+/* ---------- access gate (MAIA26) ---------- */
+(function(){
+  var CODE="MAIA26";
+  try{ if(localStorage.getItem("maia_gate_ok")==="1"){ var g0=document.getElementById("maiaGate"); if(g0){g0.parentNode.removeChild(g0);} return; } }catch(e){}
+  document.documentElement.style.overflow="hidden";
+  function unlock(){
+    var el=document.getElementById("maiaGateInput");
+    var v=(el&&el.value||"").trim();
+    if(v===CODE){ try{localStorage.setItem("maia_gate_ok","1");}catch(e){} var g=document.getElementById("maiaGate"); if(g){g.parentNode.removeChild(g);} document.documentElement.style.overflow=""; }
+    else{ var er=document.getElementById("maiaGateErr"); if(er) er.textContent="Code incorrect."; }
+  }
+  function ready(){
+    var b=document.getElementById("maiaGateBtn"); if(b) b.addEventListener("click",unlock);
+    var i=document.getElementById("maiaGateInput");
+    if(i){ i.addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();unlock();} }); try{i.focus();}catch(e){} }
+  }
+  if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded",ready); } else { ready(); }
+})();
+
+/* ---------- tabs ---------- */
+function show(id){
+  document.querySelectorAll('.panel').forEach(function(p){p.hidden=(p.id!=='panel-'+id);});
+  document.querySelectorAll('.nav a').forEach(function(a){a.classList.toggle('on',a.dataset.t===id);});
+  if(id==='autour')loadWeather();
+  window.scrollTo(0,0);
+}
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+function ago(iso){var d=(Date.now()-new Date(iso).getTime())/60000;if(isNaN(d))return '';if(d<1)return "à l'instant";if(d<60)return 'il y a '+Math.round(d)+' min';var h=d/60;if(h<24)return 'il y a '+Math.round(h)+' h';return 'il y a '+Math.round(h/24)+' j';}
+function rank(u){return u==='urgent'?0:(u==='important'?1:2);}
+function urgMeta(u){
+  if(u==='urgent')return {chip:'Urgent',c:'var(--bad)',ic:'alert-circle'};
+  if(u==='important')return {chip:'Important',c:'var(--cu2)',ic:'flag-3'};
+  return {chip:'Tranquille',c:'var(--tx2)',ic:'clock'};
+}
+function etatMeta(e){
+  var m={stable:{t:'stable',c:'var(--ok)'},affiche:{t:'en ligne',c:'var(--ok)'},transmis:{t:'transmis',c:'var(--ok)'},
+    encours:{t:'en cours',c:'var(--cu2)'},attente:{t:'en attente',c:'var(--warn)'},decision:{t:'à décider',c:'var(--warn)'},
+    bloque:{t:'réservé à toi',c:'var(--bad)'},info:{t:'info',c:'var(--tx3)'}};
+  return m[e]||{t:e,c:'var(--tx3)'};
+}
+
+/* ---------- render ---------- */
+function buildMot(decs){
+  var n=decs.length, top=decs[0];
+  var s='Bonjour Kevin. Tout est sous contrôle de mon côté — je veille en continu. ';
+  if(n){
+    s+='De ton côté, '+n+' décision'+(n>1?'s':'')+' attend'+(n>1?'ent':'')+' ton avis';
+    s+=top?(' — la plus importante : <b>'+esc(top.court||top.titre)+'</b>.'):'.';
+  } else { s+="Rien ne t'attend : tu peux fermer l'app."; }
+  return s;
+}
+function render(D){
+  if(!D||!D.meta){fail();return;}
+  var st=document.getElementById('updatedStamp');
+  if(st)st.innerHTML='<i class="ti ti-refresh" style="font-size:13px"></i>à jour '+esc(ago(D.meta.updated_ts)||'récemment');
+  var tl=document.getElementById('todayLine');
+  if(tl)tl.textContent=cap(new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}));
+
+  var decs=(D.decisions||[]).slice().sort(function(a,b){return rank(a.urg)-rank(b.urg);});
+  var motHtml=buildMot(decs);
+  var mt=document.getElementById('motTxt'); if(mt)mt.innerHTML=motHtml;
+  var mm=document.getElementById('maiaMot'); if(mm)mm.innerHTML=motHtml;
+
+  var at=document.getElementById('aTraiter');
+  var an=document.getElementById('aTraiterN'); if(an)an.textContent=decs.length?decs.length:'';
+  if(at){
+    if(decs.length){
+      at.innerHTML=decs.map(function(d){var u=urgMeta(d.urg);
+        return '<div class="todo todo-cu"><i class="ti ti-'+u.ic+' ic" style="color:'+u.c+'"></i>'
+          +'<div style="flex:1;min-width:0"><div class="row between" style="gap:8px;align-items:flex-start">'
+          +'<p style="margin:0;font-weight:600;font-size:14px">'+esc(d.titre)+'</p>'
+          +'<span class="chip" style="background:var(--cu-soft);color:'+u.c+'">'+u.chip+'</span></div>'
+          +'<p style="margin:5px 0 0;font-size:12.5px;line-height:1.45" class="muted">'+esc(d.reco||d.court||'')+'</p></div></div>';
+      }).join('');
+    } else {
+      at.innerHTML='<div class="todo todo-n"><i class="ti ti-check ic" style="color:var(--ok)"></i><div style="flex:1"><p style="margin:0;font-size:14px">Rien à traiter pour l\'instant</p></div></div>';
+    }
+  }
+
+  if(D.couts){
+    var c=D.couts;
+    var pctUsed=(c.pct!=null)?c.pct:(c.total?Math.round(100*(c.total-(c.restants||0))/c.total):0);
+    var rem=Math.max(0,Math.min(100,100-pctUsed));
+    var cp=document.getElementById('creditPct'); if(cp)cp.textContent=rem+'%';
+    var ca=document.getElementById('creditArc'); if(ca)ca.setAttribute('stroke-dasharray',rem+' 100');
+    var ct=document.getElementById('creditTxt'); if(ct)ct.innerHTML=(c.restants!=null?Number(c.restants).toLocaleString('fr-FR'):'—')+' <span class="dim" style="font-size:13px">/ '+(c.total?Number(c.total).toLocaleString('fr-FR'):'—')+'</span>';
+    var cs=document.getElementById('creditSub'); if(cs)cs.textContent='crédits restants ce cycle'+(c.reset?' · remise à zéro le '+c.reset:'');
+  }
+
+  var pj=document.getElementById('projets');
+  if(pj&&D.chantiers){
+    pj.innerHTML=D.chantiers.map(function(x){var e=etatMeta(x.etat);
+      return '<div class="lrow"><span class="dot" style="background:'+e.c+';width:8px;height:8px;border-radius:50%"></span>'
+        +'<span style="flex:1;font-size:14px">'+esc(x.titre)+'</span>'
+        +'<span style="font-size:12px;color:'+e.c+'">'+esc(e.t)+'</span></div>';
+    }).join('');
+  }
+
+  var mg=document.getElementById('managed');
+  if(mg&&D.managed){
+    mg.innerHTML=D.managed.map(function(m){
+      return '<div class="lrow"><i class="ti ti-circle-check" style="font-size:18px;color:var(--ok)"></i>'
+        +'<div style="flex:1;min-width:0"><p style="margin:0;font-size:14px">'+esc(m.titre)+'</p>'
+        +'<p style="margin:1px 0 0;font-size:12px;line-height:1.4" class="dim">'+esc(m.detail)+'</p></div></div>';
+    }).join('');
+  }
+
+  var fl=document.getElementById('fil');
+  if(fl&&D.fil){
+    fl.innerHTML=D.fil.map(function(x){var e=etatMeta(x.statut);
+      return '<div class="lrow"><i class="ti ti-point" style="font-size:18px;color:'+e.c+'"></i>'
+        +'<div style="flex:1;min-width:0"><p style="margin:0;font-size:13.5px;line-height:1.4">'+esc(x.txt)+'</p>'
+        +'<p style="margin:2px 0 0;font-size:11px" class="dim">'+esc(e.t)+(x.quand?' · '+esc(x.quand):'')+'</p></div></div>';
+    }).join('');
+  }
+
+  var dn=document.getElementById('dataNote');
+  if(dn)dn.innerHTML='<i class="ti ti-database" style="font-size:13px"></i>Données publiées : '+esc(D.meta.build||'')+' · republication automatique en cours de branchement.';
+}
+function fail(){var st=document.getElementById('updatedStamp'); if(st)st.innerHTML='<i class="ti ti-cloud-off" style="font-size:13px"></i>données indisponibles';}
+
+/* ---------- data load ---------- */
+var SNAP='maia-snapshot-v6.json';
+function load(){
+  fetch(SNAP+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(render).catch(fail);
+}
+load();
+setInterval(load,600000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});
+
+/* ---------- weather (Autour, real) ---------- */
+var WEATHER_DONE=false;
+function loadWeather(){
+  if(WEATHER_DONE)return; WEATHER_DONE=true;
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=47.9026&longitude=1.9090&current=temperature_2m,wind_speed_10m,weather_code')
+    .then(function(r){return r.json();}).then(function(j){
+      var c=j.current||{};
+      var w={0:'ciel clair',1:'plutôt clair',2:'peu nuageux',3:'couvert',45:'brouillard',48:'brouillard givrant',51:'bruine',53:'bruine',55:'bruine',61:'pluie faible',63:'pluie',65:'forte pluie',71:'neige',73:'neige',75:'forte neige',80:'averses',81:'averses',82:'fortes averses',95:'orage',96:'orage',99:'orage'}[c.weather_code]||'variable';
+      var t=document.getElementById('wTemp'); if(t)t.textContent=(c.temperature_2m!=null?Math.round(c.temperature_2m):'—')+'°';
+      var d=document.getElementById('wDesc'); if(d)d.textContent=w+' · vent '+(c.wind_speed_10m!=null?Math.round(c.wind_speed_10m):'—')+' km/h';
+      var m=document.getElementById('wMaj'); if(m)m.innerHTML='<i class="ti ti-refresh" style="font-size:13px"></i>maj '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    }).catch(function(){WEATHER_DONE=false;var d=document.getElementById('wDesc');if(d)d.textContent='météo indisponible';});
+}
+</script>
+</body>
+</html>
