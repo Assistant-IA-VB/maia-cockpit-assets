@@ -1,38 +1,12 @@
 {
   "meta": {
-    "version": "V6.0",
-    "build": "2026-06-25",
-    "updated_ts": "2026-06-26T13:10:00+02:00",
+    "version": "V6.1",
+    "build": "2026-06-30",
+    "updated_ts": "2026-06-30T06:20:00+02:00",
     "fresh_warn_h": 96,
     "fresh_stale_h": 264
   },
   "decisions": [
-    {
-      "id": "MIG",
-      "urg": "important",
-      "kind": "prepare",
-      "sensible": false,
-      "projet": "Automatisations",
-      "titre": "Deux de tes automatisations risquent de tomber en panne",
-      "court": "fiabiliser deux automatisations menacées",
-      "reco": "Laisse-moi vérifier lesquelles et préparer la correction.",
-      "why": "Elles utilisent une technologie qui vient d'être arrêtée ; sans correction, elles s'arrêteront sans prévenir.",
-      "risque": "Une tâche que tu crois automatique peut s'arrêter en silence, sans alerte.",
-      "explain": {
-        "pourquoi": "Deux automatisations pointent vers un moteur qui a été retiré. Le jour où il est coupé, elles échouent en silence.",
-        "sinon": "Une tâche que tu crois automatique peut s'arrêter sans alerte.",
-        "maiafait": "Je fais l'inventaire en lecture seule et je te propose le remplacement. Je n'active rien.",
-        "validation": "Tu valides le remplacement avant que quoi que ce soit ne change."
-      },
-      "tech": {
-        "titre": "Migration modèles Claude (Make)",
-        "responsable": "Assistant technique, en lecture seule",
-        "interdits": "Lecture seule. Aucune activation, aucun Run once, aucune écriture en production.",
-        "instruction": "MISSION — Migration modèles (Make).\nOBJECTIF : inventaire LECTURE SEULE des scénarios utilisant un ancien modèle, puis mapping de remplacement.\nCADRE : lecture seule, aucune activation.\nLIVRABLE : tableau scénario | modèle actuel | modèle cible | risque.",
-        "source": "",
-        "etat_reel": "Pas encore commencé. Inventaire à faire en lecture seule dès ton feu vert."
-      }
-    },
     {
       "id": "SECU",
       "urg": "urgent",
@@ -65,29 +39,55 @@
       }
     },
     {
-      "id": "AVOCAT",
+      "id": "OPP",
       "urg": "important",
       "kind": "prepare",
       "sensible": false,
-      "projet": "Juridique",
-      "titre": "Ton avocat attend une réponse",
-      "court": "préparer la réponse à ton avocat",
-      "reco": "Laisse-moi préparer un brouillon ; tu n'auras qu'à le relire et l'envoyer.",
-      "why": "Une réponse est en attente sur tes contrats et l'étude de holding.",
-      "risque": "Le dossier juridique et les contrats restent en suspens.",
+      "projet": "Fiches clients CRM",
+      "titre": "L'opportunité automatique attend ta vérification",
+      "court": "vérifier l'opportunité de test dans Axonaut",
+      "reco": "Jette un œil à l'opportunité de test (tunnel, date, lieu, type, invités) ; si c'est nickel, je branche la création auto.",
+      "why": "J'ai testé la création automatique d'opportunité après la fiche ; il me faut ton œil avant de la mettre en service.",
+      "risque": "Sans ta validation, on ne lance pas la création auto — pas de risque.",
       "explain": {
-        "pourquoi": "Une réponse à ton avocat est en attente (contrats barmans/commerciaux et étude de holding).",
-        "sinon": "Le dossier juridique et les contrats n'avancent pas.",
-        "maiafait": "Je rédige un brouillon de réponse prêt à relire.",
-        "validation": "Tu relis, tu ajustes et tu l'envoies toi-même."
+        "pourquoi": "Une opportunité de test a été créée dans le tunnel Mariages avec les champs perso ; il faut confirmer qu'elle s'est rangée proprement, sans créer de nouvelle catégorie.",
+        "sinon": "On reste sur la création de fiche seule (déjà en place).",
+        "maiafait": "Je n'active la création d'opportunité auto qu'après ton OK.",
+        "validation": "Tu confirmes le rendu dans Axonaut, puis je branche."
       },
       "tech": {
-        "titre": "Brouillon réponse avocat",
-        "responsable": "Assistant technique — brouillon seulement",
-        "interdits": "Aucun envoi d'e-mail. Gmail n'est pas touché.",
-        "instruction": "MISSION — Brouillon réponse avocat (contrats + holding). Brouillon uniquement, AUCUN envoi.",
+        "titre": "Opportunité auto (Make 6358729, Route C)",
+        "responsable": "Assistant technique — test fait, en attente de validation",
+        "interdits": "Aucune mise en service avant validation visuelle de Kevin.",
+        "instruction": "Brancher createAnOpportunity dans la Route C après validation : routage par type, étape Prospect (Nouveau Prospect pour Mariages), champs perso Date/Type/Nb/Lieu/CP, mariage sans date = pas d'opportunité.",
         "source": "",
-        "etat_reel": "Pas encore rédigé. Brouillon à préparer dès ton feu vert — aucun envoi."
+        "etat_reel": "Test isolé réussi (tunnel Mariages, Nouveau Prospect). En attente de ta vérif dans Axonaut."
+      }
+    },
+    {
+      "id": "MIG",
+      "urg": "important",
+      "kind": "prepare",
+      "sensible": false,
+      "projet": "Automatisations",
+      "titre": "Deux de tes automatisations risquent de tomber en panne",
+      "court": "fiabiliser deux automatisations menacées",
+      "reco": "Laisse-moi vérifier lesquelles et préparer la correction.",
+      "why": "Elles utilisent une technologie qui vient d'être arrêtée ; sans correction, elles s'arrêteront sans prévenir.",
+      "risque": "Une tâche que tu crois automatique peut s'arrêter en silence, sans alerte.",
+      "explain": {
+        "pourquoi": "Deux automatisations pointent vers un moteur qui a été retiré. Le jour où il est coupé, elles échouent en silence.",
+        "sinon": "Une tâche que tu crois automatique peut s'arrêter sans alerte.",
+        "maiafait": "Je fais l'inventaire en lecture seule et je te propose le remplacement. Je n'active rien.",
+        "validation": "Tu valides le remplacement avant que quoi que ce soit ne change."
+      },
+      "tech": {
+        "titre": "Migration modèles Claude (Make)",
+        "responsable": "Assistant technique, en lecture seule",
+        "interdits": "Lecture seule. Aucune activation, aucun Run once, aucune écriture en production.",
+        "instruction": "MISSION — Migration modèles (Make). Inventaire LECTURE SEULE des scénarios à ancien modèle, puis mapping de remplacement.",
+        "source": "",
+        "etat_reel": "Pas encore commencé. Inventaire à faire en lecture seule dès ton feu vert."
       }
     },
     {
@@ -111,7 +111,7 @@
         "titre": "Connexion Gmail (lecture seule) — décision",
         "responsable": "Kevin décide ; autorisation OAuth réalisée par Kevin",
         "interdits": "Aucune connexion sans le feu vert explicite de Kevin.",
-        "instruction": "DÉCISION KEVIN : autoriser ou non la lecture seule de Gmail (OAuth). Si oui : préparer l'architecture, Kevin réalise l'autorisation.",
+        "instruction": "DÉCISION KEVIN : autoriser ou non la lecture seule de Gmail (OAuth).",
         "source": "",
         "etat_reel": "En attente de ta décision. Rien n'est connecté tant que tu n'as pas dit oui."
       }
@@ -120,42 +120,48 @@
   "managed": [
     {
       "titre": "Je surveille tes automatisations",
-      "detail": "Tout est stable en ce moment : 6 automatisations actives, sous contrôle, sans dérive de coût."
+      "detail": "Tout est stable : tes scénarios prod tournent, le flux CRM contrôlé est actif, sans dérive de coût."
     },
     {
-      "titre": "Je fais circuler tes fichiers entre tes outils",
-      "detail": "Le transport de documents entre tes outils fonctionne et reste stable."
+      "titre": "Je garde ta base CRM propre",
+      "detail": "Les scénarios à risque sont en pause ; seul le flux contrôlé (commerciaux connus + anti-doublon) crée des fiches. Le spam ne peut pas polluer Axonaut."
     },
     {
       "titre": "Je tiens ce tableau de bord à jour",
-      "detail": "Je rassemble ici ce qui compte, pour que tu n'aies pas à chercher."
+      "detail": "Il lit maintenant tes vraies données. La republication automatique est en cours de branchement."
     }
   ],
   "fil": [
     {
-      "id": "fstd_done",
-      "txt": "Ton standard téléphonique est remis au carré et EN LIGNE : c'est la bonne version, sobre, qui répond à tes clients.",
-      "statut": "transmis",
+      "id": "f_live30",
+      "txt": "Ton tableau de bord lit maintenant tes vraies données : ce fil et tes décisions viennent du fichier publié. La mise à jour automatique (toutes les 10 min) est en cours de branchement.",
+      "statut": "encours",
+      "quand": "À l'instant"
+    },
+    {
+      "id": "f_crm30",
+      "txt": "Tu as repris le contrôle de la création de fiches CRM : les scénarios à risque sont en pause, seul le flux contrôlé (commerciaux connus + anti-doublon) tourne.",
+      "statut": "stable",
       "quand": "Aujourd'hui"
     },
     {
-      "id": "f2",
-      "txt": "Le transport de fichiers entre tes outils est stable : je peux faire circuler tes documents.",
-      "statut": "stable",
-      "quand": "Hier"
-    },
-    {
-      "id": "f3",
-      "txt": "Ton tableau de bord est publié et en ligne. Les chiffres qu'il affiche ne se mettent pas encore à jour tout seuls.",
-      "statut": "affiche",
-      "quand": "Hier"
-    },
-    {
-      "id": "f4",
-      "txt": "J'ai repéré deux automatisations à fiabiliser. Je n'ai encore rien touché — j'attends ton feu vert.",
+      "id": "f_opp30",
+      "txt": "L'opportunité automatique (date, lieu, type, nombre d'invités) est testée dans Axonaut — elle t'attend pour une vérification visuelle.",
       "statut": "attente",
       "quand": "Aujourd'hui",
-      "lien": "MIG"
+      "lien": "OPP"
+    },
+    {
+      "id": "f_wl30",
+      "txt": "3 expéditeurs ajoutés à ta liste blanche commerciaux (Émilie, Gonzo, Antoine).",
+      "statut": "stable",
+      "quand": "Aujourd'hui"
+    },
+    {
+      "id": "fstd_done",
+      "txt": "Ton standard téléphonique est remis au carré et EN LIGNE : c'est la bonne version, sobre, qui répond à tes clients.",
+      "statut": "transmis",
+      "quand": "Cette semaine"
     },
     {
       "id": "f5",
@@ -163,12 +169,6 @@
       "statut": "bloque",
       "quand": "Aujourd'hui",
       "lien": "SECU"
-    },
-    {
-      "id": "f6",
-      "txt": "Je mets en place ta file d'exécution : un endroit clair où tes décisions deviennent des actions suivies.",
-      "statut": "encours",
-      "quand": "Aujourd'hui"
     },
     {
       "id": "f7",
@@ -179,20 +179,27 @@
   ],
   "chantiers": [
     {
-      "titre": "Standard téléphonique",
+      "titre": "Fiches clients CRM (auto, contrôlé)",
       "etat": "stable",
-      "detail": "Réparé et EN LIGNE le 26/06 : ligne clients repointée sur la bonne version (anti-digression).",
-      "responsable": "Maïa (copie de test)",
-      "kevin": false,
-      "lien": "STD"
+      "detail": "Flux contrôlé actif (commerciaux connus + anti-doublon). Scénarios à risque en pause. Étape opportunité testée, en attente de ta validation.",
+      "responsable": "Maïa",
+      "kevin": true,
+      "lien": "OPP"
     },
     {
-      "titre": "Automatisations à fiabiliser",
-      "etat": "attente",
-      "detail": "Deux scénarios pointent vers un moteur retiré. Inventaire en lecture seule à lancer.",
-      "responsable": "Maïa (lecture seule)",
-      "kevin": true,
-      "lien": "MIG"
+      "titre": "Cockpit — données vivantes",
+      "etat": "encours",
+      "detail": "Le cockpit lit le fichier de données publié. Republication automatique (toutes les 10 min) à brancher via la connexion GitHub↔Make.",
+      "responsable": "Maïa",
+      "kevin": true
+    },
+    {
+      "titre": "Standard téléphonique",
+      "etat": "stable",
+      "detail": "Réparé et EN LIGNE : ligne clients repointée sur la bonne version (anti-digression).",
+      "responsable": "Maïa",
+      "kevin": false,
+      "lien": "STD"
     },
     {
       "titre": "Sécurité — clé d'accès",
@@ -203,12 +210,12 @@
       "lien": "SECU"
     },
     {
-      "titre": "Réponse à l'avocat",
+      "titre": "Automatisations à fiabiliser",
       "etat": "attente",
-      "detail": "Brouillon de réponse (contrats + holding) à préparer. Aucun envoi automatique.",
-      "responsable": "Maïa (brouillon)",
+      "detail": "Deux scénarios pointent vers un moteur retiré. Inventaire en lecture seule à lancer.",
+      "responsable": "Maïa (lecture seule)",
       "kevin": true,
-      "lien": "AVOCAT"
+      "lien": "MIG"
     },
     {
       "titre": "Suivi commercial par mail",
@@ -219,81 +226,39 @@
       "lien": "MAIL"
     },
     {
-      "titre": "Tableau de bord MAÏA",
-      "etat": "affiche",
-      "detail": "Publié et en ligne. Les données sont figées au dernier état réel ; l'automatisation des chiffres reste à faire.",
+      "titre": "Refonte barman-mariage.com",
+      "etat": "attente",
+      "detail": "Forfaits mariage tout-inclus au prix par personne. Chantier non commencé.",
       "responsable": "Maïa",
-      "kevin": false
-    },
-    {
-      "titre": "Transport de fichiers entre outils",
-      "etat": "stable",
-      "detail": "Fonctionne et reste stable (mode édition d'un document pré-créé).",
-      "responsable": "Maïa",
-      "kevin": false
-    },
-    {
-      "titre": "File d'exécution",
-      "etat": "encours",
-      "detail": "En cours de mise en place : transforme tes décisions en actions suivies, sans copier-coller.",
-      "responsable": "Maïa",
-      "kevin": false
+      "kevin": true
     }
   ],
   "tech": {
-    "note": "Cet espace est réservé à l'assistant technique. Tu n'as pas besoin d'y venir : tout ce qui compte pour toi est sur l'écran d'accueil.",
+    "note": "Cet espace est réservé à l'assistant technique. Tout ce qui compte pour toi est sur l'écran d'accueil.",
     "hermes": [
-      {
-        "k": "Transport de fichiers entre outils",
-        "v": "OK",
-        "ok": true
-      },
-      {
-        "k": "Lecture des documents partagés",
-        "v": "OK",
-        "ok": true
-      },
-      {
-        "k": "Échange de décisions (mode validé)",
-        "v": "OK",
-        "ok": true
-      },
-      {
-        "k": "Écriture directe par l'outil externe",
-        "v": "Bloqué (limite outil)",
-        "ok": false
-      }
+      { "k": "Flux CRM contrôlé (anti-spam + anti-doublon)", "v": "Actif", "ok": true },
+      { "k": "Lecture du tableau de bord (fichier de données)", "v": "OK", "ok": true },
+      { "k": "Création d'opportunité auto", "v": "Testée, en attente de validation", "ok": true },
+      { "k": "Republication auto des données", "v": "À brancher (GitHub↔Make)", "ok": false }
     ],
     "exchanges": [
-      {
-        "sujet": "Forme d'écriture qui passe la sécurité",
-        "etat": "Réglé",
-        "detail": "Mode validé : l'outil édite un document pré-créé."
-      },
-      {
-        "sujet": "Écriture/rangement direct",
-        "etat": "Réglé",
-        "detail": "Lecture et création OK ; écriture directe bloquée par l'outil externe."
-      },
-      {
-        "sujet": "Prochaine étape de transport",
-        "etat": "Réglé",
-        "detail": "Passage au connecteur de fichiers."
-      }
+      { "sujet": "Contrôle du flux CRM", "etat": "Réglé", "detail": "Scénarios à risque en pause, flux contrôlé conservé." },
+      { "sujet": "Opportunité automatique", "etat": "En cours", "detail": "Test isolé réussi ; validation visuelle requise." },
+      { "sujet": "Données vivantes du cockpit", "etat": "En cours", "detail": "Lecture OK ; republication auto à brancher." }
     ],
-    "sources": "Registre central + journal des échanges + mémoire projet (lecture seule).",
-    "note_donnees": "Données au dernier état réel connu (04–25 juin). Mise à jour : republier le fichier de données.",
-    "queue_note": "Ta file d'actions est enregistrée sur cet appareil (navigateur). Pour la rendre exploitable par Claude sans copier-coller, voir la proposition d'architecture livrée avec cette version."
+    "sources": "Data Store file d'actions + journal CRM + mémoire projet (lecture seule).",
+    "note_donnees": "Données rafraîchies le 30/06. La republication automatique (toutes les 10 min) sera active dès la connexion GitHub↔Make.",
+    "queue_note": "Ta file d'actions vit dans le Data Store ; le cockpit la lira via le fichier publié une fois la republication branchée."
   },
   "couts": {
     "titre": "Je surveille tes crédits Make",
-    "resume": "7 794 crédits restants sur 30 000 ce mois (~74 % utilisés). Remise à zéro le 28/06. Pas de dérive.",
+    "resume": "Nouveau cycle depuis le 28/06. Pas de dérive. Chiffre exact à rafraîchir automatiquement une fois la republication branchée.",
     "restants": 7794,
     "total": 30000,
     "pct": 74,
     "reset": "28/06",
     "moyenne_jour": 19,
-    "detail": "Plan Core (30 000 crédits/mois). Usage moyen ~19/jour. Le gros poste historique est coupé. Estimation en crédits Make — le montant exact en euros n'est pas lisible via l'API.",
-    "maj": "26/06 (relevé)"
+    "detail": "Plan Core (30 000 crédits/mois). Le gros poste historique est coupé. Estimation en crédits Make — le montant exact en euros n'est pas lisible via l'API.",
+    "maj": "30/06 (en attente de republication auto)"
   }
 }
