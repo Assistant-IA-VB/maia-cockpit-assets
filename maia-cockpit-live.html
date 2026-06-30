@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0f">
+<title>MAÏA — cockpit (live)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.7.0/tabler-icons.min.css">
+<style>
+  :root{--bg:#0b0c0f;--card:#15171c;--line:rgba(255,255,255,.08);
+    --tx:#f3f1ea;--tx2:#a7a49c;--tx3:#706d64;
+    --cu:#d08a52;--cu2:#e3a972;--cu-soft:rgba(208,138,82,.15);--cu-line:rgba(208,138,82,.4);
+    --ok:#5ec08a;--warn:#d8a45c;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#070809;color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .phone{max-width:430px;margin:0 auto;background:var(--bg);min-height:100vh;padding:18px 16px 96px;position:relative}
+  .row{display:flex;align-items:center}.between{justify-content:space-between}
+  .logo{height:25px}
+  h1{font-size:22px;font-weight:600;margin:0}
+  .muted{color:var(--tx2)}.dim{color:var(--tx3)}
+  .sect{font-size:13px;color:var(--tx2);margin:0 0 9px;display:flex;align-items:center;gap:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .kpi-n{font-size:25px;font-weight:600;margin:2px 0 0}
+  .lbl{font-size:12px;color:var(--tx2);margin:0}
+  .track{height:6px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-top:9px}
+  .fill{height:100%;border-radius:99px;background:var(--cu)}
+  .todo{display:flex;align-items:center;gap:12px;border-radius:14px;padding:13px 14px;margin-bottom:9px}
+  .todo .ic{font-size:21px}
+  .todo-cu{background:var(--cu-soft);border:1px solid var(--cu-line)}
+  .todo-n{background:var(--card);border:1px solid var(--line)}
+  .chev{color:var(--tx3);font-size:19px}
+  .bars{display:flex;align-items:flex-end;gap:7px;height:56px}
+  .bars div{flex:1;background:rgba(208,138,82,.28);border-radius:4px}
+  .bars .hi{background:var(--cu)}
+  .days{display:flex;gap:7px;margin-top:7px}
+  .days span{flex:1;text-align:center;font-size:11px;color:var(--tx3)}
+  .proj{margin-bottom:13px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .gw{position:relative;flex-shrink:0}
+  .gw span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600}
+  .lrow{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .lrow:last-child{border-bottom:0}
+  .stamp{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
+  .panel[hidden]{display:none}
+  .nav{position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;
+    background:rgba(11,12,15,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:9px 0 22px}
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--tx3);text-decoration:none;font-size:11px;cursor:pointer}
+  .nav a.on{color:var(--cu)}
+  .nav i{font-size:22px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="row between" style="margin-bottom:16px">
+    <img class="logo" src="https://assistant-ia-vb.github.io/maia-cockpit-assets/maia-logo-header.svg" alt="MAÏA">
+    <span class="stamp" id="updatedStamp"><i class="ti ti-refresh" style="font-size:13px"></i>chargement…</span>
+  </div>
+
+  <!-- ACCUEIL -->
+  <div class="panel" id="panel-accueil">
+    <h1>Bonjour Kevin</h1>
+    <p class="dim" id="todayLine" style="font-size:13px;margin:2px 0 16px"></p>
+
+    <p class="sect"><i class="ti ti-bell"></i>À traiter</p>
+    <div id="aTraiter" style="margin-bottom:18px">
+      <div class="todo todo-n"><i class="ti ti-loader ic dim"></i><div style="flex:1"><p style="margin:0;font-size:14px" class="dim">Chargement des données…</p></div></div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:11px">
+      <div class="card">
+        <p class="lbl">Leads ce mois</p><p class="kpi-n">6</p>
+        <p style="font-size:12px;color:var(--ok);margin:3px 0 4px">+2 cette semaine</p>
+        <svg viewBox="0 0 80 22" width="100%" height="22" preserveAspectRatio="none"><polyline fill="none" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="0,17 13,13 27,15 40,8 53,10 67,4 80,6"/></svg>
+      </div>
+      <div class="card">
+        <p class="lbl">Coût du mois</p><p class="kpi-n">~4 €</p>
+        <p style="font-size:12px;margin:3px 0 0" class="dim">budget ~30 €</p>
+        <div class="track"><div class="fill" style="width:13%"></div></div>
+      </div>
+    </div>
+
+    <div class="card row" style="gap:15px;margin-bottom:18px">
+      <div class="gw" style="width:78px;height:78px">
+        <svg viewBox="0 0 36 36" width="78" height="78"><circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3.3" pathLength="100"/><circle id="creditArc" cx="18" cy="18" r="15.9" fill="none" stroke="var(--cu)" stroke-width="3.3" stroke-linecap="round" stroke-dasharray="26 100" pathLength="100" transform="rotate(-90 18 18)"/></svg>
+        <span id="creditPct" style="font-size:17px">26%</span>
+      </div>
+      <div><p style="font-size:13px;margin:0 0 4px" class="muted">Crédits Make utilisés</p><p style="font-size:18px;font-weight:600;margin:0" id="creditTxt">7 800 <span class="dim" style="font-size:13px">/ 30 000</span></p><p style="font-size:12px;margin:4px 0 0" class="dim">74 % restant ce cycle</p></div>
+    </div>
+
+    <div class="row between" style="margin-bottom:11px"><p class="sect" style="margin:0"><i class="ti ti-rocket"></i>Projets</p></div>
+    <div id="projets"></div>
+  </div>
+
+  <!-- MAÏA -->
+  <div class="panel" id="panel-maia" hidden>
+    <div class="row" style="gap:8px;margin-bottom:16px"><h1>Maïa</h1><span style="font-size:12px;color:var(--ok);display:flex;align-items:center;gap:4px"><span class="dot" style="background:var(--ok)"></span>en ligne</span></div>
+    <div style="display:flex;flex-direction:column">
+      <div style="align-self:flex-start;max-width:82%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.45">Bonjour Kevin. Voici ton point — tape ou parle pour me demander quoi que ce soit.</div>
+    </div>
+    <p style="font-size:12px;margin:6px 0 8px" class="dim">Suggestions</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px"><span style="font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:7px 13px">Résume ma journée</span><span style="font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:7px 13px">Où en sont mes leads</span></div>
+    <div style="display:flex;align-items:center;gap:9px;margin-top:14px"><input placeholder="Écris à Maïa…" style="flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);padding:11px 13px;font-size:14px;outline:none"><div style="width:46px;height:46px;border-radius:50%;background:var(--cu);color:#181206;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-microphone" style="font-size:23px"></i></div></div>
+  </div>
+
+  <!-- AUTOUR -->
+  <div class="panel" id="panel-autour" hidden>
+    <div class="row" style="gap:8px;margin-bottom:15px"><i class="ti ti-map-pin" style="font-size:20px;color:var(--tx2)"></i><h1 style="font-size:19px">Autour de moi</h1></div>
+    <div style="background:var(--card);border:1px solid var(--cu-line);border-radius:16px;padding:15px;margin-bottom:18px">
+      <div class="row between" style="margin-bottom:9px"><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--cu2)"><i class="ti ti-ripple" style="font-size:17px"></i>Fenêtre kayak idéale</span><span style="font-size:11px;background:var(--cu-soft);color:var(--cu2);border-radius:99px;padding:3px 10px">samedi</span></div>
+      <p style="font-size:18px;font-weight:600;margin:0 0 10px">Samedi 9h – 12h</p>
+      <div class="row" style="gap:16px"><span style="display:flex;align-items:center;gap:6px;font-size:13px" class="muted"><i class="ti ti-droplet" style="font-size:16px"></i>Loire · débit modéré</span><span style="display:flex;align-items:center;gap:6px;font-size:13px" class="muted"><i class="ti ti-sun" style="font-size:16px"></i>24°, ensoleillé</span></div>
+    </div>
+  </div>
+
+  <!-- AVANCÉ -->
+  <div class="panel" id="panel-avance" hidden>
+    <div class="row" style="gap:8px;margin-bottom:16px"><i class="ti ti-adjustments" style="font-size:20px;color:var(--tx2)"></i><h1 style="font-size:19px">Avancé</h1></div>
+    <p class="sect">Systèmes</p>
+    <div style="margin-bottom:18px">
+      <div class="lrow"><span class="dot" style="background:var(--ok)"></span><span style="flex:1;font-size:14px">Téléphonie Retell</span><span style="font-size:12px;color:var(--ok)">actif</span></div>
+      <div class="lrow"><span class="dot" style="background:var(--ok)"></span><span style="flex:1;font-size:14px">CRM fiches (contrôlé)</span><span style="font-size:12px;color:var(--ok)">actif</span></div>
+      <div class="lrow"><span class="dot" style="background:var(--ok)"></span><span style="flex:1;font-size:14px">Cockpit appels</span><span style="font-size:12px;color:var(--ok)">actif</span></div>
+    </div>
+    <p class="sect">Fil d'exécution</p>
+    <div id="fil"></div>
+  </div>
+</div>
+
+<div class="nav">
+  <a class="on" data-t="accueil" onclick="show('accueil')"><i class="ti ti-layout-dashboard"></i>Accueil</a>
+  <a data-t="maia" onclick="show('maia')"><i class="ti ti-message-chatbot"></i>Maïa</a>
+  <a data-t="autour" onclick="show('autour')"><i class="ti ti-map-pin"></i>Autour</a>
+  <a data-t="avance" onclick="show('avance')"><i class="ti ti-adjustments"></i>Avancé</a>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(function(p){p.hidden=(p.id!=='panel-'+id)});
+  document.querySelectorAll('.nav a').forEach(function(a){a.classList.toggle('on',a.dataset.t===id)});
+  window.scrollTo(0,0);
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});}
+var ETAT={en_attente:{t:'en attente',c:'var(--warn)'},bloquee:{t:'bloqué',c:'#e07a5a'},prete:{t:'prêt',c:'var(--cu2)'},en_cours:{t:'en cours',c:'var(--cu2)'},terminee:{t:'fait',c:'var(--ok)'}};
+function ago(iso){var d=(Date.now()-new Date(iso).getTime())/60000;if(isNaN(d))return '';if(d<1)return "à l'instant";if(d<60)return 'il y a '+Math.round(d)+' min';var h=Math.round(d/60);if(h<24)return 'il y a '+h+' h';return 'il y a '+Math.round(h/24)+' j';}
+function render(d){
+  var st=document.getElementById('updatedStamp');
+  st.innerHTML='<i class="ti ti-refresh" style="font-size:13px"></i>à jour '+esc(ago(d.updated_at)||'');
+  var now=new Date();document.getElementById('todayLine').textContent=now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  var at=document.getElementById('aTraiter');
+  if(d.a_traiter&&d.a_traiter.length){at.innerHTML=d.a_traiter.map(function(x){
+    return '<div class="todo todo-cu"><i class="ti ti-alert-circle ic" style="color:var(--cu2)"></i><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600;font-size:14px">'+esc(x.projet)+'</p><p style="margin:0;font-size:12px;color:var(--cu2)">'+esc(x.quoi)+'</p></div><i class="ti ti-chevron-right chev" style="color:var(--cu2)"></i></div>';
+  }).join('');}else{at.innerHTML='<div class="todo todo-n"><i class="ti ti-check ic" style="color:var(--ok)"></i><div style="flex:1"><p style="margin:0;font-size:14px">Rien à traiter pour l\'instant</p></div></div>';}
+  var pj=document.getElementById('projets');
+  if(d.projets){pj.innerHTML=d.projets.map(function(x){var e=ETAT[x.etat]||{t:x.etat,c:'var(--tx3)'};
+    return '<div class="lrow"><span class="dot" style="background:'+e.c+'"></span><span style="flex:1;font-size:14px">'+esc(x.nom)+'</span><span style="font-size:12px;color:'+e.c+'">'+esc(e.t)+'</span></div>';
+  }).join('');}
+  var fl=document.getElementById('fil');
+  if(d.fil){fl.innerHTML=d.fil.map(function(x){var e=ETAT[x.etat]||{t:x.etat,c:'var(--tx3)'};
+    return '<div class="lrow"><i class="ti ti-point" style="font-size:18px;color:'+e.c+'"></i><div style="flex:1;min-width:0"><p style="margin:0;font-size:14px">'+esc(x.projet)+'</p><p style="margin:0;font-size:12px" class="dim">'+esc(x.statut)+'</p></div><span class="dim" style="font-size:11px">'+esc(ago(x.ts))+'</span></div>';
+  }).join('');}
+  if(d.credits_make){var c=d.credits_make;document.getElementById('creditPct').textContent=c.pct+'%';document.getElementById('creditArc').setAttribute('stroke-dasharray',c.pct+' 100');document.getElementById('creditTxt').innerHTML=c.utilises.toLocaleString('fr-FR')+' <span class="dim" style="font-size:13px">/ '+c.total.toLocaleString('fr-FR')+'</span>';}
+}
+function load(){
+  fetch('cockpit-data.json?t='+Date.now()).then(function(r){return r.json();}).then(render).catch(function(){
+    document.getElementById('updatedStamp').innerHTML='<i class="ti ti-cloud-off" style="font-size:13px"></i>données indisponibles';
+  });
+}
+load();
+setInterval(load,600000);
+</script>
+</body>
+</html>

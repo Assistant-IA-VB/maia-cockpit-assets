@@ -1,0 +1,29 @@
+{
+  "updated_at": "2026-06-30T05:55:00+02:00",
+  "source": "Maia data feed v1 (Data Store 139202 = file d'actions/projets)",
+  "a_traiter": [
+    { "projet": "Sécurité", "quoi": "Refermer une clé d'accès exposée (action réservée à toi)", "etat": "bloquee" },
+    { "projet": "Suivi commercial", "quoi": "Décider si Maïa suit tes mails commerciaux", "etat": "en_attente" },
+    { "projet": "Bot téléphonique", "quoi": "Valider le script qui propose un rappel en fin d'appel", "etat": "prete" }
+  ],
+  "fil": [
+    { "projet": "Refonte barman-mariage.com", "statut": "Relance demandée", "etat": "prete", "ts": "2026-06-28T09:46:47+02:00" },
+    { "projet": "Maïa au téléphone", "statut": "Relance demandée", "etat": "prete", "ts": "2026-06-28T06:17:56+02:00" },
+    { "projet": "Appel Maïa", "statut": "Feedback point du matin pris en compte", "etat": "prete", "ts": "2026-06-27T18:59:56+02:00" },
+    { "projet": "Appel Maïa", "statut": "Test Telegram T1 vérifié", "etat": "terminee", "ts": "2026-06-27T18:45:40+02:00" },
+    { "projet": "Audit des coûts IA", "statut": "Audit v1 livré", "etat": "terminee", "ts": "2026-06-27T14:34:21+02:00" },
+    { "projet": "Fiches clients CRM (auto)", "statut": "Mission lancée", "etat": "en_cours", "ts": "2026-06-27T14:25:18+02:00" }
+  ],
+  "projets": [
+    { "nom": "Maïa au téléphone", "etat": "prete" },
+    { "nom": "Standard téléphonique", "etat": "terminee" },
+    { "nom": "Audit des coûts IA", "etat": "terminee" },
+    { "nom": "Fiches clients CRM (auto)", "etat": "en_cours" },
+    { "nom": "Sécurité", "etat": "bloquee" },
+    { "nom": "Suivi commercial", "etat": "en_attente" },
+    { "nom": "Bot téléphonique", "etat": "prete" },
+    { "nom": "Refonte barman-mariage.com", "etat": "prete" }
+  ],
+  "credits_make": { "utilises": 7800, "total": 30000, "pct": 26, "source": "relevé manuel (l'API n'expose pas l'€)" },
+  "note": "Fichier généré une fois par Maïa. En production, le flux Make le régénère toutes les ~10 min et le publie dans le dépôt GitHub. a_traiter + fil = données vivantes (Data Store). credits + projets % = à brancher sur leurs sources."
+}
