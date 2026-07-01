@@ -843,17 +843,19 @@ function kbFilled(){var a=kbAns();return DOUBTS.filter(function(d){return a[d.id
 function kbSheet(){var cfg=kbCfg();var f=kbFilled();
   var body='<p style="color:var(--ink2);font-size:13px;line-height:1.55;margin:0 0 8px">Envoie tes réponses validées vers <b>ton</b> script d\'écriture KB. Rien ne part sans <b>Mode réel</b> + ta confirmation ; ton script décide (aperçu tant que DRY_RUN=true).</p>'
     +'<div style="font-size:12px;color:var(--ink2);margin-bottom:3px">URL du script (…/exec)</div><input id="kbUrl" class="field" placeholder="https://script.google.com/…/exec" value="'+esc(cfg.url||"")+'" style="width:100%;padding:7px 9px;font-size:12px;margin-bottom:8px">'
-    +'<div style="font-size:12px;color:var(--ink2);margin-bottom:3px">Jeton</div><input id="kbTok" class="field" value="'+esc(cfg.token||"maia-kb-7")+'" style="width:100%;padding:7px 9px;font-size:12px;margin-bottom:8px">'
+    +'<div style="font-size:12px;color:var(--ink2);margin-bottom:3px">Jeton</div><input id="kbTok" class="field" type="password" autocomplete="off" placeholder="ton jeton secret (jamais public)" value="'+esc(cfg.token||"")+'" style="width:100%;padding:7px 9px;font-size:12px;margin-bottom:8px">'
     +'<div class="shrow"><i class="ti ti-checklist" style="color:var(--cu2)"></i><span>Réponses validées : <b>'+f.length+' / '+DOUBTS.length+'</b></span></div>'
-    +'<div class="tacts" style="margin-top:8px"><button class="tact" id="kbSave"><i class="ti ti-device-floppy"></i>Enregistrer</button><button class="tact" id="kbPrev"><i class="ti ti-eye"></i>Voir ce qui part</button><button class="tact pri" id="kbSend"><i class="ti ti-send"></i>Envoyer au KB</button></div>'
+    +'<div class="tacts" style="margin-top:8px"><button class="tact" id="kbSave"><i class="ti ti-device-floppy"></i>Enregistrer</button><button class="tact" id="kbPrev"><i class="ti ti-eye"></i>Voir ce qui part</button><button class="tact pri" id="kbSend"><i class="ti ti-send"></i>Envoyer au KB</button><button class="tact" id="kbClear"><i class="ti ti-trash"></i>Effacer</button></div>'
     +'<p class="dim" style="font-size:11px;margin-top:8px">Après envoi, vérifie l\'onglet <b>MAIA_KB_LOG</b> / <b>MAIA_KB_SNAPSHOT</b> de ton Sheet. Le cockpit n\'écrit jamais le Sheet directement — il le demande à ton script.</p>';
   openSheet("Mise à jour du KB",body);
   var u=$("kbUrl"),t=$("kbTok");
-  var sv=$("kbSave");if(sv)sv.onclick=function(){kbCfgSet({url:(u.value||"").trim(),token:(t.value||"maia-kb-7").trim()});toast("Config enregistrée.");};
+  var sv=$("kbSave");if(sv)sv.onclick=function(){kbCfgSet({url:(u.value||"").trim(),token:(t.value||"").trim()});toast("Config enregistrée (dans ce navigateur uniquement).");};
   var pv=$("kbPrev");if(pv)pv.onclick=function(){var a=kbAns();var rows=DOUBTS.filter(function(d){return a[d.id]&&a[d.id].trim();}).map(function(d){return '<div class="shrow" style="align-items:flex-start"><span class="tag ok" style="font-size:9px;margin-top:2px">'+esc(d.id)+'</span><span style="flex:1;font-size:12px"><b>'+esc(d.sujet)+'</b><br>'+esc(a[d.id])+'</span></div>';}).join("")||'<p class="dim" style="font-size:12px">Aucune réponse saisie (onglet « Voir / répondre »).</p>';openSheet("Ce qui sera envoyé ("+kbFilled().length+")",rows);};
-  var sd=$("kbSend");if(sd)sd.onclick=function(){kbSend();};}
-function kbSend(){var cfg=kbCfg();var url=(cfg.url||($("kbUrl")&&$("kbUrl").value)||"").trim();var tok=(cfg.token||($("kbTok")&&$("kbTok").value)||"maia-kb-7").trim();
+  var sd=$("kbSend");if(sd)sd.onclick=function(){kbSend();};
+  var cl=$("kbClear");if(cl)cl.onclick=function(){try{localStorage.removeItem("maia_kb_cfg");}catch(e){}toast("URL + jeton effacés de ce navigateur.");closeSheet();};}
+function kbSend(){var cfg=kbCfg();var url=(cfg.url||($("kbUrl")&&$("kbUrl").value)||"").trim();var tok=(cfg.token||($("kbTok")&&$("kbTok").value)||"").trim();
   if(!url){toast("Colle d\'abord l\'URL de ton script (…/exec).");return;}
+  if(!tok){toast("Saisis ton jeton secret d\'abord.");return;}
   var f=kbFilled();if(!f.length){toast("Aucune réponse validée à envoyer.");return;}
   if(!armed()){toast("Active le Mode réel (Avancé) pour envoyer au KB.");return;}
   if(!confirm("Envoyer "+f.length+" réponse(s) à ton script KB ? (Ton script décide : aperçu si DRY_RUN=true, écriture si false.)"))return;
