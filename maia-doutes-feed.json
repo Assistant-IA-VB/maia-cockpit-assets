@@ -1,0 +1,27 @@
+{
+ "source": "Google Sheet « Bot KB - VotreBarman » (onglet QUESTIONS_COMMERCIALES_A_TRAITER)",
+ "colonne": "trou_KB=oui (question non couverte par la base) — équivaut à confidence faible",
+ "lu_le": "2026-07-01",
+ "mode": "lecture seule",
+ "total_detectes": 15,
+ "a_revoir_avec_kevin": 15,
+ "themes": {
+  "mariage": 1,
+  "question floue": 2,
+  "signature devis": 2,
+  "food / traiteur": 1,
+  "service boissons client": 1,
+  "annulation": 1,
+  "materiel / verrerie": 1,
+  "barman flair": 1,
+  "paiement": 1,
+  "commission commerciale": 2,
+  "logistique / depart materiel": 1,
+  "option": 1
+ },
+ "priorites": {
+  "haute": 8,
+  "moyenne": 6,
+  "basse": 1
+ }
+}

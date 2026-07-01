@@ -1,0 +1,41 @@
+{
+ "version": "v20.1",
+ "maj": "2026-07-01",
+ "routines": [
+  {
+   "id": "r_doutes",
+   "titre": "Revue des doutes du bot commercial",
+   "description": "Revue tous les 15 jours des questions où le bot a manqué de connaissance (trou_KB), pour valider/améliorer la base.",
+   "source": "cockpit",
+   "type": "revue",
+   "freq": "quinzo",
+   "next": "2026-07-16",
+   "canal": "cockpit",
+   "canaux_prepares": [
+    "telegram",
+    "appel"
+   ],
+   "seuil": 10,
+   "sourceSurv": "Google Sheet Bot KB (trou_KB=oui)",
+   "statut": "actif_reel",
+   "risque": "faible",
+   "lien": "doutes"
+  },
+  {
+   "id": "r_couts",
+   "titre": "Point hebdo des coûts API",
+   "description": "Chaque vendredi, rappel de vérifier coûts API + crédits Make.",
+   "source": "cockpit",
+   "type": "rappel",
+   "freq": "hebdo",
+   "next": "2026-07-03",
+   "canal": "cockpit",
+   "canaux_prepares": [],
+   "seuil": null,
+   "sourceSurv": null,
+   "statut": "actif_sim",
+   "risque": "faible",
+   "lien": "couts"
+  }
+ ]
+}
